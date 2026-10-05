@@ -1,0 +1,46 @@
+# Weekly dependency updates: one grouped pull request per ecosystem, tested by CI.
+# Major versions are left out so big upgrades happen deliberately.
+version: 2
+
+updates:
+  - package-ecosystem: gradle
+    directory: /kotlin
+    schedule: { interval: weekly, day: monday }
+    groups:
+      kotlin: { patterns: ["*"] }
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: pip
+    directory: /python
+    schedule: { interval: weekly, day: monday }
+    groups:
+      python: { patterns: ["*"] }
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: composer
+    directory: /php
+    schedule: { interval: weekly, day: monday }
+    groups:
+      php: { patterns: ["*"] }
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: npm
+    directories: [/javascript, /graphql]
+    schedule: { interval: weekly, day: monday }
+    groups:
+      npm: { patterns: ["*"] }
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: weekly, day: monday }
+    groups:
+      actions: { patterns: ["*"] }

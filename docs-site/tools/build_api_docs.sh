@@ -30,7 +30,7 @@ curl -sSL -o "$TMP/phpDocumentor.phar" https://github.com/phpDocumentor/phpDocum
 
 echo "JavaScript (TypeDoc; TypeDoc supports TypeScript up to 6, the library builds with 7)"
 (cd "$ROOT/javascript" && npx -y -p typedoc@0.28 -p typescript@6 typedoc --entryPoints src/index.ts --tsconfig tsconfig.json \
-    --out "$OUT/javascript" --name "sportsdb-js" --readme none --excludeInternal \
+    --out "$OUT/javascript" --name "sportsdb-js" --readme none --excludeInternal --skipErrorChecking \
     --disableGit --gitRevision main --basePath .. \
     --sourceLinkTemplate "$REPO_URL/blob/{gitRevision}/javascript/src/{path}#L{line}" --logLevel Warn)
 

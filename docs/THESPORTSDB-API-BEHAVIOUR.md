@@ -14,9 +14,9 @@ How TheSportsDB's API really behaves, measured with real calls on **5 Oct 2026**
 |---|---|---|
 | Base URL | `https://www.thesportsdb.com/api/v1/json/{key}/{endpoint}.php?…` | `https://www.thesportsdb.com/api/v2/json/{group}/{name}/{param}` |
 | Key | **in the URL path**, so a v1 URL is a secret and must never be logged | `X-API-KEY` header |
-| Free key | `123` (public, for development and testing) | none: v2 is premium only |
+| Free key | `123` (public, for development and testing). The older key **`3` also works**, with the same limits. | none: v2 is premium only |
 | Premium key | works here too, with much larger results (section 3) | the only way in |
-| Wrong key | HTTP **400**, `{"Message":"Invalid Premium API key: Signup here: …"}`. Only `123` and paid keys work; the old example key `1` is rejected. | the same, for a free, wrong or missing key |
+| Wrong key | HTTP **400**, `{"Message":"Invalid Premium API key: Signup here: …"}`. Only `123`, `3` and paid keys work; `1`, `2`, `4`, `50` and `1234` were rejected. | the same, for a free, wrong or missing key |
 | Rate limit (documented) | free 30/min, premium 100/min, business 120/min; over the limit: HTTP 429, wait a minute | the same |
 | Parameters | query string; spaces as `%20` or `_` (`English_Premier_League`) | path segments; spaces as `%20` |
 
@@ -29,6 +29,7 @@ How TheSportsDB's API really behaves, measured with real calls on **5 Oct 2026**
   - v1: the key with `null`, e.g. `{"events":null}`.
   - v1: an **empty body**, with HTTP 200. Seen from `eventstv.php?d=…&a=Canada` without `s=`.
   - v2: `{"Message":"No data found"}`, with HTTP 200.
+- **A rejected parameter is not "no results".** v1 answers HTTP 200 with the error **as text in place of the records**: `{"seasons":"Invalid League ID passed"}` (`search_all_seasons.php?l=` instead of `id=`), or `{"events":"Invalid League ID or no round passed"}`. Treat a string under the record key as an error.
 - **Values are strings.** Numbers, ids, dates and flags arrive as strings (`"idEvent":"2494052"`, `"intHomeScore":"2"`), or as `null`. Exception: **v2 `search/…` sends ids as JSON numbers** (`"idTeam":133604`). Parse both.
 - **Blank strings mean "no value".** Many fields are `""` rather than `null` (`strTwitter`, `strTimeLocal`, `strLeague2`…). Treat `""` like `null`.
 - **Zero sometimes means unknown:** `intFormedYear` `"0"`, `idCup` `"0"` (meaning "not a cup").
@@ -144,6 +145,19 @@ How TheSportsDB's API really behaves, measured with real calls on **5 Oct 2026**
 | `livescore.php?s=Soccer` | `livescore` | 19 | 19 | *undocumented* | **the free key gets the full live feed** |
 | `livescore.php?l=4328` | `livescore` | 51 | 51 | *undocumented* | **ignores `l=`**: 51 games from 20 leagues, none of them league 4328 |
 
+### Undocumented legacy endpoints
+
+These aren't in the current documentation. They **answer the free keys but return HTTP 404 (an HTML page) to premium keys.** Older client libraries still call them.
+
+| Endpoint | Record key | Free | Premium | Notes |
+|---|---|---|---|---|
+| `eventsround.php?id=4328&r=1&s=2026-2027` | `events` | 10 | 404 | a whole round; `l=` instead of `id=` gives `{"events":"Invalid League ID or no round passed"}` |
+| `lookup_all_teams.php?id=4328` | `teams` | 24 | 404 | **wrong data:** the Premier League's id returned 24 English League One clubs. Use `search_all_teams.php?l={name}` |
+| `searchloves.php?u={user}` | | works | 404 | a user's loved teams and players |
+| `lookuplineups.php`, `eventsvs.php` | | 404 | 404 | removed; use `lookuplineup.php` |
+| `searchteams.php?sname=ARS` | | empty body | | short-code search no longer answers |
+| `searchplayers.php?t={team}` | | empty body | | players by team name no longer answers; use `lookup_all_players.php?id=` |
+
 ## 4. v2 endpoints (premium key)
 
 | Endpoint | Record key | Records | Documented limit | Notes |
@@ -216,7 +230,10 @@ Useful for client authors and for anyone improving the official docs.
 7. **v2 `search/event`** needs the exact stored event name. v1 `searchevents.php` matches looser input such as `Arsenal_vs_Chelsea`.
 8. **Empty results** take three forms (section 2), and none of them is documented.
 9. **The free key gets fewer fields from `all_leagues.php`:** `strLeagueAlternate` is missing. Elsewhere, the free key returns the same fields as premium, just fewer records. The docs mention only the record limits.
-10. **Wrong keys get HTTP 400**, with a "premium" message even on v1. Old example keys such as `1` no longer work.
+10. **Undocumented legacy endpoints still answer free keys but 404 for premium keys** (`eventsround.php`, `lookup_all_teams.php`, `searchloves.php`), and `lookup_all_teams.php` returns the wrong league. An app that works on the free key can break when it upgrades.
+11. **Rejected parameters come back as HTTP 200** with the error text where the records belong (section 2), not as an error status or a `Message`.
+12. **A second free key, `3`, still works.** The documentation mentions only `123`.
+13. **Wrong keys get HTTP 400**, with a "premium" message even on v1. Old example keys such as `1` no longer work.
 
 ## 6. Fields of each record type
 
@@ -226,8 +243,8 @@ are grouped. `strDescription{XX}` stands for one field per language code.
 
 ### v1 (premium key; the free key returns the same fields, except that `all_leagues.php` omits `strLeagueAlternate`)
 
-- `searchteams.php`, `lookupteam.php`, `search_all_teams.php` (63 fields): `idAPIfootball`, `idESPN`, `idLeague`, `idLeague2`, `idLeague3`, `idLeague4`, `idLeague5`, `idLeague6`, `idLeague7`, `idTeam`, `idVenue`, `intFormedYear`, `intLoved`, `strBadge`, `strBanner`, `strColour1`, `strColour2`, `strColour3`, `strCountry`, `strDescription{XX}` (CN, DE, EN, ES, FR, HU, IL, IT, JP, NL, NO, PL, PT, RU, SE), `strDivision`, `strEquipment`, `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strGender`, `strInstagram`, `strKeywords`, `strLeague`, `strLeague2`, `strLeague3`, `strLeague4`, `strLeague5`, `strLeague6`, `strLeague7`, `strLocation`, `strLocked`, `strLogo`, `strRSS`, `strSport`, `strStadium`, `strTeam`, `strTeamAlternate`, `strTeamShort`, `strTwitter`, `strWebsite`, `strYoutube`
-- `searchevents.php`, `searchfilename.php`, `lookupevent.php`, `eventsnext.php`, `eventslast.php`, `eventsnextleague.php`, `eventspastleague.php`, `eventsday.php` (49 fields): `dateEvent`, `dateEventLocal`, `idAPIfootball`, `idAwayTeam`, `idEvent`, `idHomeTeam`, `idLeague`, `idVenue`, `intAwayScore`, `intAwayScoreExtra`, `intHomeScore`, `intHomeScoreExtra`, `intRound`, `intScore`, `intScoreVotes`, `intSpectators`, `strAwayTeam`, `strAwayTeamBadge`, `strBanner`, `strCity`, `strCountry`, `strDescriptionEN`, `strEvent`, `strEventAlternate`, `strFanart`, `strFilename`, `strGroup`, `strHomeTeam`, `strHomeTeamBadge`, `strLeague`, `strLeagueBadge`, `strLocked`, `strMap`, `strOfficial`, `strPoster`, `strPostponed`, `strResult`, `strSeason`, `strSport`, `strSquare`, `strStatus`, `strThumb`, `strTime`, `strTimeLocal`, `strTimestamp`, `strTweet1`, `strVenue`, `strVideo`, `strWeather`
+- `searchteams.php`, `lookupteam.php`, `search_all_teams.php`, `lookup_all_teams.php` (63 fields): `idAPIfootball`, `idESPN`, `idLeague`, `idLeague2`, `idLeague3`, `idLeague4`, `idLeague5`, `idLeague6`, `idLeague7`, `idTeam`, `idVenue`, `intFormedYear`, `intLoved`, `strBadge`, `strBanner`, `strColour1`, `strColour2`, `strColour3`, `strCountry`, `strDescription{XX}` (CN, DE, EN, ES, FR, HU, IL, IT, JP, NL, NO, PL, PT, RU, SE), `strDivision`, `strEquipment`, `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strGender`, `strInstagram`, `strKeywords`, `strLeague`, `strLeague2`, `strLeague3`, `strLeague4`, `strLeague5`, `strLeague6`, `strLeague7`, `strLocation`, `strLocked`, `strLogo`, `strRSS`, `strSport`, `strStadium`, `strTeam`, `strTeamAlternate`, `strTeamShort`, `strTwitter`, `strWebsite`, `strYoutube`
+- `searchevents.php`, `searchfilename.php`, `lookupevent.php`, `eventsnext.php`, `eventslast.php`, `eventsnextleague.php`, `eventspastleague.php`, `eventsday.php`, `eventsround.php` (49 fields): `dateEvent`, `dateEventLocal`, `idAPIfootball`, `idAwayTeam`, `idEvent`, `idHomeTeam`, `idLeague`, `idVenue`, `intAwayScore`, `intAwayScoreExtra`, `intHomeScore`, `intHomeScoreExtra`, `intRound`, `intScore`, `intScoreVotes`, `intSpectators`, `strAwayTeam`, `strAwayTeamBadge`, `strBanner`, `strCity`, `strCountry`, `strDescriptionEN`, `strEvent`, `strEventAlternate`, `strFanart`, `strFilename`, `strGroup`, `strHomeTeam`, `strHomeTeamBadge`, `strLeague`, `strLeagueBadge`, `strLocked`, `strMap`, `strOfficial`, `strPoster`, `strPostponed`, `strResult`, `strSeason`, `strSport`, `strSquare`, `strStatus`, `strThumb`, `strTime`, `strTimeLocal`, `strTimestamp`, `strTweet1`, `strVenue`, `strVideo`, `strWeather`
 - `searchplayers.php` (13 fields): `dateBorn`, `idPlayer`, `idTeam`, `relevance`, `strCutout`, `strGender`, `strNationality`, `strPlayer`, `strPosition`, `strSport`, `strStatus`, `strTeam`, `strThumb`
 - `searchvenues.php`, `lookupvenue.php` (29 fields): `idDupe`, `idVenue`, `intCapacity`, `intFormedYear`, `intLoved`, `strArchitect`, `strCost`, `strCountry`, `strCreativeCommons`, `strDescriptionEN`, `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strInstagram`, `strLocation`, `strLocked`, `strLogo`, `strMap`, `strSport`, `strThumb`, `strTimezone`, `strTwitter`, `strVenue`, `strVenueAlternate`, `strVenueSponsor`, `strWebsite`, `strYoutube`
 - `lookupleague.php`, `search_all_leagues.php` (47 fields): `dateFirstEvent`, `idAPIfootball`, `idAPIfootballv3`, `idCup`, `idLeague`, `intDivision`, `intFormedYear`, `strBadge`, `strBanner`, `strComplete`, `strCountry`, `strCurrentSeason`, `strDescription{XX}` (CN, DE, EN, ES, FR, HU, IL, IT, JP, NL, NO, PL, PT, RU, SE), `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strGender`, `strInstagram`, `strLeague`, `strLeagueAlternate`, `strLocked`, `strLogo`, `strNaming`, `strPoster`, `strRSS`, `strSport`, `strTrophy`, `strTvRights`, `strTwitter`, `strWebsite`, `strYoutube`

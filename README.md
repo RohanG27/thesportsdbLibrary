@@ -14,7 +14,7 @@ A Kotlin/JVM client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v
 ## Quick start
 
 ```kotlin
-val client = SportsDbClient()                     // the free key, 123: v1 only, small results
+val client = SportsDbClient()                     // the free key, 123 (3 also works): v1 only, small results
 
 val arsenal = client.v1.lookup.team(133604)
 println(arsenal?.name)                            // Arsenal
@@ -46,6 +46,7 @@ val live = client.v2.live.all()
 val h = client.helpers
 h.currentSeason(4328)                                   // "2026-2027"
 h.seasonEvents(4328)                                    // the current season's fixtures
+h.roundEvents(4328, round = 7)                          // one matchday
 h.upcomingLeagueEvents(4328, days = 7)                  // the next week of a league
 h.recentLeagueResults(4328)
 h.teamSchedule(133604)                                  // past and future, all competitions
@@ -60,6 +61,7 @@ h.tvListings("Canada", sport = "Ice Hockey", days = 3)
 |---|---|---|
 | `currentSeason` | v2 `lookup/league` | `lookupleague.php` |
 | `seasonEvents` | v2 `schedule/league/{id}/{season}`: the whole season | `eventsseason.php`: first 5 events |
+| `roundEvents` | the season schedule, filtered by round | `eventsround.php` (undocumented; the whole round) |
 | `upcomingLeagueEvents` | the season schedule, filtered by date | `eventsday.php` once per day (3 events a day) |
 | `recentLeagueResults` | v2 `schedule/previous/league` | `eventspastleague.php` (1) |
 | `teamSchedule` | v2 `schedule/full/team` | `eventsnext.php` + `eventslast.php` (home games only) |

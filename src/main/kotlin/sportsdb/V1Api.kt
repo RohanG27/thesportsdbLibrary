@@ -261,6 +261,15 @@ public class V1Api internal constructor(r: Requester) {
                 .map { it.toEvent() }
         }
 
+        /**
+         * `eventsround.php?id=&r=&s=` — every event in one round (matchday) of a season.
+         * **Undocumented, and free keys only:** it answers the free keys (a whole round, e.g. 10
+         * games) but returns HTTP 404 to premium keys. With a premium key, use
+         * [SportsDbClient.helpers]' `roundEvents`, which filters the v2 season instead.
+         */
+        public suspend fun round(leagueId: Long, round: Int, season: String): List<Event> =
+            r.v1("eventsround.php", "events", MEDIUM, "id" to leagueId, "r" to round, "s" to season).map { it.toEvent() }
+
         /** `eventsseason.php?id=&s=` — a whole season in one call (premium). Free key: 5–15. */
         public suspend fun season(leagueId: Long, season: String): List<Event> =
             r.v1("eventsseason.php", "events", MEDIUM, "id" to leagueId, "s" to season).map { it.toEvent() }

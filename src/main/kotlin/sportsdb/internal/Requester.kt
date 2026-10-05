@@ -55,7 +55,7 @@ internal class Requester(
     suspend fun v2(recordKey: String, freshness: Freshness, vararg segments: Any): List<JsonObject> {
         if (config.isFreeKey) {
             throw PremiumRequiredException(
-                "v2 endpoints need a premium key; the free key 123 only works with v1 (client.v1).",
+                "v2 endpoints need a premium key; free keys (123, 3) only work with v1 (client.v1).",
             )
         }
         val url = base.newBuilder().addPathSegments("api/v2/json")

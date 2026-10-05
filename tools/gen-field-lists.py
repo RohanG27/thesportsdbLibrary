@@ -16,7 +16,11 @@ def calls(array):
 def fields(path):
     if not path.exists() or not path.read_text().strip():
         return None
-    records = next((v for v in json.loads(path.read_text()).values() if isinstance(v, list)), None)
+    try:
+        data = json.loads(path.read_text())
+    except json.JSONDecodeError:  # e.g. an HTML 404 page
+        return None
+    records = next((v for v in data.values() if isinstance(v, list)), None) if isinstance(data, dict) else None
     if not records:
         return None
     return tuple(sorted({k for r in records for k in r}, key=str.lower))
@@ -46,7 +50,8 @@ def section(title, items):
     return "\n".join(lines) + "\n"
 
 v1 = [(call.split("?")[0] + ("?…&" + call.split("&")[-1] if re.search(r"&(poster|badge|description)=1", call) else ""),
-       fixtures / "v1-premium" / f"{name}.json") for name, call in calls("V1")]
+       next((p for p in (fixtures / "v1-premium" / f"{name}.json", fixtures / "v1-free" / f"{name}.json") if fields(p)),
+            fixtures / "v1-premium" / f"{name}.json")) for name, call in calls("V1")]
 v2 = [(call, fixtures / "v2" / f"{name}.json") for name, call in calls("V2")]
 
 generated = (

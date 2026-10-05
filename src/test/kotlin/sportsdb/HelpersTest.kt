@@ -156,6 +156,25 @@ class HelpersTest {
         assertEquals(2, free.calls.size)
     }
 
+    @Test fun roundEvents() = runTest {
+        val free = Routes("eventsround.php" to "v1-free/events_round.json")
+        val round = helpers(free, premium = false).roundEvents(4328, round = 1, season = "2026-2027")
+        assertEquals(listOf("123/eventsround.php?id=4328&r=1&s=2026-2027"), free.calls)
+        assertEquals(10, round.size)
+
+        val premium = Routes("schedule/league/4328/2026-2027" to "v2/schedule_league_season.json")
+        val filtered = helpers(premium, premium = true).roundEvents(4328, round = 1, season = "2026-2027")
+        val expected = fixtureEvents("v2/schedule_league_season.json", "schedule").count { it["intRound"]!!.jsonPrimitive.content == "1" }
+        assertEquals(expected, filtered.size)
+        assertEquals(listOf("schedule/league/4328/2026-2027"), premium.calls, "premium must not call eventsround.php (it 404s)")
+    }
+
+    @Test fun keyThreeIsTreatedAsFree() = runTest {
+        val t = Routes("eventsround.php" to "v1-free/events_round.json")
+        SportsDbClient { apiKey = "3"; transport = t; requestsPerMinute = 0 }.helpers.roundEvents(4328, 1, "2026-2027")
+        assertEquals(listOf("3/eventsround.php?id=4328&r=1&s=2026-2027"), t.calls)
+    }
+
     @Test fun eventChannels() = runTest {
         val premium = Routes("lookup/event_tv/2494052" to "v2/lookup_event_tv.json")
         assertEquals(13, helpers(premium, premium = true).eventChannels(2494052).size)

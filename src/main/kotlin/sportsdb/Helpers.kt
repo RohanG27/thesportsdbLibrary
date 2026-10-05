@@ -39,6 +39,17 @@ public class Helpers internal constructor(private val client: SportsDbClient) {
     }
 
     /**
+     * Every event in one round (matchday) of a season ([season] defaults to the current one).
+     * Premium: filtered from the season schedule. Free key: v1's undocumented `eventsround.php`,
+     * which returns the whole round (premium keys get 404 from it, hence the two routes).
+     */
+    public suspend fun roundEvents(leagueId: Long, round: Int, season: String? = null): List<Event> {
+        if (premium) return seasonEvents(leagueId, season).filter { it.round == round }
+        val name = season ?: currentSeason(leagueId) ?: return emptyList()
+        return v1.schedule.round(leagueId, round, name).sortedByStart()
+    }
+
+    /**
      * A league's events starting in the next [days] UTC days, beginning with [from].
      * Premium: filtered from the season schedule (one or two calls). Free key: one
      * `eventsday` call per day, each limited to 3 events.

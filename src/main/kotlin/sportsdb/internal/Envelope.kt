@@ -47,7 +47,9 @@ internal fun parseRecords(body: String, expectedKey: String, displayUrl: String)
         is JsonNull -> emptyList()
         is JsonArray -> value.mapNotNull { (it as? JsonObject)?.let(::normalizeRecord) }
         is JsonObject -> listOf(normalizeRecord(value))
-        else -> throw ResponseParseException("Unexpected '$expectedKey' value in response from $displayUrl")
+        // A rejected parameter comes back as text in place of the records:
+        // {"seasons":"Invalid League ID passed"}, {"events":"Invalid League ID or no round passed"}.
+        is JsonPrimitive -> throw ApiMessageException("TheSportsDB said: ${value.content} ($displayUrl)", value.content)
     }
 }
 

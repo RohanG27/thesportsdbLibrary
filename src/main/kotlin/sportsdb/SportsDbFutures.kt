@@ -232,6 +232,15 @@ public class SportsDbFutures(
         @JvmOverloads public fun day(date: LocalDate, sport: String? = null, leagueId: Long? = null, leagueName: String? = null): CompletableFuture<List<Event>> =
             call { client.v1.schedule.day(date, sport, leagueId, leagueName) }
 
+        /**
+         * `eventsround.php?id=&r=&s=` — every event in one round (matchday) of a season.
+         * **Undocumented, and free keys only:** it answers the free keys (a whole round, e.g. 10
+         * games) but returns HTTP 404 to premium keys. With a premium key, use
+         * [SportsDbClient.helpers]' `roundEvents`, which filters the v2 season instead.
+         */
+        public fun round(leagueId: Long, round: Int, season: String): CompletableFuture<List<Event>> =
+            call { client.v1.schedule.round(leagueId, round, season) }
+
         /** `eventsseason.php?id=&s=` — a whole season in one call (premium). Free key: 5–15. */
         public fun season(leagueId: Long, season: String): CompletableFuture<List<Event>> =
             call { client.v1.schedule.season(leagueId, season) }
@@ -479,6 +488,14 @@ public class SportsDbFutures(
          */
         @JvmOverloads public fun seasonEvents(leagueId: Long, season: String? = null): CompletableFuture<List<Event>> =
             call { client.helpers.seasonEvents(leagueId, season) }
+
+        /**
+         * Every event in one round (matchday) of a season ([season] defaults to the current one).
+         * Premium: filtered from the season schedule. Free key: v1's undocumented `eventsround.php`,
+         * which returns the whole round (premium keys get 404 from it, hence the two routes).
+         */
+        @JvmOverloads public fun roundEvents(leagueId: Long, round: Int, season: String? = null): CompletableFuture<List<Event>> =
+            call { client.helpers.roundEvents(leagueId, round, season) }
 
         /**
          * A league's events starting in the next [days] UTC days, beginning with [from].

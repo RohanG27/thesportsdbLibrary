@@ -71,6 +71,10 @@ V1=(
   "events_tv_country|eventstv.php?d=2026-10-05&a=Canada&s=Ice_Hockey"
   "events_highlights_league|eventshighlights.php?d=2026-10-04&l=4328"
   "events_highlights_sport|eventshighlights.php?d=2026-10-04&s=Soccer"
+  "events_round|eventsround.php?id=4328&r=1&s=2026-2027"
+  "events_round_bad_param|eventsround.php?l=4328&r=1&s=2026-2027"
+  "search_all_seasons_bad_param|search_all_seasons.php?l=4328"
+  "lookup_all_teams_wrong_league|lookup_all_teams.php?id=4328"
 )
 
 V2=(
@@ -138,8 +142,9 @@ fetch() { # dir name url [header]
 for e in "${V1[@]}"; do
   fetch v1-free "${e%%|*}" "https://www.thesportsdb.com/api/v1/json/123/${e#*|}"
 done
-# A wrong key, to pin down the error shape.
+# A wrong key, to pin down the error shape; and "3", the other key that still works for free.
 fetch v1-free invalid_key "https://www.thesportsdb.com/api/v1/json/1/lookupleague.php?id=4328"
+fetch v1-free key3_all_sports "https://www.thesportsdb.com/api/v1/json/3/all_sports.php"
 
 if [[ -n ${THESPORTSDB_PREMIUM_KEY:-} ]]; then
   for e in "${V1[@]}"; do

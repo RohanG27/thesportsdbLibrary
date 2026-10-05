@@ -162,10 +162,13 @@ class V2Test {
         assertFailsWith<InvalidApiKeyException> { v2.lookup.league(4328) }
     }
 
-    @Test fun freeKeyNeverCallsV2() = runTest {
-        val free = FakeTransport()
-        assertFailsWith<PremiumRequiredException> { client(free).v2.all.sports() }
-        assertTrue(free.requests.isEmpty())
+    @Test fun freeKeysNeverCallV2() = runTest {
+        for (key in listOf("123", "3")) {
+            val free = FakeTransport()
+            assertFailsWith<PremiumRequiredException> { client(free, key).v2.all.sports() }
+            assertTrue(free.requests.isEmpty())
+            assertEquals(false, client(free, key).isPremiumKey())
+        }
     }
 
     @Test fun isPremiumKey() = runTest {

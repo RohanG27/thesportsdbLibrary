@@ -1,7 +1,7 @@
 # Endpoint map
 
 Every TheSportsDB endpoint, the library method that calls it, and what it returns.
-"Free" is the number of records the free key `123` gets (measured 5 Oct 2026, or from the
+"Free" is the number of records the free keys (`123`, and the older `3`) get (measured 5 Oct 2026, or from the
 official docs where marked †). Premium keys get the full result.
 
 The **record key** is the top-level JSON key that holds the records. It varies, and the library handles it, but you need it if you call the API yourself.
@@ -68,6 +68,7 @@ The **record key** is the top-level JSON key that holds the records. It varies, 
 | `eventspastleague.php?id={idLeague}` | `v1.schedule.leaguePast(leagueId)` | `List<Event>` | `events` | 1 |
 | `eventsday.php?d={date}[&s={sport}][&l={idLeague or name}]` | `v1.schedule.day(date, sport?, leagueId?/leagueName?)` | `List<Event>` | `events` | 3 |
 | `eventsseason.php?id={idLeague}&s={season}` | `v1.schedule.season(leagueId, season)` | `List<Event>` | `events` | 5 |
+| `eventsround.php?id={idLeague}&r={round}&s={season}` *(undocumented)* | `v1.schedule.round(leagueId, round, season)` | `List<Event>` | `events` | the whole round; **premium keys get 404** |
 
 ### TV
 

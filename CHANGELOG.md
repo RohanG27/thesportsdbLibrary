@@ -14,6 +14,12 @@ First version.
 - `requestListener`: a `RequestEvent` per call, for logging and metrics.
 - `client.helpers`: common tasks in one call (season fixtures, upcoming events, a team's schedule, events on a local calendar day, live scores, league teams, event channels, TV listings), using v2 with a premium key and v1 with the free key.
 
+### Fixed during review
+
+- The older free key `3` is recognised as free (`SportsDbConfig.FREE_API_KEYS`), so helpers use v1 for it and v2 calls fail fast.
+- A rejected parameter (`{"seasons":"Invalid League ID passed"}`) raises `ApiMessageException` with the API's text, instead of a generic parse error.
+- Added `v1.schedule.round` (`eventsround.php`, undocumented, free keys only) and the `helpers.roundEvents` helper, which uses the v2 season schedule on premium keys.
+
 ### Known issues
 
 - Placeholder Maven coordinates (`local.sportsdb`), and no license yet.

@@ -12,6 +12,8 @@ public final class sportsdb/Helpers {
 	public final fun liveScores (Ljava/lang/String;Ljava/lang/Long;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun liveScores$default (Lsportsdb/Helpers;Ljava/lang/String;Ljava/lang/Long;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public final fun recentLeagueResults (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun roundEvents (JILjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun roundEvents$default (Lsportsdb/Helpers;JILjava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public final fun seasonEvents (JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static synthetic fun seasonEvents$default (Lsportsdb/Helpers;JLjava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public final fun teamSchedule (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -84,6 +86,7 @@ public final class sportsdb/SportsDbClientKt {
 public final class sportsdb/SportsDbConfig {
 	public static final field Companion Lsportsdb/SportsDbConfig$Companion;
 	public static final field FREE_API_KEY Ljava/lang/String;
+	public static final field FREE_API_KEYS Ljava/util/Set;
 	public fun <init> ()V
 	public final fun getApiKey ()Ljava/lang/String;
 	public final fun getBaseUrl ()Ljava/lang/String;
@@ -149,6 +152,9 @@ public final class sportsdb/SportsDbFutures$HelpersFutures {
 	public final fun liveScores (Ljava/lang/String;Ljava/lang/Long;)Ljava/util/concurrent/CompletableFuture;
 	public static synthetic fun liveScores$default (Lsportsdb/SportsDbFutures$HelpersFutures;Ljava/lang/String;Ljava/lang/Long;ILjava/lang/Object;)Ljava/util/concurrent/CompletableFuture;
 	public final fun recentLeagueResults (J)Ljava/util/concurrent/CompletableFuture;
+	public final fun roundEvents (JI)Ljava/util/concurrent/CompletableFuture;
+	public final fun roundEvents (JILjava/lang/String;)Ljava/util/concurrent/CompletableFuture;
+	public static synthetic fun roundEvents$default (Lsportsdb/SportsDbFutures$HelpersFutures;JILjava/lang/String;ILjava/lang/Object;)Ljava/util/concurrent/CompletableFuture;
 	public final fun seasonEvents (J)Ljava/util/concurrent/CompletableFuture;
 	public final fun seasonEvents (JLjava/lang/String;)Ljava/util/concurrent/CompletableFuture;
 	public static synthetic fun seasonEvents$default (Lsportsdb/SportsDbFutures$HelpersFutures;JLjava/lang/String;ILjava/lang/Object;)Ljava/util/concurrent/CompletableFuture;
@@ -226,6 +232,7 @@ public final class sportsdb/SportsDbFutures$V1Schedule {
 	public static synthetic fun day$default (Lsportsdb/SportsDbFutures$V1Schedule;Ljava/time/LocalDate;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;ILjava/lang/Object;)Ljava/util/concurrent/CompletableFuture;
 	public final fun leagueNext (J)Ljava/util/concurrent/CompletableFuture;
 	public final fun leaguePast (J)Ljava/util/concurrent/CompletableFuture;
+	public final fun round (JILjava/lang/String;)Ljava/util/concurrent/CompletableFuture;
 	public final fun season (JLjava/lang/String;)Ljava/util/concurrent/CompletableFuture;
 	public final fun teamLast (J)Ljava/util/concurrent/CompletableFuture;
 	public final fun teamNext (J)Ljava/util/concurrent/CompletableFuture;
@@ -390,6 +397,7 @@ public final class sportsdb/V1Api$Schedule {
 	public static synthetic fun day$default (Lsportsdb/V1Api$Schedule;Ljava/time/LocalDate;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
 	public final fun leagueNext (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun leaguePast (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun round (JILjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun season (JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun teamLast (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun teamNext (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;

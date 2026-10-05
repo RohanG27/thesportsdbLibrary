@@ -69,11 +69,21 @@ public class SportsDbConfig {
     /** Java: sets [rateLimitWait]. */
     public fun setRateLimitWait(value: java.time.Duration) { rateLimitWait = value.toKotlinDuration() }
 
-    /** True when [apiKey] is the public free key. Paid keys are not checked offline; see [SportsDbClient.isPremiumKey]. */
-    public val isFreeKey: Boolean get() = apiKey == FREE_API_KEY
+    /**
+     * True when [apiKey] is one of the public free keys ([FREE_API_KEYS]). Any other key the
+     * API accepts is a paid key; see [SportsDbClient.isPremiumKey] to check one.
+     */
+    public val isFreeKey: Boolean get() = apiKey in FREE_API_KEYS
 
     public companion object {
         /** The public key for development and testing. */
         public const val FREE_API_KEY: String = "123"
+
+        /**
+         * Keys the API accepts without payment: `123` (documented) and `3` (an older key that
+         * still works, with the same limits; measured 5 Oct 2026).
+         */
+        @JvmField
+        public val FREE_API_KEYS: Set<String> = setOf(FREE_API_KEY, "3")
     }
 }

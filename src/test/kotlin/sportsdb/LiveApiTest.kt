@@ -54,7 +54,7 @@ class LiveApiTest {
         val zone = java.time.ZoneId.of("America/Toronto")
         val day = LocalDate.of(2026, 10, 4)
         val local = h.eventsOnLocalDate(day, zone, sport = "Soccer")
-        assertTrue(local.all { it.timestamp == null || it.timestamp!!.atZone(zone).toLocalDate() == day })
+        assertTrue(local.all { it.timestamp == null || it.timestamp.atZone(zone).toLocalDate() == day })
     }
 
     @Test fun v2WithPremiumKey() = runBlocking {

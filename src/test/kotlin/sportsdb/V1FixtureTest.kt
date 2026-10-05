@@ -7,6 +7,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
@@ -173,6 +174,19 @@ class V1FixtureTest {
         }
         t.respond(fixture("v1-free/events_highlights_league.json")) // {"tvhighlights":null}
         assertTrue(v1.video.highlights(LocalDate.of(2026, 10, 4), leagueId = 4328).isEmpty())
+    }
+
+    @Test fun roundAndLegacyQuirks() = runTest {
+        val round = check("events_round", "eventsround.php?id=4328&r=1&s=2026-2027") { v1.schedule.round(4328, 1, "2026-2027") }
+        assertEquals(10, round.size, "the free key gets a whole round")
+        assertTrue(round.all { it.round == 1 })
+
+        // A rejected parameter comes back as text where the records should be.
+        t.respond(fixture("v1-free/search_all_seasons_bad_param.json"))
+        val e = assertFailsWith<ApiMessageException> { v1.list.seasons(4328) }
+        assertEquals("Invalid League ID passed", e.apiMessage)
+        t.respond(fixture("v1-free/events_round_bad_param.json"))
+        assertFailsWith<ApiMessageException> { v1.schedule.round(4328, 1, "2026-2027") }
     }
 
     @Test fun emptyResults() = runTest {

@@ -9,7 +9,7 @@ Client libraries, a GraphQL schema and API documentation for [TheSportsDB](https
 | [`php/`](php/README.md) | **PHP** client (`sportsdb-php`) | PHP 8.2+, readonly models, no runtime dependencies |
 | [`javascript/`](javascript/README.md) | **JavaScript/TypeScript** client (`sportsdb-js`) | Node 18+, Deno, Bun and browsers; no dependencies |
 | [`graphql/`](graphql/README.md) | **GraphQL schema** (`sportsdb-graphql-schema`) | every record type and relationship, each annotated with the endpoints that resolve it |
-| [`docs-site/`](docs-site/README.md) | **API documentation**: guides plus an OpenAPI 3.1 reference | live at **https://rohang27.github.io/thesportsdbLibrary/** |
+| [`docs-site/`](docs-site/README.md) | **API documentation**: guides, an OpenAPI 3.1 reference, and each library's API reference | live at **https://rohang27.github.io/thesportsdbLibrary/** |
 | [`docs/`](docs/) | Shared references | [measured API behaviour](docs/THESPORTSDB-API-BEHAVIOUR.md), [endpoint map](docs/ENDPOINTS.md), [library parity checklist](docs/LIBRARY-PARITY.md) |
 
 ## What every library does

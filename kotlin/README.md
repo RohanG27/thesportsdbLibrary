@@ -1,5 +1,7 @@
 # sportsdb-kotlin
 
+**API reference:** https://rohang27.github.io/thesportsdbLibrary/api/kotlin/index.html (Dokka)
+
 > Part of [thesportsdbLibrary](../README.md). Run the commands below from `kotlin/`.
 
 A Kotlin/JVM client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2.

@@ -1,5 +1,7 @@
 # sportsdb-js
 
+**API reference:** https://rohang27.github.io/thesportsdbLibrary/api/javascript/index.html (TypeDoc)
+
 A JavaScript and TypeScript client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the JS sibling of the Kotlin (`../kotlin/`), Python (`../python/`) and PHP (`../php/`) libraries: same behaviour, same lessons, tested against the same recorded responses.
 
 - **Every documented endpoint**, plus the useful undocumented ones, one method each, for v1 and v2.

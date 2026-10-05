@@ -12,6 +12,7 @@ It consists of guides plus an OpenAPI 3.1 reference for v1 and v2. It's written 
 | `fields.yaml` | a hand-written glossary of every record field | — (the build fails if a recorded field is missing) |
 | `guides/*.md` | hand-written | — |
 | `site/` (git-ignored) | everything above | `tools/build_site.py` (Python Markdown plus the Redocly CLI, which needs Node) |
+| `site/api/` (git-ignored) | each library's source | `tools/build_api_docs.sh`: Dokka (Kotlin), pdoc (Python), phpDocumentor (PHP), TypeDoc (JavaScript) |
 
 ## Building
 

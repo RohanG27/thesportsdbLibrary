@@ -14,10 +14,12 @@ use SportsDb\V2\V2Api;
 /**
  * The TheSportsDB client.
  *
- *     $db = new SportsDb();                          // free key 123: v1 only
- *     $arsenal = $db->v1->lookup->team(133604);
- *     $db = new SportsDb(apiKey: getenv('THESPORTSDB_API_KEY'), cache: new InMemoryResponseCache());
- *     $tv = $db->v2->tv->country('Canada');
+ * ```php
+ * $db = new SportsDb();                          // free key 123: v1 only
+ * $arsenal = $db->v1->lookup->team(133604);
+ * $db = new SportsDb(apiKey: getenv('THESPORTSDB_API_KEY'), cache: new InMemoryResponseCache());
+ * $tv = $db->v2->tv->country('Canada');
+ * ```
  *
  * Reuse one client per key: its rate limiter and cache cover every call made through it.
  */

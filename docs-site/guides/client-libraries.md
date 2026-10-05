@@ -2,12 +2,14 @@
 
 Community libraries that handle the details on these pages: response formats, "no results", errors, UTC times, rate limits and keys.
 
-| Language | Library | Notes |
-|---|---|---|
-| Kotlin / Java (JVM) | `sportsdb-kotlin` | v1 and v2, typed models, coroutines plus a `CompletableFuture` API for Java |
-| Python | `sportsdb-python` | v1 and v2, typed models, blocking and async |
-| PHP | `sportsdb-php` | v1 and v2, typed readonly models, no runtime dependencies |
-| JavaScript / TypeScript | `sportsdb-js` | v1 and v2, typed models, Node, Deno, Bun and browsers, no dependencies |
+| Language | Library | Notes | API reference |
+|---|---|---|---|
+| Kotlin / Java (JVM) | `sportsdb-kotlin` | v1 and v2, typed models, coroutines plus a `CompletableFuture` API for Java | [Dokka](api/kotlin/index.html) |
+| Python | `sportsdb-python` | v1 and v2, typed models, blocking and async | [pdoc](api/python/sportsdb.html) |
+| PHP | `sportsdb-php` | v1 and v2, typed readonly models, no runtime dependencies | [phpDocumentor](api/php/index.html) |
+| JavaScript / TypeScript | `sportsdb-js` | v1 and v2, typed models, Node, Deno, Bun and browsers, no dependencies | [TypeDoc](api/javascript/index.html) |
+
+The source is at [github.com/RohanG27/thesportsdbLibrary](https://github.com/RohanG27/thesportsdbLibrary).
 
 All four are tested against the same recorded real responses, and handle every behaviour described in these guides.
 

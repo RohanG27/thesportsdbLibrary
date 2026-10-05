@@ -1,5 +1,7 @@
 # sportsdb-php
 
+**API reference:** https://rohang27.github.io/thesportsdbLibrary/api/php/index.html (phpDocumentor)
+
 A PHP client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the PHP sibling of the Kotlin library (`../kotlin/`) and the Python library (`../python/`): same behaviour, same lessons, tested against the same recorded responses.
 
 - **Every documented endpoint**, plus the useful undocumented ones, one method each, for v1 and v2.

@@ -141,6 +141,10 @@ Requires JDK 17 to build (the output targets Java 11).
 ./gradlew dokkaGenerate    # API reference: build/dokka/html/index.html
 tools/record-fixtures.sh   # re-record test fixtures (THESPORTSDB_PREMIUM_KEY=... adds v2)
 python3 tools/gen-futures.py   # regenerate SportsDbFutures after changing V1Api/V2Api
+./gradlew updateKotlinAbi      # after an intended public-API change (checkKotlinAbi runs in `check`)
+./gradlew publishToMavenLocal  # use it from another project: mavenLocal(), local.sportsdb:sportsdb-kotlin:0.1.0-SNAPSHOT
 ```
+
+CI (`.github/workflows/ci.yml`) runs the offline build, the ABI check and the docs build on every push and pull request. Weekly, it also runs the live tests, to catch changes in TheSportsDB's API. Add a `THESPORTSDB_API_KEY` repository secret to include v2.
 
 See [docs/THESPORTSDB-API-BEHAVIOUR.md](docs/THESPORTSDB-API-BEHAVIOUR.md) for the measured API behaviour this library is built on, including where it differs from the official documentation.

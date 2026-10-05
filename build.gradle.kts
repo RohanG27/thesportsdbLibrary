@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "2.4.20"
     `java-library`
+    `maven-publish`
     id("org.jetbrains.dokka") version "2.2.0"
 }
 
@@ -13,6 +14,8 @@ repositories {
 
 kotlin {
     explicitApi()
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation()
     jvmToolchain(17)
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
@@ -56,5 +59,20 @@ dokka {
     dokkaSourceSets.main {
         includes.from("docs/dokka-module.md")
         jdkVersion.set(11)
+    }
+}
+
+// Placeholder coordinates (group "local.sportsdb"); set real ones and a license before publishing anywhere public.
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+            artifactId = "sportsdb-kotlin"
+            pom {
+                name.set("sportsdb-kotlin")
+                description.set("Kotlin/JVM client for TheSportsDB API v1 and v2, with typed models, rate limiting, caching and a Java CompletableFuture API.")
+                // TODO: url, licenses, developers and scm are required by Maven Central.
+            }
+        }
     }
 }

@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"   # weekly: catch TheSportsDB API changes with the live tests
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v6
+      # Offline tests against recorded responses, the public-API (ABI) check, and the docs build.
+      - run: ./gradlew build dokkaGenerate
+      - name: Check the generated Java facade is up to date
+        run: |
+          python3 tools/gen-futures.py
+          git diff --exit-code src/main/kotlin/sportsdb/SportsDbFutures.kt
+
+  live:
+    # Calls the real API. Uses the free key unless the THESPORTSDB_API_KEY secret is set (then v2 too).
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v6
+      - run: ./gradlew liveTest
+        env:
+          THESPORTSDB_API_KEY: ${{ secrets.THESPORTSDB_API_KEY }}

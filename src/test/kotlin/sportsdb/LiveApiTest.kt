@@ -15,7 +15,7 @@ import kotlin.test.assertTrue
  */
 @Tag("live")
 class LiveApiTest {
-    private val key = System.getenv("THESPORTSDB_API_KEY") ?: SportsDbConfig.FREE_API_KEY
+    private val key = System.getenv("THESPORTSDB_API_KEY")?.takeIf { it.isNotBlank() } ?: SportsDbConfig.FREE_API_KEY
     private val client = SportsDbClient { apiKey = key }
 
     @Test fun lookupTeam() = runBlocking {

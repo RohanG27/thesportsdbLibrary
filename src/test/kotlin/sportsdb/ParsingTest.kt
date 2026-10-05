@@ -106,6 +106,11 @@ class ParsingTest {
         assertEquals("$badge/tiny", badge.sized(ImageSize.TINY))
         assertEquals("$badge/small", "$badge/tiny".sized(ImageSize.SMALL))
         assertEquals("https://example.com/x.png", "https://example.com/x.png".sized(ImageSize.TINY))
+        // Verified 5 Oct 2026: /tiny works under www.thesportsdb.com/images/media/ but 404s elsewhere on www.
+        val honour = "https://www.thesportsdb.com/images/media/honour/logo/mxhjar1650460067.png"
+        assertEquals("$honour/tiny", honour.sized(ImageSize.TINY))
+        val sportThumb = "https://www.thesportsdb.com/images/sports/soccer.jpg"
+        assertEquals(sportThumb, sportThumb.sized(ImageSize.TINY))
     }
 }
 

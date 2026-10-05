@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\V2;
+namespace RohanG27\TheSportsDb\V2;
 
-use SportsDb\Internal\Requester;
+use RohanG27\TheSportsDb\Internal\Requester;
 
 /**
  * The v2 API: https://www.thesportsdb.com/api/v2/json/{group}/{name}/{param}, key in the

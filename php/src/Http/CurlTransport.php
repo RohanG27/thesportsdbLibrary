@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Http;
+namespace RohanG27\TheSportsDb\Http;
 
 /** The default transport, on ext-curl. */
 final class CurlTransport implements Transport

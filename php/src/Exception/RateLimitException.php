@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Exception;
+namespace RohanG27\TheSportsDb\Exception;
 
 /** HTTP 429 after the retry was used up or disabled. */
 final class RateLimitException extends SportsDbException

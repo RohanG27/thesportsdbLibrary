@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Tests;
+namespace RohanG27\TheSportsDb\Tests;
 
-use SportsDb\Clock;
-use SportsDb\Http\Response;
-use SportsDb\Http\Transport;
-use SportsDb\Http\TransportException;
-use SportsDb\SportsDb;
+use RohanG27\TheSportsDb\Clock;
+use RohanG27\TheSportsDb\Http\Response;
+use RohanG27\TheSportsDb\Http\Transport;
+use RohanG27\TheSportsDb\Http\TransportException;
+use RohanG27\TheSportsDb\SportsDb;
 
 const PREMIUM = '9999999999'; // a stand-in; fixtures never contain a real key
 

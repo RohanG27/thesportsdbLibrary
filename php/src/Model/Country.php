@@ -4,9 +4,9 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Model;
+namespace RohanG27\TheSportsDb\Model;
 
-use SportsDb\Internal\Rec;
+use RohanG27\TheSportsDb\Internal\Rec;
 
 /**
  * A country (`all_countries.php`, `all/countries`). v1 returns only [name] and [flag32].

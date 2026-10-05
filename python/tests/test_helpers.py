@@ -7,7 +7,7 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
-from sportsdb import SportsDB
+from thesportsdb_client import SportsDB
 
 from .conftest import PREMIUM, Routes, fixture_records
 

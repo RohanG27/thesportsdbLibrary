@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Exception;
+namespace RohanG27\TheSportsDb\Exception;
 
 /**
  * The API answered with a message instead of data: an unrecognised {"Message": ...} body, or a

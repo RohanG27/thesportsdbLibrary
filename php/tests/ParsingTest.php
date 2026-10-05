@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Tests;
+namespace RohanG27\TheSportsDb\Tests;
 
 use PHPUnit\Framework\TestCase;
-use SportsDb\Exception\ApiMessageException;
-use SportsDb\Exception\InvalidApiKeyException;
-use SportsDb\Exception\ResponseParseException;
-use SportsDb\Internal\Envelope;
-use SportsDb\Internal\Rec;
-use SportsDb\Model\EventStatus;
-use SportsDb\Model\ImageSize;
+use RohanG27\TheSportsDb\Exception\ApiMessageException;
+use RohanG27\TheSportsDb\Exception\InvalidApiKeyException;
+use RohanG27\TheSportsDb\Exception\ResponseParseException;
+use RohanG27\TheSportsDb\Internal\Envelope;
+use RohanG27\TheSportsDb\Internal\Rec;
+use RohanG27\TheSportsDb\Model\EventStatus;
+use RohanG27\TheSportsDb\Model\ImageSize;
 
 final class ParsingTest extends TestCase
 {
@@ -99,11 +99,11 @@ final class ParsingTest extends TestCase
 
     public function testRoundStages(): void
     {
-        self::assertSame(\SportsDb\Model\RoundStage::Final, \SportsDb\Model\RoundStage::of(200));
-        self::assertSame(\SportsDb\Model\RoundStage::PreSeason, \SportsDb\Model\RoundStage::of(500));
-        self::assertNull(\SportsDb\Model\RoundStage::of(38));
-        self::assertNull(\SportsDb\Model\RoundStage::of(226)); // seen in the data; not a documented code
-        self::assertNull(\SportsDb\Model\RoundStage::of(null));
+        self::assertSame(\RohanG27\TheSportsDb\Model\RoundStage::Final, \RohanG27\TheSportsDb\Model\RoundStage::of(200));
+        self::assertSame(\RohanG27\TheSportsDb\Model\RoundStage::PreSeason, \RohanG27\TheSportsDb\Model\RoundStage::of(500));
+        self::assertNull(\RohanG27\TheSportsDb\Model\RoundStage::of(38));
+        self::assertNull(\RohanG27\TheSportsDb\Model\RoundStage::of(226)); // seen in the data; not a documented code
+        self::assertNull(\RohanG27\TheSportsDb\Model\RoundStage::of(null));
     }
 
     public function testImageSizes(): void

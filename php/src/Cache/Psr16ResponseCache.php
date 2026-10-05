@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Cache;
+namespace RohanG27\TheSportsDb\Cache;
 
 use Psr\SimpleCache\CacheInterface;
 
 /** Caches responses in any PSR-16 cache (Redis, APCu, files...). Needs psr/simple-cache. */
 final class Psr16ResponseCache implements ResponseCache
 {
-    public function __construct(private readonly CacheInterface $cache, private readonly string $prefix = 'sportsdb.')
+    public function __construct(private readonly CacheInterface $cache, private readonly string $prefix = 'thesportsdb.')
     {
     }
 

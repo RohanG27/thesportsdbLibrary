@@ -1,4 +1,4 @@
-# sportsdb-php
+# thesportsdb-client
 
 **API reference:** https://rohang27.github.io/thesportsdbLibrary/api/php/index.html (phpDocumentor)
 
@@ -26,11 +26,21 @@ A PHP client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's
 
 > Not affiliated with TheSportsDB. Read their [terms](https://www.thesportsdb.com/docs_terms_of_use.php) before publishing an app; artwork that isn't Creative Commons may not be used in published apps (see `Player::$creativeCommons`).
 
+## Install
+
+Not published yet: until the first release, build it from this folder (see [Development](#development)).
+
+```sh
+composer require rohang27/thesportsdb-client
+```
+
+The namespace is `RohanG27\TheSportsDb`.
+
 ## Quick start
 
 ```php
-use SportsDb\SportsDb;
-use SportsDb\Model\ImageSize;
+use RohanG27\TheSportsDb\SportsDb;
+use RohanG27\TheSportsDb\Model\ImageSize;
 
 $db = new SportsDb();                                   // the free key "123" ("3" also works): v1 only
 $arsenal = $db->v1->lookup->team(133604);
@@ -39,7 +49,7 @@ $table = $db->v1->lookup->table(4328);                  // Premier League standi
 ```
 
 ```php
-use SportsDb\Cache\InMemoryResponseCache;
+use RohanG27\TheSportsDb\Cache\InMemoryResponseCache;
 
 $db = new SportsDb(apiKey: getenv('THESPORTSDB_API_KEY'), cache: new InMemoryResponseCache());
 $league = $db->v2->lookup->league(4328);
@@ -88,7 +98,7 @@ $h->tvListings('Canada', sport: 'Ice Hockey', days: 3);
 
 ## Errors
 
-All exceptions extend `SportsDb\Exception\SportsDbException`:
+All exceptions extend `RohanG27\TheSportsDb\Exception\SportsDbException`:
 
 | Exception | When |
 |---|---|
@@ -133,7 +143,7 @@ python3 tools/gen_models.py                 # regenerate src/Model/ after changi
 php tools/sync_fixtures.php                 # copy re-recorded fixtures from the Kotlin project
 ```
 
-`src/Model/` is generated from `../kotlin/src/main/kotlin/sportsdb/model/` (except the hand-written `ApiRecord`, `Socials`, `LeagueRef`, `PlayerExternalIds`, `EventStatus` and `ImageSize`), and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
+`src/Model/` is generated from `../kotlin/src/main/kotlin/io/github/rohang27/thesportsdb/model/` (except the hand-written `ApiRecord`, `Socials`, `LeagueRef`, `PlayerExternalIds`, `EventStatus` and `ImageSize`), and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
 
 ## License
 

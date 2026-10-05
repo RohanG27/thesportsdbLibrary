@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Tests;
+namespace RohanG27\TheSportsDb\Tests;
 
 use PHPUnit\Framework\TestCase;
 

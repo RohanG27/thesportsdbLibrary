@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Generates each client library's API reference into docs-site/site/api/<library>/:
 #   kotlin      Dokka (Gradle)            -> api/kotlin/index.html
-#   python      pdoc                      -> api/python/sportsdb.html
+#   python      pdoc                      -> api/python/thesportsdb_client.html
 #   php         phpDocumentor (phar)      -> api/php/index.html
 #   javascript  TypeDoc                   -> api/javascript/index.html
 #
@@ -21,16 +21,16 @@ echo "Kotlin (Dokka)"
 cp -r "$ROOT/kotlin/build/dokka/html" "$OUT/kotlin"
 
 echo "Python (pdoc)"
-(cd "$ROOT/python" && "$PY" -m pdoc sportsdb -o "$OUT/python" --docformat restructuredtext)
+(cd "$ROOT/python" && "$PY" -m pdoc thesportsdb_client -o "$OUT/python" --docformat restructuredtext)
 
 echo "PHP (phpDocumentor)"
 curl -sSL -o "$TMP/phpDocumentor.phar" https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.10.0/phpDocumentor.phar
-(cd "$ROOT/php" && php "$TMP/phpDocumentor.phar" run -d src -t "$OUT/php" --title "sportsdb-php" \
-    --defaultpackagename "sportsdb-php" --cache-folder "$TMP/phpdoc-cache" --no-interaction -q)
+(cd "$ROOT/php" && php "$TMP/phpDocumentor.phar" run -d src -t "$OUT/php" --title "thesportsdb-client" \
+    --defaultpackagename "thesportsdb-client" --cache-folder "$TMP/phpdoc-cache" --no-interaction -q)
 
 echo "JavaScript (TypeDoc; TypeDoc supports TypeScript up to 6, the library builds with 7)"
 (cd "$ROOT/javascript" && npx -y -p typedoc@0.28 -p typescript@6 typedoc --entryPoints src/index.ts --tsconfig tsconfig.json \
-    --out "$OUT/javascript" --name "sportsdb-js" --readme none --excludeInternal --skipErrorChecking \
+    --out "$OUT/javascript" --name "thesportsdb-client" --readme none --excludeInternal --skipErrorChecking \
     --disableGit --gitRevision main --basePath .. \
     --sourceLinkTemplate "$REPO_URL/blob/{gitRevision}/javascript/src/{path}#L{line}" --logLevel Warn)
 

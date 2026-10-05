@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Internal;
+namespace RohanG27\TheSportsDb\Internal;
 
-use SportsDb\Exception\ApiMessageException;
-use SportsDb\Exception\InvalidApiKeyException;
-use SportsDb\Exception\ResponseParseException;
+use RohanG27\TheSportsDb\Exception\ApiMessageException;
+use RohanG27\TheSportsDb\Exception\InvalidApiKeyException;
+use RohanG27\TheSportsDb\Exception\ResponseParseException;
 
 /**
  * Pulls the records out of a response. Every response is one JSON object with one key holding a

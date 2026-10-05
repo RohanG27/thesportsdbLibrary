@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Tests;
+namespace RohanG27\TheSportsDb\Tests;
 
 use PHPUnit\Framework\TestCase;
-use SportsDb\Helpers;
-use SportsDb\SportsDb;
+use RohanG27\TheSportsDb\Helpers;
+use RohanG27\TheSportsDb\SportsDb;
 
 /** Helpers route to v2 for premium keys and v1 for free keys. */
 final class HelpersTest extends TestCase

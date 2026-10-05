@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Tests;
+namespace RohanG27\TheSportsDb\Tests;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SportsDb\Config;
-use SportsDb\SportsDb;
+use RohanG27\TheSportsDb\Config;
+use RohanG27\TheSportsDb\SportsDb;
 
 /** Calls the real API. Excluded by default; run with: vendor/bin/phpunit --group live (THESPORTSDB_API_KEY for v2). */
 #[Group('live')]

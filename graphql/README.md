@@ -1,4 +1,4 @@
-# sportsdb-graphql-schema
+# thesportsdb-graphql-schema
 
 A GraphQL schema for [TheSportsDB](https://www.thesportsdb.com) API: every record type, the relationships between them, and the queries a client needs. Each relationship and query is annotated with the v1 and v2 endpoints that resolve it. It's a schema, not a server: use it to build a GraphQL gateway, generate typed clients, or document the data.
 
@@ -19,11 +19,19 @@ A GraphQL schema for [TheSportsDB](https://www.thesportsdb.com) API: every recor
   - `JSONObject` for `raw`, every field as the API sent it.
 - **Image sizes:** image fields take an optional `size: ImageSize` (`MEDIUM`, `SMALL`, `TINY`), e.g. `badge(size: TINY)`.
 
+## Install
+
+Not published yet: until the first release, build it from this folder (see [Development](#development)).
+
+```sh
+npm install thesportsdb-graphql-schema
+```
+
 ## Using it
 
 ```ts
-import { typeDefs, sources } from "sportsdb-graphql-schema";
-// The .graphql file itself: "sportsdb-graphql-schema/schema.graphql"
+import { typeDefs, sources } from "thesportsdb-graphql-schema";
+// The .graphql file itself: "thesportsdb-graphql-schema/schema.graphql"
 ```
 
 - `typeDefs` is the SDL string, for GraphQL Yoga, Apollo Server, graphql-js `buildSchema`, or code generators such as GraphQL Code Generator.
@@ -34,7 +42,7 @@ The package has no runtime dependencies. `graphql` is an optional peer dependenc
 A typical server resolves relationships through one of the client libraries, which already handle the API's quirks: rate limits, retries, "no results" forms, free versus premium keys, and UTC times. With the JavaScript library, for example:
 
 ```ts
-import { SportsDb } from "sportsdb-js";
+import { SportsDb } from "thesportsdb-client";
 const db = new SportsDb({ apiKey: process.env.THESPORTSDB_API_KEY });
 const resolvers = {
   Query: { team: (_: unknown, { id }: { id: string }) => db.v1.lookup.team(Number(id)) },
@@ -137,7 +145,7 @@ npm run build
 
 Sources:
 - `src/relations.graphql` (hand-written): scalars, `@source`, `Query` and the relationships.
-- The record types: generated from `../kotlin/src/main/kotlin/sportsdb/model/`.
+- The record types: generated from `../kotlin/src/main/kotlin/io/github/rohang27/thesportsdb/model/`.
 - Field descriptions: from `../docs-site/fields.yaml`.
 
 ## License

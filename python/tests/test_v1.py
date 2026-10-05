@@ -8,7 +8,7 @@ from typing import Any
 
 import pytest
 
-from sportsdb import ApiMessageError, EventStatus, SportsDB
+from thesportsdb_client import ApiMessageError, EventStatus, SportsDB
 
 from .conftest import FakeTransport, client, fixture
 
@@ -106,7 +106,7 @@ def test_older_events_have_no_status() -> None:
     assert event.status_code is None and event.status is EventStatus.UNKNOWN
     assert event.home_score == 4
     # The 2017 FA Cup final is recorded with intRound 200: the "final" stage code.
-    from sportsdb import RoundStage
+    from thesportsdb_client import RoundStage
 
     final = client(FakeTransport().respond(fixture("v1-free/search_events_season.json"))).v1.search.events(
         "Arsenal_vs_Chelsea", season="2016-2017")[0]

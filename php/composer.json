@@ -1,5 +1,5 @@
 {
-    "name": "local/sportsdb-php",
+    "name": "rohang27/thesportsdb-client",
     "description": "PHP client for TheSportsDB API v1 and v2: typed models, rate limiting, retries, caching.",
     "type": "library",
     "keywords": [
@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "SportsDb\\": "src/"
+            "RohanG27\\TheSportsDb\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "SportsDb\\Tests\\": "tests/"
+            "RohanG27\\TheSportsDb\\Tests\\": "tests/"
         },
         "files": [
             "tests/Support.php"

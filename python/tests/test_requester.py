@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from sportsdb import (
+from thesportsdb_client import (
     HTTPStatusError,
     InMemoryResponseCache,
     InvalidApiKeyError,
@@ -90,7 +90,7 @@ def test_v1_key_never_appears_in_errors(no_sleep: list[float]) -> None:
 def test_user_agent_is_sent() -> None:
     t = FakeTransport().respond(OK)
     client(t).v1.list.sports()
-    assert t.requests[0][1]["User-Agent"] == "sportsdb-python"
+    assert t.requests[0][1]["User-Agent"] == "thesportsdb-client-python"
 
 
 def test_cache_serves_repeats_and_keeps_keys_out() -> None:

@@ -4,9 +4,9 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Model;
+namespace RohanG27\TheSportsDb\Model;
 
-use SportsDb\Internal\Rec;
+use RohanG27\TheSportsDb\Internal\Rec;
 
 /**
  * One broadcast of an event on one channel (v1 `lookuptv.php`/`eventstv.php`, v2 `lookup/event_tv`/`filter/tv`).

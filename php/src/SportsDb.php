@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SportsDb;
+namespace RohanG27\TheSportsDb;
 
-use SportsDb\Exception\InvalidApiKeyException;
-use SportsDb\Http\CurlTransport;
-use SportsDb\Http\Transport;
-use SportsDb\Internal\Requester;
-use SportsDb\V1\V1Api;
-use SportsDb\V2\V2Api;
+use RohanG27\TheSportsDb\Exception\InvalidApiKeyException;
+use RohanG27\TheSportsDb\Http\CurlTransport;
+use RohanG27\TheSportsDb\Http\Transport;
+use RohanG27\TheSportsDb\Internal\Requester;
+use RohanG27\TheSportsDb\V1\V1Api;
+use RohanG27\TheSportsDb\V2\V2Api;
 
 /**
  * The TheSportsDB client.
@@ -50,7 +50,7 @@ final class SportsDb
         float $timeout = 30.0,
         ?\Closure $requestListener = null,
         string $baseUrl = 'https://www.thesportsdb.com',
-        string $userAgent = 'sportsdb-php',
+        string $userAgent = 'thesportsdb-client-php',
         ?Transport $transport = null,
         ?Clock $clock = null,
     ) {

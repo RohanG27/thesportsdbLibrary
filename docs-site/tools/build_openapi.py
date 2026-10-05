@@ -6,7 +6,7 @@ Three sources:
   official documentation and the measurements in docs/THESPORTSDB-API-BEHAVIOUR.md).
 - The recorded responses in kotlin/src/test/resources/fixtures/: one schema per record type with every
   field ever seen, the measured free/premium counts, and real (trimmed) examples.
-- The field comments in python/src/sportsdb/models.py, for field descriptions.
+- The field comments in python/src/thesportsdb_client/models.py, for field descriptions.
 
     docs-site/.venv/bin/python docs-site/tools/build_openapi.py
 """
@@ -23,7 +23,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 FIXTURES = ROOT / "kotlin" / "src" / "test" / "resources" / "fixtures"
-MODELS = ROOT / "python" / "src" / "sportsdb" / "models.py"
+MODELS = ROOT / "python" / "src" / "thesportsdb_client" / "models.py"
 OUT = ROOT / "docs-site" / "openapi"
 MEASURED = "5 Oct 2026"
 
@@ -276,7 +276,7 @@ TAGS = {
 
 
 def field_docs() -> dict[str, dict[str, str]]:
-    """{schema: {apiField: description}} from the comments in python/src/sportsdb/models.py."""
+    """{schema: {apiField: description}} from the comments in python/src/thesportsdb_client/models.py."""
     src = MODELS.read_text()
     parts = re.split(r"\nclass (\w+)\(ApiRecord\):", src)
     docs: dict[str, dict[str, str]] = {}

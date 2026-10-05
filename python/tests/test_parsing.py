@@ -4,9 +4,9 @@ from datetime import date, datetime, time, timezone
 
 import pytest
 
-from sportsdb import ApiMessageError, EventStatus, ImageSize, InvalidApiKeyError, ResponseParseError, sized
-from sportsdb._envelope import normalize, parse_records
-from sportsdb._fields import Rec
+from thesportsdb_client import ApiMessageError, EventStatus, ImageSize, InvalidApiKeyError, ResponseParseError, sized
+from thesportsdb_client._envelope import normalize, parse_records
+from thesportsdb_client._fields import Rec
 
 
 def rec(**values: object) -> Rec:
@@ -88,7 +88,7 @@ def test_image_sizes() -> None:
 
 
 def test_round_stages() -> None:
-    from sportsdb import RoundStage
+    from thesportsdb_client import RoundStage
 
     assert RoundStage.of(200) is RoundStage.FINAL
     assert RoundStage.of(500) is RoundStage.PRE_SEASON

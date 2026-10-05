@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb;
+namespace RohanG27\TheSportsDb;
 
 final class SystemClock implements Clock
 {

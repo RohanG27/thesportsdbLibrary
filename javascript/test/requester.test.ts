@@ -76,7 +76,7 @@ describe("retries, rate limits, errors", () => {
   it("sends a User-Agent", async () => {
     const t = new FakeTransport().respond(OK);
     await client(t).v1.list.sports();
-    expect(t.requests[0]?.[1]["User-Agent"]).toBe("sportsdb-js");
+    expect(t.requests[0]?.[1]["User-Agent"]).toBe("thesportsdb-client-js");
   });
 });
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Exception;
+namespace RohanG27\TheSportsDb\Exception;
 
 /** Any other non-2xx HTTP response, after retries for 5xx. */
 final class HttpStatusException extends SportsDbException

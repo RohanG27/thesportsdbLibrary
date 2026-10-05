@@ -1,4 +1,4 @@
-# sportsdb-kotlin
+# thesportsdb-client
 
 **API reference:** https://rohang27.github.io/thesportsdbLibrary/api/kotlin/index.html (Dokka)
 
@@ -16,6 +16,16 @@ A Kotlin/JVM client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v
 - Coroutines (`suspend`) on OkHttp 5, plus a `CompletableFuture` API for Java. JVM 11+ and Android (API 26+).
 
 > Not affiliated with TheSportsDB. Read their [terms](https://www.thesportsdb.com/docs_terms_of_use.php) before you publish an app. In particular, artwork that isn't Creative Commons may not be used in published apps (see `Player.creativeCommons`).
+
+## Install
+
+Not published yet: until the first release, build it from this folder (see [Building](#building)).
+
+```kotlin
+implementation("io.github.rohang27:thesportsdb-client:0.1.0")  // Gradle; Maven: groupId io.github.rohang27, artifactId thesportsdb-client
+```
+
+The package is `io.github.rohang27.thesportsdb`.
 
 ## Quick start
 
@@ -200,7 +210,7 @@ Requires JDK 17 to build (the output targets Java 11).
 ../tools/record-fixtures.sh   # re-record test fixtures (shared by every library) (THESPORTSDB_PREMIUM_KEY=... adds v2)
 python3 tools/gen-futures.py   # regenerate SportsDbFutures after changing V1Api/V2Api
 ./gradlew updateKotlinAbi      # after an intended public-API change (checkKotlinAbi runs in `check`)
-./gradlew publishToMavenLocal  # use it from another project: mavenLocal(), local.sportsdb:sportsdb-kotlin:0.1.0-SNAPSHOT
+./gradlew publishToMavenLocal  # use it from another project: mavenLocal(), io.github.rohang27:thesportsdb-client:0.1.0-SNAPSHOT
 ```
 
 CI (`../.github/workflows/ci.yml`) runs the offline build, the ABI check and the docs build on every push and pull request. Weekly, it also runs the live tests, to catch changes in TheSportsDB's API. Add a `THESPORTSDB_API_KEY` repository secret to include v2.

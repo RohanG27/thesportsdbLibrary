@@ -4,9 +4,9 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Model;
+namespace RohanG27\TheSportsDb\Model;
 
-use SportsDb\Internal\Rec;
+use RohanG27\TheSportsDb\Internal\Rec;
 
 /**
  * A goal, card or substitution during an event (`lookuptimeline.php`, `lookup/event_timeline`).

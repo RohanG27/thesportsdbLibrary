@@ -4,9 +4,9 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Model;
+namespace RohanG27\TheSportsDb\Model;
 
-use SportsDb\Internal\Rec;
+use RohanG27\TheSportsDb\Internal\Rec;
 
 /**
  * One player in an event's lineup (`lookuplineup.php`, `lookup/event_lineup`).

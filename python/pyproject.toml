@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "sportsdb-python"  # placeholder distribution name, like the Kotlin library's coordinates
+name = "thesportsdb-client"
 version = "0.1.0.dev0"
 description = "Python client for TheSportsDB API v1 and v2: typed models, sync and async, rate limiting, caching."
 readme = "README.md"
@@ -21,7 +21,7 @@ classifiers = [
 dev = ["pytest", "anyio", "mypy", "ruff"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/sportsdb"]
+packages = ["src/thesportsdb_client"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -30,12 +30,12 @@ addopts = "-m 'not live'"
 
 [tool.mypy]
 strict = true
-files = ["src/sportsdb"]
+files = ["src/thesportsdb_client"]
 
 [tool.ruff]
 line-length = 135
 src = ["src", "tests"]
-extend-exclude = ["src/sportsdb/_sync"]  # generated from _async
+extend-exclude = ["src/thesportsdb_client/_sync"]  # generated from _async
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]

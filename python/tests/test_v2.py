@@ -8,7 +8,7 @@ from typing import Any
 
 import pytest
 
-from sportsdb import EventStatus, InvalidApiKeyError, PremiumRequiredError, SportsDB
+from thesportsdb_client import EventStatus, InvalidApiKeyError, PremiumRequiredError, SportsDB
 
 from .conftest import PREMIUM, FakeTransport, client, fixture
 

@@ -4,9 +4,9 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Model;
+namespace RohanG27\TheSportsDb\Model;
 
-use SportsDb\Internal\Rec;
+use RohanG27\TheSportsDb\Internal\Rec;
 
 /**
  * A league or cup. Lists (`all_leagues.php`, v2 `search/league`) fill only a few fields;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\V2;
+namespace RohanG27\TheSportsDb\V2;
 
-use SportsDb\Cache\Freshness;
-use SportsDb\Internal\Requester;
-use SportsDb\Model\Country;
-use SportsDb\Model\League;
-use SportsDb\Model\Sport;
+use RohanG27\TheSportsDb\Cache\Freshness;
+use RohanG27\TheSportsDb\Internal\Requester;
+use RohanG27\TheSportsDb\Model\Country;
+use RohanG27\TheSportsDb\Model\League;
+use RohanG27\TheSportsDb\Model\Sport;
 
 /** all/...: complete catalogues. */
 final class All

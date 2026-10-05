@@ -4,11 +4,11 @@ Client libraries, a GraphQL schema and API documentation for [TheSportsDB](https
 
 | Folder | What | Highlights |
 |---|---|---|
-| [`kotlin/`](kotlin/README.md) | **Kotlin/JVM** client (`sportsdb-kotlin`) | coroutines, a `CompletableFuture` API for Java, Dokka docs |
-| [`python/`](python/README.md) | **Python** client (`sportsdb-python`) | blocking and async (asyncio/trio), strict typing, httpx |
-| [`php/`](php/README.md) | **PHP** client (`sportsdb-php`) | PHP 8.2+, readonly models, no runtime dependencies |
-| [`javascript/`](javascript/README.md) | **JavaScript/TypeScript** client (`sportsdb-js`) | Node 18+, Deno, Bun and browsers; no dependencies |
-| [`graphql/`](graphql/README.md) | **GraphQL schema** (`sportsdb-graphql-schema`) | every record type and relationship, each annotated with the endpoints that resolve it |
+| [`kotlin/`](kotlin/README.md) | **Kotlin/JVM** client (`io.github.rohang27:thesportsdb-client`) | coroutines, a `CompletableFuture` API for Java, Dokka docs |
+| [`python/`](python/README.md) | **Python** client (`thesportsdb-client`) | blocking and async (asyncio/trio), strict typing, httpx |
+| [`php/`](php/README.md) | **PHP** client (`rohang27/thesportsdb-client`) | PHP 8.2+, readonly models, no runtime dependencies |
+| [`javascript/`](javascript/README.md) | **JavaScript/TypeScript** client (`thesportsdb-client`) | Node 18+, Deno, Bun and browsers; no dependencies |
+| [`graphql/`](graphql/README.md) | **GraphQL schema** (`thesportsdb-graphql-schema`) | every record type and relationship, each annotated with the endpoints that resolve it |
 | [`docs-site/`](docs-site/README.md) | **API documentation**: guides, an OpenAPI 3.1 reference, and each library's API reference | live at **https://rohang27.github.io/thesportsdbLibrary/** |
 | [`docs/`](docs/) | Shared references | [measured API behaviour](docs/THESPORTSDB-API-BEHAVIOUR.md), [endpoint map](docs/ENDPOINTS.md), [library parity checklist](docs/LIBRARY-PARITY.md) |
 

@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Internal;
+namespace RohanG27\TheSportsDb\Internal;
 
-use SportsDb\Cache\Freshness;
-use SportsDb\Clock;
-use SportsDb\Config;
-use SportsDb\Exception\HttpStatusException;
-use SportsDb\Exception\InvalidApiKeyException;
-use SportsDb\Exception\NetworkException;
-use SportsDb\Exception\PremiumRequiredException;
-use SportsDb\Exception\RateLimitException;
-use SportsDb\Http\Transport;
-use SportsDb\Http\TransportException;
-use SportsDb\RequestEvent;
+use RohanG27\TheSportsDb\Cache\Freshness;
+use RohanG27\TheSportsDb\Clock;
+use RohanG27\TheSportsDb\Config;
+use RohanG27\TheSportsDb\Exception\HttpStatusException;
+use RohanG27\TheSportsDb\Exception\InvalidApiKeyException;
+use RohanG27\TheSportsDb\Exception\NetworkException;
+use RohanG27\TheSportsDb\Exception\PremiumRequiredException;
+use RohanG27\TheSportsDb\Exception\RateLimitException;
+use RohanG27\TheSportsDb\Http\Transport;
+use RohanG27\TheSportsDb\Http\TransportException;
+use RohanG27\TheSportsDb\RequestEvent;
 
 /**
  * Builds URLs and runs every call through the rate limiter, retries, cache and parser.

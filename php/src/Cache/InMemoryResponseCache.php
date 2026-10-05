@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Cache;
+namespace RohanG27\TheSportsDb\Cache;
 
 /** A bounded, per-process LRU cache with per-entry expiry. */
 final class InMemoryResponseCache implements ResponseCache, \Countable

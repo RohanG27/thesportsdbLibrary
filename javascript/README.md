@@ -1,4 +1,4 @@
-# sportsdb-js
+# thesportsdb-client
 
 **API reference:** https://rohang27.github.io/thesportsdbLibrary/api/javascript/index.html (TypeDoc)
 
@@ -29,10 +29,18 @@ A JavaScript and TypeScript client for [TheSportsDB](https://www.thesportsdb.com
 >
 > **In a browser, any key you use is visible to your users**, and v1 puts it in the URL. Call the API from a server if your key is a paid one.
 
+## Install
+
+Not published yet: until the first release, build it from this folder (see [Development](#development)).
+
+```sh
+npm install thesportsdb-client
+```
+
 ## Quick start
 
 ```js
-import { SportsDb, sized } from "sportsdb-js";
+import { SportsDb, sized } from "thesportsdb-client";
 
 const db = new SportsDb();                                 // the free key "123" ("3" also works): v1 only
 const arsenal = await db.v1.lookup.team(133604);
@@ -41,7 +49,7 @@ const table = await db.v1.lookup.table(4328);              // Premier League sta
 ```
 
 ```ts
-import { SportsDb, InMemoryResponseCache } from "sportsdb-js";
+import { SportsDb, InMemoryResponseCache } from "thesportsdb-client";
 
 const db = new SportsDb({ apiKey: process.env.THESPORTSDB_API_KEY, cache: new InMemoryResponseCache() });
 const league = await db.v2.lookup.league(4328);
@@ -136,7 +144,7 @@ npm run sync-fixtures       # copy re-recorded fixtures from the Kotlin project
 
 Vitest needs Node 22.12+ (it fails to start on Node 18), while the library supports Node 18+. So `test/smoke-node18.mjs` checks the built package on Node 18 without a test framework: parsing, time zones via `Intl`, de-duplication, the timeout and, with `LIVE=1`, real calls. Verified on Node 18.20.8.
 
-`src/models.ts` is generated from `../kotlin/src/main/kotlin/sportsdb/model/`, and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
+`src/models.ts` is generated from `../kotlin/src/main/kotlin/io/github/rohang27/thesportsdb/model/`, and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
 
 ## License
 

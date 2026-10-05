@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Model;
+namespace RohanG27\TheSportsDb\Model;
 
 /** Image sizes TheSportsDB serves by appending a path suffix. */
 enum ImageSize: string

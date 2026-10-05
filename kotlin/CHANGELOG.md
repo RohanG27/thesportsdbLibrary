@@ -22,8 +22,4 @@ First version.
 
 - `timeout` (30 s by default) for the default transport; previously OkHttp's fixed 10 s defaults applied. `transport` is now nullable (null = built from `timeout`).
 
-### Known issues
-
-- Placeholder Maven coordinates (`local.sportsdb`).
-
 Licensed under the MIT License.

@@ -15,7 +15,7 @@ import { parse as parseYaml } from "yaml";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, "..");
-const kotlinDir = join(root, "..", "kotlin", "src", "main", "kotlin", "sportsdb", "model");
+const kotlinDir = join(root, "..", "kotlin", "src", "main", "kotlin", "io", "github", "rohang27", "thesportsdb", "model");
 const glossary = parseYaml(readFileSync(join(root, "..", "docs-site", "fields.yaml"), "utf8"));
 const relations = readFileSync(join(root, "src", "relations.graphql"), "utf8");
 const out = join(root, "schema.graphql");

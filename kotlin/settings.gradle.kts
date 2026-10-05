@@ -1,1 +1,1 @@
-rootProject.name = "sportsdb-kotlin"
+rootProject.name = "thesportsdb-client"

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SportsDb;
+namespace RohanG27\TheSportsDb;
 
-use SportsDb\Cache\CachePolicy;
-use SportsDb\Cache\ResponseCache;
+use RohanG27\TheSportsDb\Cache\CachePolicy;
+use RohanG27\TheSportsDb\Cache\ResponseCache;
 
 /** Client settings. Pass them to SportsDb's constructor as named arguments. */
 final class Config
@@ -38,7 +38,7 @@ final class Config
         public readonly float $timeout = 30.0,
         public readonly ?\Closure $requestListener = null,
         public readonly string $baseUrl = 'https://www.thesportsdb.com',
-        public readonly string $userAgent = 'sportsdb-php',
+        public readonly string $userAgent = 'thesportsdb-client-php',
     ) {
         $this->cachePolicy = $cachePolicy ?? new CachePolicy();
     }

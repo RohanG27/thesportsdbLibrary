@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Internal;
+namespace RohanG27\TheSportsDb\Internal;
 
 /**
  * Lenient readers for a normalized record (every value a string or null). A malformed value

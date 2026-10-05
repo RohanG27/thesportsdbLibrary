@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Http;
+namespace RohanG27\TheSportsDb\Http;
 
 final class Response
 {

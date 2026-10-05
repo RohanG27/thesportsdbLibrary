@@ -9,7 +9,7 @@ from zoneinfo import ZoneInfo
 import anyio
 import pytest
 
-from sportsdb import AsyncSportsDB, HTTPStatusError, PremiumRequiredError, RequestEvent, Response
+from thesportsdb_client import AsyncSportsDB, HTTPStatusError, PremiumRequiredError, RequestEvent, Response
 
 from .conftest import PREMIUM, AsyncRoutes, fixture
 
@@ -146,7 +146,7 @@ async def test_closing_leaves_a_passed_in_transport_open() -> None:
 
 
 async def test_matches_the_blocking_client() -> None:
-    from sportsdb import SportsDB
+    from thesportsdb_client import SportsDB
 
     from .conftest import Routes
 

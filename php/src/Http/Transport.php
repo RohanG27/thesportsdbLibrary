@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Http;
+namespace RohanG27\TheSportsDb\Http;
 
 /**
  * Performs GET requests. Implement it to use another HTTP stack (e.g. a PSR-18 client) or to

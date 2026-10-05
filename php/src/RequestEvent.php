@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb;
+namespace RohanG27\TheSportsDb;
 
 /** One finished API call, passed to Config::$requestListener. */
 final class RequestEvent

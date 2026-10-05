@@ -7,8 +7,8 @@ from typing import Any
 
 import pytest
 
-import sportsdb
-from sportsdb import Response
+import thesportsdb_client
+from thesportsdb_client import Response
 
 FIXTURES = Path(__file__).parent / "fixtures"
 PREMIUM = "9999999999"  # a stand-in; fixtures never contain a real key
@@ -81,16 +81,16 @@ class AsyncRoutes(Routes):
         pass
 
 
-def client(transport: Any, key: str = "123", **options: Any) -> sportsdb.SportsDB:
+def client(transport: Any, key: str = "123", **options: Any) -> thesportsdb_client.SportsDB:
     options.setdefault("requests_per_minute", 0)
     options.setdefault("retry_backoff", 0)
-    return sportsdb.SportsDB(key, transport=transport, **options)
+    return thesportsdb_client.SportsDB(key, transport=transport, **options)
 
 
 @pytest.fixture
 def no_sleep(monkeypatch: pytest.MonkeyPatch) -> list[float]:
     """Replaces the blocking client's sleep and clock with a virtual clock; returns the sleeps."""
-    from sportsdb._sync import _compat
+    from thesportsdb_client._sync import _compat
 
     clock = [0.0]
     sleeps: list[float] = []

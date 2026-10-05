@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Tests;
+namespace RohanG27\TheSportsDb\Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use SportsDb\Exception\ApiMessageException;
-use SportsDb\Model\EventStatus;
-use SportsDb\SportsDb;
+use RohanG27\TheSportsDb\Exception\ApiMessageException;
+use RohanG27\TheSportsDb\Model\EventStatus;
+use RohanG27\TheSportsDb\SportsDb;
 
 /** Every v1 method against a real recorded response: the URL it builds, the record key it reads, the fields it parses. */
 final class V1Test extends TestCase
@@ -120,7 +120,7 @@ final class V1Test extends TestCase
         // The 2017 FA Cup final is recorded with intRound 200: the "final" stage code.
         $final = client((new FakeTransport())->respond(fixture('v1-free/search_events_season.json')))
             ->v1->search->events('Arsenal_vs_Chelsea', season: '2016-2017')[0];
-        self::assertSame([200, \SportsDb\Model\RoundStage::Final, 'FA Cup'], [$final->round, $final->stage(), $final->league]);
+        self::assertSame([200, \RohanG27\TheSportsDb\Model\RoundStage::Final, 'FA Cup'], [$final->round, $final->stage(), $final->league]);
     }
 
     public function testLeaguePlayerVenue(): void

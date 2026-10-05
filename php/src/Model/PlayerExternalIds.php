@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Model;
+namespace RohanG27\TheSportsDb\Model;
 
 /** Ids of the same player in other databases. */
 final readonly class PlayerExternalIds

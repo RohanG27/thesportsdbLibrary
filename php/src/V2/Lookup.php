@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\V2;
+namespace RohanG27\TheSportsDb\V2;
 
-use SportsDb\Cache\Freshness;
-use SportsDb\Internal\Requester;
-use SportsDb\Model\ApiRecord;
-use SportsDb\Model\Contract;
-use SportsDb\Model\Equipment;
-use SportsDb\Model\Event;
-use SportsDb\Model\EventResult;
-use SportsDb\Model\EventStat;
-use SportsDb\Model\FormerTeam;
-use SportsDb\Model\Honour;
-use SportsDb\Model\League;
-use SportsDb\Model\LineupEntry;
-use SportsDb\Model\Milestone;
-use SportsDb\Model\Player;
-use SportsDb\Model\PlayerStat;
-use SportsDb\Model\Team;
-use SportsDb\Model\TimelineEntry;
-use SportsDb\Model\TvListing;
-use SportsDb\Model\Venue;
+use RohanG27\TheSportsDb\Cache\Freshness;
+use RohanG27\TheSportsDb\Internal\Requester;
+use RohanG27\TheSportsDb\Model\ApiRecord;
+use RohanG27\TheSportsDb\Model\Contract;
+use RohanG27\TheSportsDb\Model\Equipment;
+use RohanG27\TheSportsDb\Model\Event;
+use RohanG27\TheSportsDb\Model\EventResult;
+use RohanG27\TheSportsDb\Model\EventStat;
+use RohanG27\TheSportsDb\Model\FormerTeam;
+use RohanG27\TheSportsDb\Model\Honour;
+use RohanG27\TheSportsDb\Model\League;
+use RohanG27\TheSportsDb\Model\LineupEntry;
+use RohanG27\TheSportsDb\Model\Milestone;
+use RohanG27\TheSportsDb\Model\Player;
+use RohanG27\TheSportsDb\Model\PlayerStat;
+use RohanG27\TheSportsDb\Model\Team;
+use RohanG27\TheSportsDb\Model\TimelineEntry;
+use RohanG27\TheSportsDb\Model\TvListing;
+use RohanG27\TheSportsDb\Model\Venue;
 
 /** lookup/...: full records by id. */
 final class Lookup

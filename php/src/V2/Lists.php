@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\V2;
+namespace RohanG27\TheSportsDb\V2;
 
-use SportsDb\Cache\Freshness;
-use SportsDb\Internal\Requester;
-use SportsDb\Model\Player;
-use SportsDb\Model\Season;
-use SportsDb\Model\SeasonPoster;
-use SportsDb\Model\Team;
+use RohanG27\TheSportsDb\Cache\Freshness;
+use RohanG27\TheSportsDb\Internal\Requester;
+use RohanG27\TheSportsDb\Model\Player;
+use RohanG27\TheSportsDb\Model\Season;
+use RohanG27\TheSportsDb\Model\SeasonPoster;
+use RohanG27\TheSportsDb\Model\Team;
 
 /** list/... */
 final class Lists

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SportsDb;
+namespace RohanG27\TheSportsDb;
 
-use SportsDb\Model\Event;
-use SportsDb\Model\LiveScore;
-use SportsDb\Model\Team;
-use SportsDb\Model\TvListing;
+use RohanG27\TheSportsDb\Model\Event;
+use RohanG27\TheSportsDb\Model\LiveScore;
+use RohanG27\TheSportsDb\Model\Team;
+use RohanG27\TheSportsDb\Model\TvListing;
 
 /**
  * Common tasks in one call. Each helper uses v2 with a premium key and v1 with a free key (then

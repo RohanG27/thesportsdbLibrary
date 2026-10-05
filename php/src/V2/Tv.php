@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\V2;
+namespace RohanG27\TheSportsDb\V2;
 
-use SportsDb\Cache\Freshness;
-use SportsDb\Internal\Requester;
-use SportsDb\Model\TvListing;
+use RohanG27\TheSportsDb\Cache\Freshness;
+use RohanG27\TheSportsDb\Internal\Requester;
+use RohanG27\TheSportsDb\Model\TvListing;
 
 /** filter/tv/... */
 final class Tv

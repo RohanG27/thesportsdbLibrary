@@ -9,7 +9,7 @@ from zoneinfo import ZoneInfo
 
 import pytest
 
-from sportsdb import FREE_API_KEY, AsyncSportsDB, SportsDB
+from thesportsdb_client import FREE_API_KEY, AsyncSportsDB, SportsDB
 
 pytestmark = pytest.mark.live
 KEY = os.environ.get("THESPORTSDB_API_KEY", "").strip() or FREE_API_KEY

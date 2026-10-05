@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Cache;
+namespace RohanG27\TheSportsDb\Cache;
 
 /** How quickly an endpoint's data changes. Every endpoint is tagged with one. */
 enum Freshness

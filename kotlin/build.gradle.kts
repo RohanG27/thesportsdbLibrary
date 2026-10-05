@@ -5,7 +5,7 @@ plugins {
     id("org.jetbrains.dokka") version "2.2.0"
 }
 
-group = "local.sportsdb" // TODO: set the published Maven group before release
+group = "io.github.rohang27"
 version = "0.1.0-SNAPSHOT"
 
 repositories {
@@ -55,21 +55,20 @@ tasks.register<Test>("liveTest") {
 }
 
 dokka {
-    moduleName.set("sportsdb-kotlin")
+    moduleName.set("thesportsdb-client")
     dokkaSourceSets.main {
         includes.from("docs/dokka-module.md")
         jdkVersion.set(11)
     }
 }
 
-// Placeholder coordinates (group "local.sportsdb"); set real ones before publishing anywhere public.
 publishing {
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
-            artifactId = "sportsdb-kotlin"
+            artifactId = "thesportsdb-client"
             pom {
-                name.set("sportsdb-kotlin")
+                name.set("thesportsdb-client")
                 description.set("Kotlin/JVM client for TheSportsDB API v1 and v2, with typed models, rate limiting, caching and a Java CompletableFuture API.")
                 licenses {
                     license {
@@ -77,7 +76,19 @@ publishing {
                         url.set("https://opensource.org/license/mit")
                     }
                 }
-                // TODO: url, developers and scm are also required by Maven Central.
+                url.set("https://github.com/RohanG27/thesportsdbLibrary")
+                developers {
+                    developer {
+                        id.set("RohanG27")
+                        name.set("RohanG27")
+                        url.set("https://github.com/RohanG27")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/RohanG27/thesportsdbLibrary")
+                    connection.set("scm:git:https://github.com/RohanG27/thesportsdbLibrary.git")
+                    developerConnection.set("scm:git:ssh://git@github.com/RohanG27/thesportsdbLibrary.git")
+                }
             }
         }
     }

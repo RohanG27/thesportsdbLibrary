@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Model;
+namespace RohanG27\TheSportsDb\Model;
 
 /** A league a team plays in: one of idLeague/strLeague .. idLeague7/strLeague7. */
 final readonly class LeagueRef

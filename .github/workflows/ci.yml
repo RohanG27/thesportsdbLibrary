@@ -26,7 +26,7 @@ jobs:
       - name: Check the generated Java facade is up to date
         run: |
           python3 tools/gen-futures.py
-          git diff --exit-code src/main/kotlin/sportsdb/SportsDbFutures.kt
+          git diff --exit-code src/main/kotlin/io/github/rohang27/thesportsdb/SportsDbFutures.kt
 
   python:
     runs-on: ubuntu-latest

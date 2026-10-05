@@ -1,5 +1,5 @@
 {
-  "name": "sportsdb-graphql-schema",
+  "name": "thesportsdb-graphql-schema",
   "version": "0.1.0-dev",
   "description": "GraphQL schema (SDL) for TheSportsDB API: every record type, relationships and queries, each annotated with the v1/v2 endpoints that resolve it.",
   "type": "module",

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Model;
+namespace RohanG27\TheSportsDb\Model;
 
 /**
  * Base class of every record the API returns (Team, Event, ...).
  *
  * Records are read-only and built by the client from one API record. Every property is read
  * from $raw, so two records are equal (==) when the API sent the same fields. To test code that
- * uses them, fake the HTTP layer (SportsDb\Http\Transport) instead of building records.
+ * uses them, fake the HTTP layer (RohanG27\TheSportsDb\Http\Transport) instead of building records.
  */
 abstract readonly class ApiRecord implements \Stringable
 {

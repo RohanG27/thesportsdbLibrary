@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Tests;
+namespace RohanG27\TheSportsDb\Tests;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use SportsDb\Exception\InvalidApiKeyException;
-use SportsDb\Exception\PremiumRequiredException;
-use SportsDb\Model\EventStatus;
-use SportsDb\SportsDb;
+use RohanG27\TheSportsDb\Exception\InvalidApiKeyException;
+use RohanG27\TheSportsDb\Exception\PremiumRequiredException;
+use RohanG27\TheSportsDb\Model\EventStatus;
+use RohanG27\TheSportsDb\SportsDb;
 
 /** Every v2 method against a real premium response, plus v2's key handling. */
 final class V2Test extends TestCase

@@ -3,7 +3,7 @@ import time
 
 import pytest
 
-from sportsdb import NetworkError, SportsDB
+from thesportsdb_client import NetworkError, SportsDB
 
 
 def test_a_silent_server_times_out() -> None:

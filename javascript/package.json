@@ -1,5 +1,5 @@
 {
-  "name": "sportsdb-js",
+  "name": "thesportsdb-client",
   "version": "0.1.0-dev",
   "description": "JavaScript/TypeScript client for TheSportsDB API v1 and v2: typed models, rate limiting, retries, caching. No dependencies.",
   "type": "module",

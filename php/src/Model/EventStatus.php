@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Model;
+namespace RohanG27\TheSportsDb\Model;
 
 /**
  * A broad reading of a strStatus code, so you don't need every sport's codes. Covers the codes in

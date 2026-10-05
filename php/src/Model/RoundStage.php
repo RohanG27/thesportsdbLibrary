@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Model;
+namespace RohanG27\TheSportsDb\Model;
 
 /** The stage a special intRound value stands for (docs_api_data). Other values are ordinary round numbers. */
 enum RoundStage: int

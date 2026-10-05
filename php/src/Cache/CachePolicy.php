@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Cache;
+namespace RohanG27\TheSportsDb\Cache;
 
 /** Time-to-live in seconds for each Freshness. Zero or less means don't cache. */
 final class CachePolicy

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\V2;
+namespace RohanG27\TheSportsDb\V2;
 
-use SportsDb\Cache\Freshness;
-use SportsDb\Internal\Requester;
-use SportsDb\Model\Event;
-use SportsDb\Model\League;
-use SportsDb\Model\Player;
-use SportsDb\Model\Team;
-use SportsDb\Model\Venue;
+use RohanG27\TheSportsDb\Cache\Freshness;
+use RohanG27\TheSportsDb\Internal\Requester;
+use RohanG27\TheSportsDb\Model\Event;
+use RohanG27\TheSportsDb\Model\League;
+use RohanG27\TheSportsDb\Model\Player;
+use RohanG27\TheSportsDb\Model\Team;
+use RohanG27\TheSportsDb\Model\Venue;
 
 /** search/...: up to about 10 results, summary fields only. Ids arrive as JSON numbers here. */
 final class Search

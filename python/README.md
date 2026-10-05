@@ -1,6 +1,6 @@
-# sportsdb-python
+# thesportsdb-client
 
-**API reference:** https://rohang27.github.io/thesportsdbLibrary/api/python/sportsdb.html (pdoc)
+**API reference:** https://rohang27.github.io/thesportsdbLibrary/api/python/thesportsdb_client.html (pdoc)
 
 A Python client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the Python twin of the Kotlin library in this repository (`../kotlin/`): same behaviour, same lessons, tested against the same recorded responses.
 
@@ -24,10 +24,20 @@ A Python client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. I
 
 > Not affiliated with TheSportsDB. Read their [terms](https://www.thesportsdb.com/docs_terms_of_use.php) before publishing an app; artwork that isn't Creative Commons may not be used in published apps (see `Player.creative_commons`).
 
+## Install
+
+Not published yet: until the first release, build it from this folder (see [Development](#development)).
+
+```sh
+pip install thesportsdb-client
+```
+
+Import it as `thesportsdb_client`.
+
 ## Quick start
 
 ```python
-from sportsdb import SportsDB, ImageSize, sized
+from thesportsdb_client import SportsDB, ImageSize, sized
 
 db = SportsDB()                                    # the free key "123" ("3" also works): v1 only
 arsenal = db.v1.lookup.team(133604)
@@ -37,7 +47,7 @@ table = db.v1.lookup.table(4328)                   # Premier League standings
 
 ```python
 import os
-from sportsdb import AsyncSportsDB, InMemoryResponseCache
+from thesportsdb_client import AsyncSportsDB, InMemoryResponseCache
 
 async with AsyncSportsDB(os.environ["THESPORTSDB_API_KEY"], cache=InMemoryResponseCache()) as db:
     league = await db.v2.lookup.league(4328)
@@ -131,11 +141,11 @@ pip --python .venv/bin/python install -e '.[dev]'
 .venv/bin/pytest                     # offline tests against recorded responses
 .venv/bin/pytest -m live             # the real API (free key; set THESPORTSDB_API_KEY for v2)
 .venv/bin/mypy && .venv/bin/ruff check src tests tools
-python tools/unasync.py              # regenerate src/sportsdb/_sync/ after editing src/sportsdb/_async/
+python tools/unasync.py              # regenerate src/thesportsdb_client/_sync/ after editing src/thesportsdb_client/_async/
 python tools/sync_fixtures.py        # copy re-recorded fixtures from the Kotlin project
 ```
 
-`src/sportsdb/_async/` is the source of truth. `_sync/` is generated, except the hand-written `_compat.py` on each side, and a test fails if it's out of date. Behaviour shared with the Kotlin library is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
+`src/thesportsdb_client/_async/` is the source of truth. `_sync/` is generated, except the hand-written `_compat.py` on each side, and a test fails if it's out of date. Behaviour shared with the Kotlin library is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
 
 ## License
 

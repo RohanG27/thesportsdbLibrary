@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\V1;
+namespace RohanG27\TheSportsDb\V1;
 
-use SportsDb\Cache\Freshness;
-use SportsDb\Internal\Requester;
-use SportsDb\Model\Event;
+use RohanG27\TheSportsDb\Cache\Freshness;
+use RohanG27\TheSportsDb\Internal\Requester;
+use RohanG27\TheSportsDb\Model\Event;
 
 final class Video
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Internal;
+namespace RohanG27\TheSportsDb\Internal;
 
-use SportsDb\Clock;
+use RohanG27\TheSportsDb\Clock;
 
 /**
  * Sliding window: at most $permits calls in any $window seconds; callers wait for a slot.

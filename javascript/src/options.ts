@@ -85,7 +85,7 @@ export function resolveOptions(o: SportsDbOptions): ResolvedOptions {
     deduplicateRequests: o.deduplicateRequests ?? true,
     requestListener: o.requestListener ?? null,
     baseUrl: (o.baseUrl ?? "https://www.thesportsdb.com").replace(/\/+$/, ""),
-    userAgent: o.userAgent ?? "sportsdb-js",
+    userAgent: o.userAgent ?? "thesportsdb-client-js",
     isFreeKey,
   });
 }

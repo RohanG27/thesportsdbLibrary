@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Model;
+namespace RohanG27\TheSportsDb\Model;
 
-use SportsDb\Internal\Rec;
+use RohanG27\TheSportsDb\Internal\Rec;
 
 /** Web and social links. TheSportsDB often gives these without a scheme (www.facebook.com/Arsenal). */
 final readonly class Socials

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SportsDb\Tests;
+namespace RohanG27\TheSportsDb\Tests;
 
 use PHPUnit\Framework\TestCase;
-use SportsDb\Cache\InMemoryResponseCache;
-use SportsDb\Exception\HttpStatusException;
-use SportsDb\Exception\InvalidApiKeyException;
-use SportsDb\Exception\NetworkException;
-use SportsDb\Exception\RateLimitException;
-use SportsDb\Http\Response;
-use SportsDb\RequestEvent;
-use SportsDb\SportsDb;
+use RohanG27\TheSportsDb\Cache\InMemoryResponseCache;
+use RohanG27\TheSportsDb\Exception\HttpStatusException;
+use RohanG27\TheSportsDb\Exception\InvalidApiKeyException;
+use RohanG27\TheSportsDb\Exception\NetworkException;
+use RohanG27\TheSportsDb\Exception\RateLimitException;
+use RohanG27\TheSportsDb\Http\Response;
+use RohanG27\TheSportsDb\RequestEvent;
+use RohanG27\TheSportsDb\SportsDb;
 
 /** Retries, rate limits, errors, redaction, caching, the request listener and timeouts. */
 final class RequesterTest extends TestCase
@@ -119,7 +119,7 @@ final class RequesterTest extends TestCase
     {
         $t = (new FakeTransport())->respond(self::OK);
         client($t)->v1->list->sports();
-        self::assertSame('sportsdb-php', $t->requests[0][1]['User-Agent']);
+        self::assertSame('thesportsdb-client-php', $t->requests[0][1]['User-Agent']);
     }
 
     public function testCacheServesRepeatsAndKeepsKeysOut(): void

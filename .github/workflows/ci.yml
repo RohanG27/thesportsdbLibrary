@@ -163,7 +163,14 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-      - run: npm install && npm run test:live
+      - run: npm install && npm run test:live && npm run build
         working-directory: javascript
         env:
           THESPORTSDB_API_KEY: ${{ secrets.THESPORTSDB_API_KEY }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 18
+      - run: node test/smoke-node18.mjs   # the built package on Node 18, including real API calls
+        working-directory: javascript
+        env:
+          LIVE: "1"

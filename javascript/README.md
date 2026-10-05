@@ -126,8 +126,11 @@ npm install
 npm test                    # offline tests against recorded responses
 npm run test:live           # the real API (free key; set THESPORTSDB_API_KEY for v2)
 npm run typecheck && npm run build
+node test/smoke-node18.mjs  # the built package with plain Node (LIVE=1 adds real API calls); CI runs it on Node 18
 npm run generate            # regenerate src/models.ts after changing the Kotlin models
 npm run sync-fixtures       # copy re-recorded fixtures from the Kotlin project
 ```
+
+Vitest needs Node 22.12+ (it fails to start on Node 18), while the library supports Node 18+. So `test/smoke-node18.mjs` checks the built package on Node 18 without a test framework: parsing, time zones via `Intl`, de-duplication, the timeout and, with `LIVE=1`, real calls. Verified on Node 18.20.8.
 
 `src/models.ts` is generated from `../src/main/kotlin/sportsdb/model/`, and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).

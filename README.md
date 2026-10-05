@@ -38,6 +38,41 @@ val tv = client.v2.tv.country("Canada")                                       //
 val live = client.v2.live.all()
 ```
 
+## Helpers: common tasks in one call
+
+`client.helpers` picks v2 with a premium key and v1 with the free key, so the same code works with either key. With the free key you get the free key's small results.
+
+```kotlin
+val h = client.helpers
+h.currentSeason(4328)                                   // "2026-2027"
+h.seasonEvents(4328)                                    // the current season's fixtures
+h.upcomingLeagueEvents(4328, days = 7)                  // the next week of a league
+h.recentLeagueResults(4328)
+h.teamSchedule(133604)                                  // past and future, all competitions
+h.eventsOnLocalDate(LocalDate.now(), ZoneId.of("America/Toronto"), sport = "Ice Hockey")
+h.liveScores(leagueId = 4328)
+h.leagueTeams(4328)                                     // with badges
+h.eventChannels(2494052)                                // who's showing it
+h.tvListings("Canada", sport = "Ice Hockey", days = 3)
+```
+
+| Helper | Premium key | Free key |
+|---|---|---|
+| `currentSeason` | v2 `lookup/league` | `lookupleague.php` |
+| `seasonEvents` | v2 `schedule/league/{id}/{season}`: the whole season | `eventsseason.php`: first 5 events |
+| `upcomingLeagueEvents` | the season schedule, filtered by date | `eventsday.php` once per day (3 events a day) |
+| `recentLeagueResults` | v2 `schedule/previous/league` | `eventspastleague.php` (1) |
+| `teamSchedule` | v2 `schedule/full/team` | `eventsnext.php` + `eventslast.php` (home games only) |
+| `eventsOnLocalDate` | `eventsday.php` for each UTC day the local day overlaps, filtered to the local day | the same (3 events per UTC day) |
+| `liveScores` | v2 `livescore/…` | `livescore.php` (undocumented), filtered by league here; needs a sport or a league |
+| `leagueTeams` | v2 `list/teams` | league name, then `search_all_teams.php` (10) |
+| `eventChannels` | v2 `lookup/event_tv` | `lookuptv.php` (2) |
+| `tvListings` | v2 `filter/tv/country` (about a week), filtered | `eventstv.php` once per day; needs a sport |
+
+**Why `eventsOnLocalDate`:** the API files events under their UTC date, so evening games in North America appear on the next UTC day. "Saturday's games in Toronto" spans two API days; this helper fetches both and keeps the right ones.
+
+From Java: `db.helpers().seasonEvents(4328).join()`.
+
 ## v1 or v2?
 
 | | v1 | v2 |

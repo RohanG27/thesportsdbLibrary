@@ -3,6 +3,24 @@ public final class sportsdb/ApiMessageException : sportsdb/SportsDbException {
 	public final fun getApiMessage ()Ljava/lang/String;
 }
 
+public final class sportsdb/Helpers {
+	public final fun currentSeason (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun eventChannels (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun eventsOnLocalDate (Ljava/time/LocalDate;Ljava/time/ZoneId;Ljava/lang/String;Ljava/lang/Long;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun eventsOnLocalDate$default (Lsportsdb/Helpers;Ljava/time/LocalDate;Ljava/time/ZoneId;Ljava/lang/String;Ljava/lang/Long;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun leagueTeams (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun liveScores (Ljava/lang/String;Ljava/lang/Long;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun liveScores$default (Lsportsdb/Helpers;Ljava/lang/String;Ljava/lang/Long;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun recentLeagueResults (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun seasonEvents (JLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun seasonEvents$default (Lsportsdb/Helpers;JLjava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun teamSchedule (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun tvListings (Ljava/lang/String;Ljava/lang/String;ILjava/time/LocalDate;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun tvListings$default (Lsportsdb/Helpers;Ljava/lang/String;Ljava/lang/String;ILjava/time/LocalDate;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public final fun upcomingLeagueEvents (JILjava/time/LocalDate;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun upcomingLeagueEvents$default (Lsportsdb/Helpers;JILjava/time/LocalDate;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
 public final class sportsdb/HttpStatusException : sportsdb/SportsDbException {
 	public fun <init> (Ljava/lang/String;ILjava/lang/String;)V
 	public final fun getBodySnippet ()Ljava/lang/String;
@@ -53,6 +71,7 @@ public final class sportsdb/SportsDbClient {
 	public fun <init> (Lsportsdb/SportsDbConfig;)V
 	public synthetic fun <init> (Lsportsdb/SportsDbConfig;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getConfig ()Lsportsdb/SportsDbConfig;
+	public final fun getHelpers ()Lsportsdb/Helpers;
 	public final fun getV1 ()Lsportsdb/V1Api;
 	public final fun getV2 ()Lsportsdb/V2Api;
 	public final fun isPremiumKey (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -111,9 +130,38 @@ public final class sportsdb/SportsDbFutures : java/lang/AutoCloseable {
 	public fun <init> (Lsportsdb/SportsDbConfig;)V
 	public fun close ()V
 	public final fun getClient ()Lsportsdb/SportsDbClient;
+	public final fun helpers ()Lsportsdb/SportsDbFutures$HelpersFutures;
 	public final fun isPremiumKey ()Ljava/util/concurrent/CompletableFuture;
 	public final fun v1 ()Lsportsdb/SportsDbFutures$V1;
 	public final fun v2 ()Lsportsdb/SportsDbFutures$V2;
+}
+
+public final class sportsdb/SportsDbFutures$HelpersFutures {
+	public final fun currentSeason (J)Ljava/util/concurrent/CompletableFuture;
+	public final fun eventChannels (J)Ljava/util/concurrent/CompletableFuture;
+	public final fun eventsOnLocalDate (Ljava/time/LocalDate;Ljava/time/ZoneId;)Ljava/util/concurrent/CompletableFuture;
+	public final fun eventsOnLocalDate (Ljava/time/LocalDate;Ljava/time/ZoneId;Ljava/lang/String;)Ljava/util/concurrent/CompletableFuture;
+	public final fun eventsOnLocalDate (Ljava/time/LocalDate;Ljava/time/ZoneId;Ljava/lang/String;Ljava/lang/Long;)Ljava/util/concurrent/CompletableFuture;
+	public static synthetic fun eventsOnLocalDate$default (Lsportsdb/SportsDbFutures$HelpersFutures;Ljava/time/LocalDate;Ljava/time/ZoneId;Ljava/lang/String;Ljava/lang/Long;ILjava/lang/Object;)Ljava/util/concurrent/CompletableFuture;
+	public final fun leagueTeams (J)Ljava/util/concurrent/CompletableFuture;
+	public final fun liveScores ()Ljava/util/concurrent/CompletableFuture;
+	public final fun liveScores (Ljava/lang/String;)Ljava/util/concurrent/CompletableFuture;
+	public final fun liveScores (Ljava/lang/String;Ljava/lang/Long;)Ljava/util/concurrent/CompletableFuture;
+	public static synthetic fun liveScores$default (Lsportsdb/SportsDbFutures$HelpersFutures;Ljava/lang/String;Ljava/lang/Long;ILjava/lang/Object;)Ljava/util/concurrent/CompletableFuture;
+	public final fun recentLeagueResults (J)Ljava/util/concurrent/CompletableFuture;
+	public final fun seasonEvents (J)Ljava/util/concurrent/CompletableFuture;
+	public final fun seasonEvents (JLjava/lang/String;)Ljava/util/concurrent/CompletableFuture;
+	public static synthetic fun seasonEvents$default (Lsportsdb/SportsDbFutures$HelpersFutures;JLjava/lang/String;ILjava/lang/Object;)Ljava/util/concurrent/CompletableFuture;
+	public final fun teamSchedule (J)Ljava/util/concurrent/CompletableFuture;
+	public final fun tvListings (Ljava/lang/String;)Ljava/util/concurrent/CompletableFuture;
+	public final fun tvListings (Ljava/lang/String;Ljava/lang/String;)Ljava/util/concurrent/CompletableFuture;
+	public final fun tvListings (Ljava/lang/String;Ljava/lang/String;I)Ljava/util/concurrent/CompletableFuture;
+	public final fun tvListings (Ljava/lang/String;Ljava/lang/String;ILjava/time/LocalDate;)Ljava/util/concurrent/CompletableFuture;
+	public static synthetic fun tvListings$default (Lsportsdb/SportsDbFutures$HelpersFutures;Ljava/lang/String;Ljava/lang/String;ILjava/time/LocalDate;ILjava/lang/Object;)Ljava/util/concurrent/CompletableFuture;
+	public final fun upcomingLeagueEvents (J)Ljava/util/concurrent/CompletableFuture;
+	public final fun upcomingLeagueEvents (JI)Ljava/util/concurrent/CompletableFuture;
+	public final fun upcomingLeagueEvents (JILjava/time/LocalDate;)Ljava/util/concurrent/CompletableFuture;
+	public static synthetic fun upcomingLeagueEvents$default (Lsportsdb/SportsDbFutures$HelpersFutures;JILjava/time/LocalDate;ILjava/lang/Object;)Ljava/util/concurrent/CompletableFuture;
 }
 
 public final class sportsdb/SportsDbFutures$V1 {

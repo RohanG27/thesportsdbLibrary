@@ -14,7 +14,8 @@ val team = client.v1.lookup.team(133604)
 # Package sportsdb
 
 The clients ([SportsDbClient], [SportsDbFutures]), their configuration, the v1 and v2
-endpoint groups, and the exceptions.
+endpoint groups, [Helpers] for common tasks (v2 or v1 depending on the key), and the
+exceptions.
 
 # Package sportsdb.model
 

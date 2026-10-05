@@ -8,6 +8,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.future.future
 import sportsdb.model.*
 import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZoneOffset
 import java.util.concurrent.CompletableFuture
 
 /**
@@ -37,6 +39,7 @@ public class SportsDbFutures(
 
     @get:JvmName("v1") public val v1: V1 = V1()
     @get:JvmName("v2") public val v2: V2 = V2()
+    @get:JvmName("helpers") public val helpers: HelpersFutures = HelpersFutures()
 
     /** See [SportsDbClient.isPremiumKey]. */
     public fun isPremiumKey(): CompletableFuture<Boolean> = scope.future { client.isPremiumKey() }
@@ -462,5 +465,77 @@ public class SportsDbFutures(
         /** Every live game in every sport. */
         public fun all(): CompletableFuture<List<LiveScore>> =
             call { client.v2.live.all() }
+    }
+
+    /** CompletableFuture versions of [Helpers]. */
+    public inner class HelpersFutures internal constructor() {
+        /** A league's current season name, e.g. `2026-2027` or `2026`; null if the league is unknown. */
+        public fun currentSeason(leagueId: Long): CompletableFuture<String?> =
+            call { client.helpers.currentSeason(leagueId) }
+
+        /**
+         * Every event of a league's season ([season] defaults to the current one).
+         * Premium: the whole season in one call. Free key: only the first 5 events.
+         */
+        @JvmOverloads public fun seasonEvents(leagueId: Long, season: String? = null): CompletableFuture<List<Event>> =
+            call { client.helpers.seasonEvents(leagueId, season) }
+
+        /**
+         * A league's events starting in the next [days] UTC days, beginning with [from].
+         * Premium: filtered from the season schedule (one or two calls). Free key: one
+         * `eventsday` call per day, each limited to 3 events.
+         */
+        @JvmOverloads public fun upcomingLeagueEvents(leagueId: Long, days: Int = 7, from: LocalDate = LocalDate.now(ZoneOffset.UTC)): CompletableFuture<List<Event>> =
+            call { client.helpers.upcomingLeagueEvents(leagueId, days, from) }
+
+        /** A league's latest results. Premium: up to about 20. Free key: 1. */
+        public fun recentLeagueResults(leagueId: Long): CompletableFuture<List<Event>> =
+            call { client.helpers.recentLeagueResults(leagueId) }
+
+        /**
+         * A team's schedule across all competitions, past and future.
+         * Premium: the full schedule (one call). Free key: the next and the last event only,
+         * and only home games (a free-key limit).
+         */
+        public fun teamSchedule(teamId: Long): CompletableFuture<List<Event>> =
+            call { client.helpers.teamSchedule(teamId) }
+
+        /**
+         * Events on a calendar day in your time zone. The API files events under their UTC date,
+         * so a local day can span two API days; this fetches both and keeps the events that start
+         * on [date] in [zone]. Optionally narrowed to a [sport] or a [leagueId].
+         * Free key: at most 3 events per UTC day.
+         */
+        @JvmOverloads public fun eventsOnLocalDate(date: LocalDate, zone: ZoneId, sport: String? = null, leagueId: Long? = null): CompletableFuture<List<Event>> =
+            call { client.helpers.eventsOnLocalDate(date, zone, sport, leagueId) }
+
+        /**
+         * Games in progress, optionally for one [sport] (e.g. `Soccer`) or one [leagueId].
+         * Premium: v2 live scores. Free key: v1's undocumented live feed, which needs a sport;
+         * for a league, the league's sport is looked up and the results filtered.
+         *
+         * Entries can be stale (a finished game may linger); check [LiveScore.updated].
+         */
+        @JvmOverloads public fun liveScores(sport: String? = null, leagueId: Long? = null): CompletableFuture<List<LiveScore>> =
+            call { client.helpers.liveScores(sport, leagueId) }
+
+        /**
+         * A league's teams, with badges.
+         * Premium: one call. Free key: the league's name is looked up, then up to 10 teams.
+         */
+        public fun leagueTeams(leagueId: Long): CompletableFuture<List<Team>> =
+            call { client.helpers.leagueTeams(leagueId) }
+
+        /** The channels showing an event. Free key: at most 2. */
+        public fun eventChannels(eventId: Long): CompletableFuture<List<TvListing>> =
+            call { client.helpers.eventChannels(eventId) }
+
+        /**
+         * A country's TV listings for the next [days] days from [from], optionally for one [sport].
+         * Premium: about a week of the country's listings in one call, filtered here.
+         * Free key: one call per day, which needs a [sport], and returns 1 listing per call.
+         */
+        @JvmOverloads public fun tvListings(country: String, sport: String? = null, days: Int = 7, from: LocalDate = LocalDate.now(ZoneOffset.UTC)): CompletableFuture<List<TvListing>> =
+            call { client.helpers.tvListings(country, sport, days, from) }
     }
 }

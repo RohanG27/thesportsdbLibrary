@@ -12,6 +12,7 @@ First version.
 - Models are read-only `ApiRecord` subclasses with internal constructors, equal when built from the same API fields, so fields can be added without breaking binary compatibility.
 - Identical calls in flight share one HTTP request (`deduplicateRequests`).
 - `requestListener`: a `RequestEvent` per call, for logging and metrics.
+- `client.helpers`: common tasks in one call (season fixtures, upcoming events, a team's schedule, events on a local calendar day, live scores, league teams, event channels, TV listings), using v2 with a premium key and v1 with the free key.
 
 ### Known issues
 

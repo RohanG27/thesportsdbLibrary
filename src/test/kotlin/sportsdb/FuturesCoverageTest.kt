@@ -28,6 +28,10 @@ class FuturesCoverageTest {
                 checked += suspendMethods(group).size
             }
         }
-        assertTrue(checked > 80, "only found $checked methods")
+        val helperMissing = suspendMethods(Helpers::class.java) -
+            futureMethods(Class.forName("sportsdb.SportsDbFutures\$HelpersFutures"))
+        assertEquals(emptySet(), helperMissing, "SportsDbFutures.HelpersFutures is missing methods")
+        checked += suspendMethods(Helpers::class.java).size
+        assertTrue(checked > 90, "only found $checked methods")
     }
 }

@@ -43,6 +43,20 @@ class LiveApiTest {
         assertEquals(key != SportsDbConfig.FREE_API_KEY, client.isPremiumKey())
     }
 
+    @Test fun helpersPickTheRightEndpoints() = runBlocking {
+        val h = client.helpers
+        val season = assertNotNull(h.currentSeason(4328))
+        val events = h.seasonEvents(4328, season)
+        assertTrue(events.isNotEmpty())
+        assertEquals(events.sortedBy { it.timestamp }, events)
+        assertTrue(h.leagueTeams(4328).isNotEmpty())
+        // A local day: every event returned starts on that day in that zone.
+        val zone = java.time.ZoneId.of("America/Toronto")
+        val day = LocalDate.of(2026, 10, 4)
+        val local = h.eventsOnLocalDate(day, zone, sport = "Soccer")
+        assertTrue(local.all { it.timestamp == null || it.timestamp!!.atZone(zone).toLocalDate() == day })
+    }
+
     @Test fun v2WithPremiumKey() = runBlocking {
         assumeTrue(key != SportsDbConfig.FREE_API_KEY, "set THESPORTSDB_API_KEY to test v2")
         val league = assertNotNull(client.v2.lookup.league(4328))

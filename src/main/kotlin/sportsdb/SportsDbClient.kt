@@ -25,6 +25,9 @@ public class SportsDbClient(public val config: SportsDbConfig = SportsDbConfig()
     /** The v2 API (premium keys only). */
     public val v2: V2Api = V2Api(requester)
 
+    /** Common tasks in one call, using v2 or v1 depending on the key. */
+    public val helpers: Helpers = Helpers(this)
+
     /**
      * Whether [SportsDbConfig.apiKey] is a premium key: v2 accepts it. Makes one call
      * (v2 `lookup/league/4328`) unless the key is the free key.

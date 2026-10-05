@@ -11,4 +11,4 @@ GET https://www.thesportsdb.com/api/v1/json/{apiKey}/{endpoint}.php?{parameters}
 - **Times:** `dateEvent`, `strTime` and `strTimestamp` are **UTC**.
 - **Rate limit:** 30 requests a minute on the free keys, 100 premium, 120 business. Over the limit: HTTP 429; wait a minute.
 
-The guides cover these in detail, with recipes for common tasks.
+The [guides](../index.html) cover these in detail, with [recipes](../recipes.html) for common tasks.

@@ -478,7 +478,7 @@ def spec(version: str, endpoints: list[E]) -> dict[str, Any]:
             tags.append({"name": e.tag, "description": TAGS[e.tag]})
     result: dict[str, Any] = {
         "openapi": "3.1.0",
-        "info": {"title": f"TheSportsDB API {version}", "version": f"{version} (measured {MEASURED})", "description": intro,
+        "info": {"title": "TheSportsDB API", "version": f"{version} · measured {MEASURED}", "description": intro,
                  "termsOfService": "https://www.thesportsdb.com/docs_terms_of_use.php"},
         "servers": [{"url": "https://www.thesportsdb.com"}],
         "tags": tags,

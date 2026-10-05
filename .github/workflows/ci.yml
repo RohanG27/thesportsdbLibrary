@@ -48,6 +48,25 @@ jobs:
           python tools/sync_fixtures.py
           git diff --exit-code -- tests/fixtures
 
+  docs:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs-site
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - run: pip install pyyaml openapi-spec-validator markdown
+      - name: Specs are up to date with the fixtures and glossary
+        run: |
+          python tools/build_openapi.py
+          git diff --exit-code -- openapi
+      - run: python -m openapi_spec_validator openapi/v1.yaml openapi/v2.yaml
+      - run: npx -y @redocly/cli@latest lint openapi/v1.yaml openapi/v2.yaml
+      - run: python tools/build_site.py
+
   live:
     # Calls the real API. Uses the free key unless the THESPORTSDB_API_KEY secret is set (then v2 too).
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'

@@ -1,0 +1,144 @@
+#!/usr/bin/env python3
+"""Builds the static documentation site into docs-site/site/.
+
+- guides/*.md -> HTML pages with a shared layout
+- fields.yaml -> the Fields page (one table per section of the glossary)
+- openapi/*.yaml -> copied, and rendered as interactive references by Redocly (needs Node/npx)
+
+    docs-site/.venv/bin/python docs-site/tools/build_openapi.py   # first, if fixtures changed
+    docs-site/.venv/bin/python docs-site/tools/build_site.py
+"""
+
+from __future__ import annotations
+
+import html
+import re
+import shutil
+import subprocess
+from pathlib import Path
+
+import markdown
+import yaml
+
+DOCS = Path(__file__).resolve().parents[1]
+SITE = DOCS / "site"
+
+NAV = [
+    ("index", "Overview"),
+    ("keys-and-limits", "Keys and limits"),
+    ("responses", "Responses and errors"),
+    ("dates-and-times", "Dates and times"),
+    ("recipes", "Recipes"),
+    ("images", "Images"),
+    ("fields", "Fields"),
+    ("known-issues", "Known issues"),
+    ("client-libraries", "Client libraries"),
+]
+REFERENCE = [("reference/v1", "v1 reference"), ("reference/v2", "v2 reference")]
+
+CSS = """
+:root { --bg:#ffffff; --fg:#1d2330; --muted:#5b6475; --line:#e3e6ec; --accent:#0b6bcb; --code:#f4f6f9; --side:#f8f9fb; }
+@media (prefers-color-scheme: dark) {
+  :root { --bg:#14171d; --fg:#e6e9ef; --muted:#9aa3b2; --line:#2a2f3a; --accent:#6aaeff; --code:#1d222b; --side:#181c23; }
+}
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; }
+.layout { display:flex; min-height:100vh; }
+nav { width:250px; flex:none; background:var(--side); border-right:1px solid var(--line); padding:24px 16px; position:sticky; top:0; height:100vh; overflow:auto; }
+nav .brand { font-weight:700; margin:0 8px 16px; }
+nav a { display:block; padding:6px 8px; border-radius:6px; color:var(--fg); text-decoration:none; }
+nav a:hover { background:var(--line); }
+nav a.here { color:var(--accent); font-weight:600; }
+nav .group { margin:20px 8px 6px; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+main { flex:1; min-width:0; padding:32px 48px 80px; max-width:980px; }
+h1 { font-size:2rem; margin-top:0; } h2 { margin-top:2.2em; border-bottom:1px solid var(--line); padding-bottom:.3em; } h3 { margin-top:1.6em; }
+a { color:var(--accent); }
+code { background:var(--code); padding:.1em .35em; border-radius:4px; font-size:.9em; }
+pre { background:var(--code); padding:14px 16px; border-radius:8px; overflow:auto; line-height:1.45; }
+pre code { background:none; padding:0; }
+table { border-collapse:collapse; width:100%; margin:1em 0; display:block; overflow-x:auto; }
+th, td { border:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top; }
+th { background:var(--side); }
+.footer { margin-top:64px; color:var(--muted); font-size:14px; border-top:1px solid var(--line); padding-top:16px; }
+@media (max-width: 800px) {
+  .layout { display:block; } nav { position:static; width:auto; height:auto; border-right:none; border-bottom:1px solid var(--line); }
+  main { padding:20px 16px 60px; }
+}
+"""
+
+
+def page(slug: str, title: str, body: str) -> str:
+    depth = slug.count("/")
+    up = "../" * depth
+    links = []
+    for s, label in NAV:
+        links.append(f'<a href="{up}{s}.html"{" class=here" if s == slug else ""}>{html.escape(label)}</a>')
+    refs = "".join(f'<a href="{up}{s}.html">{html.escape(label)}</a>' for s, label in REFERENCE)
+    return f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{html.escape(title)} · TheSportsDB API</title><style>{CSS}</style></head>
+<body><div class="layout">
+<nav><div class="brand">TheSportsDB API</div><div class="group">Guides</div>{''.join(links)}
+<div class="group">Reference</div>{refs}</nav>
+<main>{body}
+<div class="footer">Measured with real requests on 5 Oct 2026.
+<a href="https://www.thesportsdb.com/docs_terms_of_use.php">Terms of use</a>.</div></main>
+</div></body></html>
+"""
+
+
+def render(md_text: str) -> str:
+    return markdown.markdown(md_text, extensions=["tables", "fenced_code", "toc"])
+
+
+def fields_markdown() -> str:
+    """The Fields page, keeping the glossary's sections ("# --- Identifiers ---")."""
+    text = (DOCS / "fields.yaml").read_text()
+    glossary = yaml.safe_load(text)
+    sections: list[tuple[str, list[str]]] = []
+    for line in text.splitlines():
+        if m := re.match(r"# --- (.+?) -+$", line):
+            sections.append((m.group(1), []))
+        elif (m := re.match(r"^(\w+):", line)) and sections:
+            sections[-1][1].append(m.group(1))
+    out = ["# Fields", "",
+           "Every field that appears in a record, with its meaning and format. Values are always text or `null`, "
+           "and `\"\"` also means no value (see [Responses and errors](responses.html#values)). Where a field means "
+           "different things in different records, each meaning is listed.", "",
+           "Families of numbered fields:", "",
+           "- `strDescriptionEN`, `strDescriptionDE`, …: the description in each language (up to 15).",
+           "- `idLeague2`–`idLeague7` and `strLeague2`–`strLeague7`: a team's other leagues and cups.",
+           "- `strFanart1`–`strFanart4`: fan art images. `strColour1`–`strColour3`: team colours, hex like `#EF0107`.", ""]
+    for title, names in sections:
+        out += [f"## {title}", "", "| Field | Meaning |", "|---|---|"]
+        for name in names:
+            entry = glossary[name]
+            if isinstance(entry, dict):
+                parts = [str(entry["default"])] + [f"*In {k}:* {v}" for k, v in entry.items() if k != "default"]
+                meaning = "<br>".join(parts)
+            else:
+                meaning = str(entry)
+            out.append(f"| `{name}` | {meaning} |")
+        out.append("")
+    return "\n".join(out)
+
+
+def main() -> None:
+    if SITE.exists():
+        shutil.rmtree(SITE)
+    (SITE / "reference").mkdir(parents=True)
+    (SITE / "openapi").mkdir()
+    for slug, title in NAV:
+        source = fields_markdown() if slug == "fields" else (DOCS / "guides" / f"{slug}.md").read_text()
+        (SITE / f"{slug}.html").write_text(page(slug, title, render(source)))
+    for version in ("v1", "v2"):
+        shutil.copy(DOCS / "openapi" / f"{version}.yaml", SITE / "openapi" / f"{version}.yaml")
+        subprocess.run(["npx", "-y", "@redocly/cli@latest", "build-docs", str(DOCS / "openapi" / f"{version}.yaml"),
+                        "-o", str(SITE / "reference" / f"{version}.html"),
+                        "--title", f"TheSportsDB API {version} reference"],
+                       check=True, cwd=DOCS, capture_output=True)
+    print(f"built {len(NAV)} guides and 2 references into {SITE.relative_to(DOCS.parent)}")
+
+
+if __name__ == "__main__":
+    main()

@@ -12,4 +12,4 @@ X-API-KEY: your-premium-key
 - **Times:** `dateEvent`, `strTime` and `strTimestamp` are **UTC**.
 - **Not in v2:** league tables. Use v1's `lookuptable.php` with your premium key.
 
-The guides cover these in detail, with recipes for common tasks.
+The [guides](../index.html) cover these in detail, with [recipes](../recipes.html) for common tasks.

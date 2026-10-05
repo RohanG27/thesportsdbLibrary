@@ -2,6 +2,8 @@
 
 A Kotlin/JVM client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2.
 
+> A Python twin with the same behaviour lives in [`python/`](python/README.md). [docs/LIBRARY-PARITY.md](docs/LIBRARY-PARITY.md) tracks every lesson both libraries implement.
+
 - **Every documented endpoint**, v1 and v2, as one method each: [docs/ENDPOINTS.md](docs/ENDPOINTS.md).
 - **Typed models** with readable names (`event.homeScore: Int?`, `event.timestamp: Instant?`), parsed leniently: the API sends everything as strings, and a bad value becomes `null` instead of failing the call. The original fields stay available in `raw`.
 - **The API's quirks are handled for you**: one-off record keys, the four ways of saying "no results", UTC timestamps in two formats, `yes`/`No`/`NO` flags.
@@ -139,7 +141,8 @@ SportsDbClient {
     retryOnRateLimit = true          // on 429: wait (Retry-After, or 1 minute) and retry once
     cache = InMemoryResponseCache(maxEntries = 5_000)
     cachePolicy = CachePolicy(static = 7.days, slow = 1.days, medium = 1.hours, live = Duration.ZERO)
-    transport = OkHttpTransport(mySharedOkHttpClient)
+    timeout = 30.seconds             // per request; applies to the default transport
+    transport = OkHttpTransport(mySharedOkHttpClient)   // optional: share an OkHttp client
 }
 ```
 

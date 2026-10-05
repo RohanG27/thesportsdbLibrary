@@ -14,10 +14,13 @@ import sportsdb.RateLimitException
 import sportsdb.RequestEvent
 import sportsdb.SportsDbConfig
 import sportsdb.cache.Freshness
+import okhttp3.OkHttpClient
 import sportsdb.http.HttpResponse
+import sportsdb.http.OkHttpTransport
 import sportsdb.http.RateLimiter
 import java.io.IOException
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 
 /** Builds URLs and runs every call through the rate limiter, retries, cache and parser. */
 internal class Requester(
@@ -31,6 +34,9 @@ internal class Requester(
         if (rpm > 0) RateLimiter(rpm, now = now) else null
     }
     private val tier = if (config.isFreeKey) "free" else "paid"
+    private val transport = config.transport ?: OkHttpTransport(
+        OkHttpClient.Builder().callTimeout(config.timeout.toJavaDuration()).build(),
+    )
 
     /** `GET /api/v1/json/{key}/{endpoint}?params`. Null params are left out. */
     suspend fun v1(
@@ -174,7 +180,7 @@ internal class Requester(
             limiter?.acquire()
             trace.attempts++
             val response: HttpResponse = try {
-                config.transport.get(url, headers)
+                transport.get(url, headers)
             } catch (e: CancellationException) {
                 throw e
             } catch (e: IOException) {

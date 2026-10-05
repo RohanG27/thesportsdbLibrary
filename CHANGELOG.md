@@ -20,6 +20,8 @@ First version.
 - A rejected parameter (`{"seasons":"Invalid League ID passed"}`) raises `ApiMessageException` with the API's text, instead of a generic parse error.
 - Added `v1.schedule.round` (`eventsround.php`, undocumented, free keys only) and the `helpers.roundEvents` helper, which uses the v2 season schedule on premium keys.
 
+- `timeout` (30 s by default) for the default transport; previously OkHttp's fixed 10 s defaults applied. `transport` is now nullable (null = built from `timeout`).
+
 ### Known issues
 
 - Placeholder Maven coordinates (`local.sportsdb`), and no license yet.

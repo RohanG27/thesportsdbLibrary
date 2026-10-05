@@ -99,6 +99,7 @@ public final class sportsdb/SportsDbConfig {
 	public final fun getRequestsPerMinute ()Ljava/lang/Integer;
 	public final fun getRetryBackoff-UwyO8pc ()J
 	public final fun getRetryOnRateLimit ()Z
+	public final fun getTimeout-UwyO8pc ()J
 	public final fun getTransport ()Lsportsdb/http/HttpTransport;
 	public final fun getUserAgent ()Ljava/lang/String;
 	public final fun isFreeKey ()Z
@@ -115,6 +116,8 @@ public final class sportsdb/SportsDbConfig {
 	public final fun setRetryBackoff (Ljava/time/Duration;)V
 	public final fun setRetryBackoff-LRDsOJo (J)V
 	public final fun setRetryOnRateLimit (Z)V
+	public final fun setTimeout (Ljava/time/Duration;)V
+	public final fun setTimeout-LRDsOJo (J)V
 	public final fun setTransport (Lsportsdb/http/HttpTransport;)V
 	public final fun setUserAgent (Ljava/lang/String;)V
 }

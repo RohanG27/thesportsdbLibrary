@@ -9,6 +9,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
 /** Retries, rate limits, errors, redaction and caching. */
@@ -121,5 +122,20 @@ class RequesterTest {
         val t = FakeTransport().respond(ok)
         client(t).v1.list.sports()
         assertEquals("sportsdb-kotlin", t.requests.single().second["User-Agent"])
+    }
+
+    @Test fun aSilentServerTimesOut() {
+        // Accepts the connection but never answers: the call must give up, not hang.
+        java.net.ServerSocket(0).use { server ->
+            val c = SportsDbClient {
+                baseUrl = "http://127.0.0.1:${server.localPort}"
+                timeout = 300.milliseconds
+                maxRetries = 0
+                requestsPerMinute = 0
+            }
+            val started = System.nanoTime()
+            assertFailsWith<NetworkException> { kotlinx.coroutines.runBlocking { c.v1.list.sports() } }
+            assertTrue((System.nanoTime() - started) / 1_000_000 < 5_000)
+        }
     }
 }

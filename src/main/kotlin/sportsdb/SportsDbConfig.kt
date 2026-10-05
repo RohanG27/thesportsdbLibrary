@@ -3,9 +3,9 @@ package sportsdb
 import sportsdb.cache.CachePolicy
 import sportsdb.cache.ResponseCache
 import sportsdb.http.HttpTransport
-import sportsdb.http.OkHttpTransport
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toKotlinDuration
 
 /**
@@ -53,8 +53,14 @@ public class SportsDbConfig {
     /** Time-to-live per kind of data, used when [cache] is set. */
     public var cachePolicy: CachePolicy = CachePolicy.DEFAULT
 
-    /** The HTTP stack. Pass `OkHttpTransport(yourClient)` to share an OkHttp client. */
-    public var transport: HttpTransport = OkHttpTransport()
+    /** Time allowed for one HTTP request (connect, send and read). Applies to the default transport. */
+    public var timeout: Duration = 30.seconds
+
+    /**
+     * The HTTP stack. `null` (the default) uses OkHttp with [timeout]. Pass
+     * `OkHttpTransport(yourClient)` to share an OkHttp client (its own timeouts then apply).
+     */
+    public var transport: HttpTransport? = null
 
     /** Change only for testing or a proxy. */
     public var baseUrl: String = "https://www.thesportsdb.com"
@@ -65,6 +71,9 @@ public class SportsDbConfig {
 
     /** Java: sets [retryBackoff]. */
     public fun setRetryBackoff(value: java.time.Duration) { retryBackoff = value.toKotlinDuration() }
+
+    /** Java: sets [timeout]. */
+    public fun setTimeout(value: java.time.Duration) { timeout = value.toKotlinDuration() }
 
     /** Java: sets [rateLimitWait]. */
     public fun setRateLimitWait(value: java.time.Duration) { rateLimitWait = value.toKotlinDuration() }

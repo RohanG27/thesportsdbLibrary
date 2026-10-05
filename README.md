@@ -7,7 +7,7 @@ A Kotlin/JVM client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v
 - **The API's quirks are handled for you**: one-off record keys, the four ways of saying "no results", UTC timestamps in two formats, `yes`/`No`/`NO` flags.
 - **Safe by default**: a client-side rate limiter matched to your key, retries for 429s and server errors, and no API key in any exception message.
 - **Optional caching**, with TTLs based on how fast each kind of data changes.
-- Coroutines (`suspend`) on OkHttp 5. JVM 11+ and Android (API 26+).
+- Coroutines (`suspend`) on OkHttp 5, plus a `CompletableFuture` API for Java. JVM 11+ and Android (API 26+).
 
 > Not affiliated with TheSportsDB. Read their [terms](https://www.thesportsdb.com/docs_terms_of_use.php) before you publish an app. In particular, artwork that isn't Creative Commons may not be used in published apps (see `Player.creativeCommons`).
 
@@ -113,16 +113,34 @@ v1 puts the key in the URL, so a v1 URL is a secret. The library never puts a UR
 
 ## Java
 
-The API uses `suspend` functions. From Java, call it through `kotlinx-coroutines` (`BuildersKt.runBlocking`, or `future { }` from `kotlinx-coroutines-jdk8`). A Java-friendly `CompletableFuture` facade is planned.
+`SportsDbFutures` wraps every method in a `CompletableFuture`:
+
+```java
+SportsDbConfig config = new SportsDbConfig();
+config.setApiKey(System.getenv("THESPORTSDB_API_KEY"));
+config.setCache(new InMemoryResponseCache());
+
+try (SportsDbFutures db = new SportsDbFutures(config)) {
+    Team arsenal = db.v1().lookup().team(133604).join();             // null if not found
+    db.v2().schedule().leagueNext(4328)
+        .thenAccept(events -> events.forEach(e -> System.out.println(e.getName())));
+}
+```
+
+Optional Kotlin arguments become Java overloads (`db.v1().schedule().day(date)`, `day(date, "Soccer")`, ...). Failures complete the future exceptionally with a `SportsDbException` (`join()` wraps it in a `CompletionException`). `close()` cancels calls that are still running. For `Duration` settings, use `config.setRetryBackoff(java.time.Duration)`, `CachePolicy.of(...)` and `RateLimitException.retryAfterDuration()`.
+
+`SportsDbFutures` is generated from the Kotlin API by `tools/gen-futures.py`. A test fails if it falls out of date.
 
 ## Building
 
 Requires JDK 17 to build (the output targets Java 11).
 
 ```sh
-./gradlew test        # offline: parser and HTTP tests against recorded responses
+./gradlew test        # offline: parser, HTTP and Java-interop tests against recorded responses
 ./gradlew liveTest    # calls the real API with the free key (set THESPORTSDB_API_KEY for v2)
+./gradlew dokkaGenerate    # API reference: build/dokka/html/index.html
 tools/record-fixtures.sh   # re-record test fixtures (THESPORTSDB_PREMIUM_KEY=... adds v2)
+python3 tools/gen-futures.py   # regenerate SportsDbFutures after changing V1Api/V2Api
 ```
 
 See [docs/THESPORTSDB-API-REFERENCE.md](docs/THESPORTSDB-API-REFERENCE.md) for the measured API behaviour this library is built on.

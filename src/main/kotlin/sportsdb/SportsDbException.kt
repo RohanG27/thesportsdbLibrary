@@ -1,6 +1,7 @@
 package sportsdb
 
 import kotlin.time.Duration
+import kotlin.time.toJavaDuration
 
 /**
  * Base class for every error this library throws.
@@ -20,7 +21,10 @@ public class PremiumRequiredException(message: String) : SportsDbException(messa
  * The rate limit was exceeded (HTTP 429) and retries were used up or disabled.
  * [retryAfter] is how long the server asked to wait, when it said.
  */
-public class RateLimitException(message: String, public val retryAfter: Duration?) : SportsDbException(message)
+public class RateLimitException(message: String, public val retryAfter: Duration?) : SportsDbException(message) {
+    /** Java: [retryAfter] as a `java.time.Duration`. */
+    public fun retryAfterDuration(): java.time.Duration? = retryAfter?.toJavaDuration()
+}
 
 /** Any other non-2xx HTTP response. [bodySnippet] is the start of the response body. */
 public class HttpStatusException(message: String, public val status: Int, public val bodySnippet: String) :

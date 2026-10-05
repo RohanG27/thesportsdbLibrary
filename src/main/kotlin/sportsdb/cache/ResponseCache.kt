@@ -4,6 +4,7 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.toKotlinDuration
 
 /**
  * How quickly an endpoint's data changes. Every endpoint is tagged with one of these,
@@ -38,10 +39,23 @@ public data class CachePolicy(
     }
 
     public companion object {
+        @JvmField
         public val DEFAULT: CachePolicy = CachePolicy()
 
         /** Useful defaults with a short cache for live scores too, to soften polling. */
+        @JvmField
         public val AGGRESSIVE: CachePolicy = CachePolicy(live = 1.minutes)
+
+        /** Java: builds a policy from `java.time.Duration`s. */
+        @JvmStatic
+        public fun of(
+            static: java.time.Duration,
+            slow: java.time.Duration,
+            medium: java.time.Duration,
+            live: java.time.Duration,
+        ): CachePolicy = CachePolicy(
+            static.toKotlinDuration(), slow.toKotlinDuration(), medium.toKotlinDuration(), live.toKotlinDuration(),
+        )
     }
 }
 

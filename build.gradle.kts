@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "2.4.20"
     `java-library`
+    id("org.jetbrains.dokka") version "2.2.0"
 }
 
 group = "local.sportsdb" // TODO: set the published Maven group before release
@@ -19,8 +20,11 @@ kotlin {
 }
 
 java {
-    targetCompatibility = JavaVersion.VERSION_11
     withSourcesJar()
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(11)
 }
 
 dependencies {
@@ -45,4 +49,12 @@ tasks.register<Test>("liveTest") {
     testClassesDirs = sourceSets.test.get().output.classesDirs
     classpath = sourceSets.test.get().runtimeClasspath
     useJUnitPlatform { includeTags("live") }
+}
+
+dokka {
+    moduleName.set("sportsdb-kotlin")
+    dokkaSourceSets.main {
+        includes.from("docs/dokka-module.md")
+        jdkVersion.set(11)
+    }
 }

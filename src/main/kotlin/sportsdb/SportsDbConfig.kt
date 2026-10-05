@@ -6,6 +6,7 @@ import sportsdb.http.HttpTransport
 import sportsdb.http.OkHttpTransport
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.toKotlinDuration
 
 /**
  * Client settings. Build with [SportsDbClient]'s DSL:
@@ -50,6 +51,14 @@ public class SportsDbConfig {
     public var baseUrl: String = "https://www.thesportsdb.com"
 
     public var userAgent: String = "sportsdb-kotlin"
+
+    // Java callers can't use kotlin.time.Duration setters; these take java.time.Duration.
+
+    /** Java: sets [retryBackoff]. */
+    public fun setRetryBackoff(value: java.time.Duration) { retryBackoff = value.toKotlinDuration() }
+
+    /** Java: sets [rateLimitWait]. */
+    public fun setRateLimitWait(value: java.time.Duration) { rateLimitWait = value.toKotlinDuration() }
 
     /** True when [apiKey] is the public free key. Paid keys are not checked offline; see [SportsDbClient.isPremiumKey]. */
     public val isFreeKey: Boolean get() = apiKey == FREE_API_KEY

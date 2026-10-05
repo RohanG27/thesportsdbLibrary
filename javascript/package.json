@@ -1,0 +1,40 @@
+{
+  "name": "sportsdb-js",
+  "version": "0.1.0-dev",
+  "description": "JavaScript/TypeScript client for TheSportsDB API v1 and v2: typed models, rate limiting, retries, caching. No dependencies.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "sideEffects": false,
+  "keywords": [
+    "thesportsdb",
+    "sports",
+    "api",
+    "client"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:live": "vitest run --config vitest.live.config.ts",
+    "generate": "node tools/gen-models.mjs",
+    "sync-fixtures": "node tools/sync-fixtures.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3"
+  }
+}

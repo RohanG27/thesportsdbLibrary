@@ -72,6 +72,46 @@ jobs:
           php tools/sync_fixtures.php
           git diff --exit-code -- tests/fixtures
 
+  javascript:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22, 24]
+    defaults:
+      run:
+        working-directory: javascript
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      # Offline tests (recorded responses); generated.test.ts checks src/models.ts matches the Kotlin models.
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Fixtures match the Kotlin project's recordings
+        run: |
+          npm run sync-fixtures
+          git diff --exit-code -- test/fixtures
+
+  javascript-node18:
+    # The library supports Node 18+, older than Vitest supports: build on 24, run the built package on 18.
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: javascript
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: npm install && npm run build
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 18
+      - run: node test/smoke-node18.mjs
+
   docs:
     runs-on: ubuntu-latest
     defaults:
@@ -118,5 +158,12 @@ jobs:
           tools: composer
       - run: composer install --no-interaction --no-progress && vendor/bin/phpunit --group live
         working-directory: php
+        env:
+          THESPORTSDB_API_KEY: ${{ secrets.THESPORTSDB_API_KEY }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: npm install && npm run test:live
+        working-directory: javascript
         env:
           THESPORTSDB_API_KEY: ${{ secrets.THESPORTSDB_API_KEY }}

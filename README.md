@@ -2,7 +2,7 @@
 
 A Kotlin/JVM client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2.
 
-> Python and PHP siblings with the same behaviour live in [`python/`](python/README.md) and [`php/`](php/README.md). [docs/LIBRARY-PARITY.md](docs/LIBRARY-PARITY.md) tracks every lesson all three libraries implement. [`docs-site/`](docs-site/README.md) holds proposed API documentation (guides and OpenAPI reference) for TheSportsDB.
+> Python, PHP and JavaScript siblings with the same behaviour live in [`python/`](python/README.md), [`php/`](php/README.md) and [`javascript/`](javascript/README.md). [docs/LIBRARY-PARITY.md](docs/LIBRARY-PARITY.md) tracks every lesson all four libraries implement. [`docs-site/`](docs-site/README.md) holds proposed API documentation (guides and OpenAPI reference) for TheSportsDB.
 
 - **Every documented endpoint**, v1 and v2, as one method each: [docs/ENDPOINTS.md](docs/ENDPOINTS.md).
 - **Typed models** with readable names (`event.homeScore: Int?`, `event.timestamp: Instant?`), parsed leniently: the API sends everything as strings, and a bad value becomes `null` instead of failing the call. The original fields stay available in `raw`.

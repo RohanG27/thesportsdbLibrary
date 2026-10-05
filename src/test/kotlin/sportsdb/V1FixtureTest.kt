@@ -145,6 +145,36 @@ class V1FixtureTest {
         }
     }
 
+    @Test fun documentedVariants() = runTest {
+        check("search_events_date", "searchevents.php?e=Arsenal%20vs%20Chelsea&d=2015-04-26") {
+            v1.search.events("Arsenal vs Chelsea", date = LocalDate.of(2015, 4, 26))
+        }
+        check("search_filename_season", "searchfilename.php?e=English%20Premier%20League%202015-04-26%20Arsenal%20vs%20Chelsea&s=2014-2015") {
+            v1.search.eventsByFilename("English Premier League 2015-04-26 Arsenal vs Chelsea", season = "2014-2015")
+        }
+        val past = check("lookup_table_season", "lookuptable.php?l=4328&s=2024-2025") { v1.lookup.table(4328, "2024-2025") }
+        assertTrue(past.all { it.season == "2024-2025" })
+        val badges = check("search_all_seasons_badge", "search_all_seasons.php?id=4328&badge=1") { v1.list.seasons(4328, badges = true) }
+        assertTrue(badges.any { it.badge != null })
+        val described = check("search_all_seasons_description", "search_all_seasons.php?id=4328&description=1") {
+            v1.list.seasons(4328, descriptions = true)
+        }
+        assertTrue(described.any { it.description != null })
+        val hockey = check("events_day_sport", "eventsday.php?d=2026-10-04&s=Ice%20Hockey") {
+            v1.schedule.day(LocalDate.of(2026, 10, 4), sport = "Ice Hockey")
+        }
+        assertTrue(hockey.all { it.sport == "Ice Hockey" })
+        val canada = check("events_tv_country", "eventstv.php?d=2026-10-05&a=Canada&s=Ice%20Hockey") {
+            v1.tv.day(LocalDate.of(2026, 10, 5), sport = "Ice Hockey", country = "Canada")
+        }
+        assertTrue(canada.all { it.country == "Canada" })
+        check("events_highlights_sport", "eventshighlights.php?d=2026-10-04&s=Soccer") {
+            v1.video.highlights(LocalDate.of(2026, 10, 4), sport = "Soccer")
+        }
+        t.respond(fixture("v1-free/events_highlights_league.json")) // {"tvhighlights":null}
+        assertTrue(v1.video.highlights(LocalDate.of(2026, 10, 4), leagueId = 4328).isEmpty())
+    }
+
     @Test fun emptyResults() = runTest {
         t.respond(fixture("v1-free/events_day_none.json")) // {"events":null}
         assertTrue(v1.schedule.day(LocalDate.of(2026, 10, 4), leagueId = 4328).isEmpty())

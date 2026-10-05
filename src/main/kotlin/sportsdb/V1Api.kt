@@ -183,7 +183,7 @@ public class V1Api internal constructor(r: Requester) {
         public suspend fun countries(): List<Country> =
             r.v1("all_countries.php", "countries", STATIC).map { it.toCountry() }
 
-        /** `all_leagues.php`: id, name, sport and alternate names only. Free key: 5–10. */
+        /** `all_leagues.php`: id, name and sport (plus alternate names with a premium key). Free key: 5. */
         public suspend fun leagues(): List<League> = r.v1("all_leagues.php", "leagues", STATIC).map { it.toLeague() }
 
         /**

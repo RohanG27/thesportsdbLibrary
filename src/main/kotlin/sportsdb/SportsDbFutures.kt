@@ -173,7 +173,7 @@ public class SportsDbFutures(
         public fun countries(): CompletableFuture<List<Country>> =
             call { client.v1.list.countries() }
 
-        /** `all_leagues.php`: id, name, sport and alternate names only. Free key: 5–10. */
+        /** `all_leagues.php`: id, name and sport (plus alternate names with a premium key). Free key: 5. */
         public fun leagues(): CompletableFuture<List<League>> =
             call { client.v1.list.leagues() }
 

@@ -29,13 +29,6 @@ class V2Test {
     private suspend fun <T : Any> checkOne(fixtureName: String, expectedPath: String, call: suspend () -> T?): T =
         check<T>(fixtureName, expectedPath) { listOfNotNull(call()) }.single()
 
-    /** For endpoints without a recorded fixture: checks the URL only. */
-    private suspend fun expectPath(expectedPath: String, call: suspend () -> Unit) {
-        t.respond("{}")
-        call()
-        assertEquals("/api/v2/json/$expectedPath", t.lastUrl.encodedPath)
-    }
-
     @Test fun search() = runTest {
         // v2 search sends ids as JSON numbers, not strings.
         val teams = check("search_team", "search/team/Arsenal") { v2.search.teams("Arsenal") }
@@ -107,6 +100,8 @@ class V2Test {
             assertNull(apiFootballId)
         }
         check("all_sports", "all/sports") { v2.all.sports() }
+        val leagues = check("all_leagues", "all/leagues") { v2.all.leagues() }
+        assertTrue(leagues.size > 1000)
     }
 
     @Test fun schedules() = runTest {
@@ -120,11 +115,11 @@ class V2Test {
         }
         check("schedule_next_league", "schedule/next/league/4328") { v2.schedule.leagueNext(4328) }
 
-        expectPath("schedule/previous/league/4328") { v2.schedule.leaguePrevious(4328) }
-        expectPath("schedule/next/team/133604") { v2.schedule.teamNext(133604) }
-        expectPath("schedule/previous/team/133604") { v2.schedule.teamPrevious(133604) }
-        expectPath("schedule/next/venue/16163") { v2.schedule.venueNext(16163) }
-        expectPath("schedule/previous/venue/16163") { v2.schedule.venuePrevious(16163) }
+        check("schedule_previous_league", "schedule/previous/league/4328") { v2.schedule.leaguePrevious(4328) }
+        check("schedule_next_team", "schedule/next/team/133604") { v2.schedule.teamNext(133604) }
+        check("schedule_previous_team", "schedule/previous/team/133604") { v2.schedule.teamPrevious(133604) }
+        check("schedule_next_venue", "schedule/next/venue/16163") { v2.schedule.venueNext(16163) }
+        check("schedule_previous_venue", "schedule/previous/venue/16163") { v2.schedule.venuePrevious(16163) }
     }
 
     @Test fun tv() = runTest {
@@ -134,8 +129,10 @@ class V2Test {
         val channel = check("filter_tv_channel", "filter/tv/channel/TSN%201") { v2.tv.channel("TSN 1") }
         assertEquals(Instant.parse("2026-10-05T00:20:00Z"), channel.first().timestamp)
 
-        expectPath("filter/tv/channelid/8631") { v2.tv.channel(8631L) }
-        expectPath("filter/tv/sport/Ice%20Hockey") { v2.tv.sport("Ice Hockey") }
+        val byId = check("filter_tv_channel_id", "filter/tv/channelid/8631") { v2.tv.channel(8631L) }
+        assertTrue(byId.all { it.channelId == 8631L })
+        val hockey = check("filter_tv_sport", "filter/tv/sport/Ice%20Hockey") { v2.tv.sport("Ice Hockey") }
+        assertTrue(hockey.all { it.sport == "Ice Hockey" })
     }
 
     @Test fun liveScores() = runTest {
@@ -146,8 +143,11 @@ class V2Test {
             assertEquals(2, homeScore)
             assertNotNull(updated)
         }
-        expectPath("livescore/Soccer") { v2.live.sport("Soccer") }
-        expectPath("livescore/4328") { v2.live.league(4328) }
+        val soccer = check("livescore_soccer", "livescore/soccer") { v2.live.sport("soccer") }
+        assertTrue(soccer.all { it.sport == "Soccer" })
+        t.respond(fixture("v2/livescore_league.json")) // {"Message":"No data found"}
+        assertTrue(v2.live.league(4328).isEmpty())
+        assertEquals("/api/v2/json/livescore/4328", t.lastUrl.encodedPath)
     }
 
     @Test fun keyGoesInHeaderNotUrl() = runTest {

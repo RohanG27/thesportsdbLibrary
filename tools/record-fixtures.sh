@@ -3,6 +3,7 @@
 #
 #   tools/record-fixtures.sh            # v1 with the public free key 123
 #   THESPORTSDB_PREMIUM_KEY=... tools/record-fixtures.sh   # also v1-premium and v2
+#   ONLY_MISSING=1 ...                  # skip fixtures that already exist (keeps tests stable)
 #
 # The premium key is sent only as v2's X-API-KEY header or inside a v1 URL that is
 # never printed. Fixtures contain response bodies only, never keys.
@@ -58,6 +59,18 @@ V1=(
   "events_tv_channel_id|eventstv.php?id=8631"
   "events_highlights|eventshighlights.php?d=2026-10-04"
   "livescore_soccer|livescore.php?s=Soccer"
+  "livescore_league_ignored|livescore.php?l=4328"
+  "search_events_date|searchevents.php?e=Arsenal_vs_Chelsea&d=2015-04-26"
+  "search_events_f|searchevents.php?f=English_Premier_League_2015-04-26_Arsenal_vs_Chelsea"
+  "search_filename_season|searchfilename.php?e=English_Premier_League_2015-04-26_Arsenal_vs_Chelsea&s=2014-2015"
+  "lookup_table_season|lookuptable.php?l=4328&s=2024-2025"
+  "search_all_seasons_badge|search_all_seasons.php?id=4328&badge=1"
+  "search_all_seasons_description|search_all_seasons.php?id=4328&description=1"
+  "events_day_sport|eventsday.php?d=2026-10-04&s=Ice_Hockey"
+  "events_tv_day_sport|eventstv.php?d=2026-10-05&s=Ice_Hockey"
+  "events_tv_country|eventstv.php?d=2026-10-05&a=Canada&s=Ice_Hockey"
+  "events_highlights_league|eventshighlights.php?d=2026-10-04&l=4328"
+  "events_highlights_sport|eventshighlights.php?d=2026-10-04&s=Soccer"
 )
 
 V2=(
@@ -96,11 +109,22 @@ V2=(
   "schedule_full_team|schedule/full/team/133604"
   "schedule_league_season|schedule/league/4328/2026-2027"
   "livescore_all|livescore/all"
+  "livescore_soccer|livescore/soccer"
+  "livescore_league|livescore/4328"
+  "filter_tv_sport|filter/tv/sport/Ice%20Hockey"
+  "filter_tv_channel_id|filter/tv/channelid/8631"
+  "all_leagues|all/leagues"
+  "schedule_previous_league|schedule/previous/league/4328"
+  "schedule_next_team|schedule/next/team/133604"
+  "schedule_previous_team|schedule/previous/team/133604"
+  "schedule_next_venue|schedule/next/venue/16163"
+  "schedule_previous_venue|schedule/previous/venue/16163"
 )
 
 fetch() { # dir name url [header]
   local dir=$1 name=$2 url=$3 hdr=${4:-}
   mkdir -p "$OUT/$dir"
+  if [[ -n ${ONLY_MISSING:-} && -e "$OUT/$dir/$name.json" ]]; then return; fi
   local code
   if [[ -n $hdr ]]; then
     code=$(curl -s -o "$OUT/$dir/$name.json" -w '%{http_code}' -H "$hdr" "$url")

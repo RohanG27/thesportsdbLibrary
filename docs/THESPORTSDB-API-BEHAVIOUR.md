@@ -59,7 +59,7 @@ How TheSportsDB's API really behaves, measured with real calls on **5 Oct 2026**
 
 ## 3. v1 endpoints
 
-"Free" and "Premium" are the records returned in one recorded call. "Documented" is the official page's free/premium limit. Rows marked *(not recorded)* are documented variants that weren't called. They use the same record key and fields as the row above them.
+"Free" and "Premium" are the records returned in one recorded call. "Documented" is the official page's free/premium limit. Every row has a recorded response in the fixtures.
 
 ### Search
 
@@ -68,10 +68,10 @@ How TheSportsDB's API really behaves, measured with real calls on **5 Oct 2026**
 | `searchteams.php?t=Arsenal` | `teams` | 1 | 15 | 1 / 100 | the free key finds only "Arsenal" itself |
 | `searchevents.php?e=Arsenal_vs_Chelsea` | `event` | 1 | 10 | 1 / 10 | |
 | `searchevents.php?e=…&s=2016-2017` | `event` | 1 | 2 | 1 / 10 | narrows by season |
-| `searchevents.php?e=…&d={date}` *(not recorded)* | `event` | | | 1 / 10 | narrows by date |
-| `searchevents.php?f={filename}` *(not recorded)* | `event` | | | 1 / 10 | the same as `searchfilename.php` |
+| `searchevents.php?e=Arsenal_vs_Chelsea&d=2015-04-26` | `event` | 1 | 1 | 1 / 10 | narrows by date |
+| `searchevents.php?f=English_Premier_League_2015-04-26_Arsenal_vs_Chelsea` | `event` | 1 | 1 | 1 / 10 | the same result as `searchfilename.php` |
 | `searchfilename.php?e=English_Premier_League_2015-04-26_Arsenal_vs_Chelsea` | `event` | 1 | 1 | 1 / 10 | `strFilename` is `{league} {date} {home} vs {away}` |
-| `searchfilename.php?e=…&s={season}` *(not recorded)* | `event` | | | 1 / 10 | |
+| `searchfilename.php?e=…&s=2014-2015` | `event` | 1 | 1 | 1 / 10 | |
 | `searchplayers.php?p=Danny_Welbeck` | `player` | 1 | 1 | 1 / 10 | summary fields plus `relevance` |
 | `searchvenues.php?v=Wembley` | `venues` | 1 | 2 | 1 / 10 | |
 
@@ -81,7 +81,7 @@ How TheSportsDB's API really behaves, measured with real calls on **5 Oct 2026**
 |---|---|---|---|---|---|
 | `lookupleague.php?id=4328` | `leagues` | 1 | 1 | 1 / 1 | |
 | `lookuptable.php?l=4328` | `table` | 5 | 20 | 5 / 100 | standings; only some leagues (mostly featured soccer) |
-| `lookuptable.php?l=…&s={season}` *(not recorded)* | `table` | | | 5 / 100 | a past season's table |
+| `lookuptable.php?l=4328&s=2024-2025` | `table` | 5 | 20 | 5 / 100 | a past season's table |
 | `lookupteam.php?id=133604` | `teams` | 1 | 1 | 1 / 1 | |
 | `lookupequipment.php?id=133597` | `equipment` | 2 | 18 | 2 / 100 | kits by season |
 | `lookupplayer.php?id=34145937` | `players` | 1 | 1 | 1 / 1 | |
@@ -105,10 +105,12 @@ How TheSportsDB's API really behaves, measured with real calls on **5 Oct 2026**
 |---|---|---|---|---|---|
 | `all_sports.php` | `sports` | 2 | 37 | 2 / 50 | |
 | `all_countries.php` | `countries` | 50 | 256 | 50 / 500 | `name_en` and `flag_url_32` only |
-| `all_leagues.php` | `leagues` | 5 | 1547 | 10 / 3000 | id, name, sport, alternate names |
+| `all_leagues.php` | `leagues` | 5 | 1547 | 10 / 3000 | id, name, sport; `strLeagueAlternate` **only with a premium key** |
 | `search_all_leagues.php?c=England&s=Soccer` | **`countries`** | 5 | 25 | 10 / 100 | full league records; `s=` is optional |
 | `search_all_seasons.php?id=4328` | `seasons` | 5 | 35 | 5 / 500 | `strSeason` only |
-| `search_all_seasons.php?id=…&poster=1` | `seasons` | 5 | 35 | 5 / 500 | adds `strPoster`; `badge=1` and `description=1` add `strBadge` and `strDescriptionEN` |
+| `search_all_seasons.php?id=…&poster=1` | `seasons` | 5 | 35 | 5 / 500 | adds `strPoster` |
+| `search_all_seasons.php?id=…&badge=1` | `seasons` | 5 | 35 | 5 / 500 | adds `strBadge` |
+| `search_all_seasons.php?id=…&description=1` | `seasons` | 5 | 35 | 5 / 500 | adds `strDescriptionEN` |
 | `search_all_teams.php?l=English_Premier_League` | `teams` | 10 | 20 | 10 / 3000 | by league **name** |
 | `search_all_teams.php?s=Soccer&c=Spain` | `teams` | 10 | 729 | 10 / 3000 | |
 | `lookup_all_players.php?id=133604` | `player` | 10 | 27 | 10 / 3000 | a team's squad |
@@ -122,7 +124,7 @@ How TheSportsDB's API really behaves, measured with real calls on **5 Oct 2026**
 | `eventsnextleague.php?id=4328` | `events` | 1 | 20 | 1 / 20 | |
 | `eventspastleague.php?id=4328` | `events` | 1 | 15 | 1 / 20 | |
 | `eventsday.php?d=2026-10-04` | `events` | 3 | 901 | 3 / 1500 | every event that (UTC) day |
-| `eventsday.php?d=…&s=Ice_Hockey` | `events` | 3 | 97 | 3 / 1500 | measured in the earlier survey |
+| `eventsday.php?d=2026-10-04&s=Ice_Hockey` | `events` | 3 | 97 | 3 / 1500 | |
 | `eventsday.php?d=2026-10-04&l=4328` | `events` | null | null | 3 / 1500 | no games that day; `l=` takes an id or a name |
 | `eventsseason.php?id=4328&s=2026-2027` | `events` | 5 | 380 | 15 / 3000 | **a whole season in one call**; fewer fields than a lookup |
 
@@ -131,15 +133,16 @@ How TheSportsDB's API really behaves, measured with real calls on **5 Oct 2026**
 | Endpoint | Record key | Free | Premium | Documented | Notes |
 |---|---|---|---|---|---|
 | `eventstv.php?d=2026-10-05` | `tvevents` | 1 | 287 | 1 / 1500 | every listing that day |
-| `eventstv.php?d=…&s={sport}` *(not recorded)* | `tvevents` | | | 1 / 1500 | |
-| `eventstv.php?d=…&a=Canada&s=Ice_Hockey` | `tvevents` | | | 1 / 1500 | country **and** sport; works (earlier survey) |
+| `eventstv.php?d=2026-10-05&s=Ice_Hockey` | `tvevents` | 1 | 23 | 1 / 1500 | |
+| `eventstv.php?d=2026-10-05&a=Canada&s=Ice_Hockey` | `tvevents` | 1 | 4 | 1 / 1500 | country **and** sport |
 | `eventstv.php?d=2026-10-05&a=Canada` | — | empty body | empty body | — | **a country without a sport returns an empty body** |
 | `eventstv.php?c=TSN_1` | `tvevents` | 1 | 3 | 1 / 1500 | by channel name |
 | `eventstv.php?id=8631` | `tvevents` | 1 | 4 | 1 / 1500 | by **channel** id (`idChannel`), not event id |
 | `eventshighlights.php?d=2026-10-04` | `tvhighlights` | 2 | 50 | 2 / 50 | the premium result hit the documented cap |
-| `eventshighlights.php?d=…&l={idLeague}` / `&s={sport}` *(not recorded)* | `tvhighlights` | | | 2 / 50 | |
+| `eventshighlights.php?d=2026-10-04&l=4328` | `tvhighlights` | null | null | 2 / 50 | no Premier League games that day |
+| `eventshighlights.php?d=2026-10-04&s=Soccer` | `tvhighlights` | 2 | 27 | 2 / 50 | |
 | `livescore.php?s=Soccer` | `livescore` | 19 | 19 | *undocumented* | **the free key gets the full live feed** |
-| `livescore.php?l=4328` | `livescore` | | | *undocumented* | ignores `l=`: returned every live game (earlier survey) |
+| `livescore.php?l=4328` | `livescore` | 51 | 51 | *undocumented* | **ignores `l=`**: 51 games from 20 leagues, none of them league 4328 |
 
 ## 4. v2 endpoints (premium key)
 
@@ -173,39 +176,38 @@ How TheSportsDB's API really behaves, measured with real calls on **5 Oct 2026**
 | `list/players/133604` | `list` | 27 | 100 | |
 | `filter/tv/day/2026-10-05` | `filter` | 287 | 100 | every listing worldwide that day |
 | `filter/tv/country/Canada` | `filter` | 90 | 100 | about a week of a country's listings |
-| `filter/tv/sport/Ice%20Hockey` | `filter` | 125 | 100 | earlier survey |
+| `filter/tv/sport/Ice%20Hockey` | `filter` | 189 | 100 | |
 | `filter/tv/channel/TSN%201` | `filter` | 3 | 100 | the API's spelling (`TSN 1`, not `TSN1`); partial names match |
-| `filter/tv/channelid/8631` | `filter` | 4 | 100 | earlier survey |
+| `filter/tv/channelid/8631` | `filter` | 4 | 100 | |
 | `all/countries` | `all` | 256 | 500 | adds `code`, `name_fr`, 16/32/64 px flags |
 | `all/sports` | `all` | 37 | 500 | |
-| `all/leagues` | `all` | 1547 | 3000 | earlier survey |
+| `all/leagues` | `all` | 1547 | 3000 | |
 | `schedule/next/league/4328` | `schedule` | 20 | 10 | |
-| `schedule/previous/league/4328` | `schedule` | 20 | 10 | earlier survey |
-| `schedule/next/team/133604` | `schedule` | 10 | 10 | earlier survey |
-| `schedule/previous/team/133604` | `schedule` | 10 | 10 | earlier survey |
-| `schedule/next/venue/16163` | `schedule` | 3 | 10 | earlier survey |
-| `schedule/previous/venue/16163` | `schedule` | 10 | 10 | earlier survey |
+| `schedule/previous/league/4328` | `schedule` | 20 | 10 | |
+| `schedule/next/team/133604` | `schedule` | 10 | 10 | |
+| `schedule/previous/team/133604` | `schedule` | 10 | 10 | |
+| `schedule/next/venue/16163` | `schedule` | 3 | 10 | |
+| `schedule/previous/venue/16163` | `schedule` | 10 | 10 | |
 | `schedule/full/team/133604` | `schedule` | 48 | 250 | past and future, all competitions |
 | `schedule/league/4328/2026-2027` | `schedule` | 380 | 3000 | **the whole season**; the season name comes from `strCurrentSeason` |
-| `livescore/soccer` | `livescore` | 1 | 100 | earlier survey |
-| `livescore/4328` | `Message` | No data found | 100 | when the league has no game in play |
+| `livescore/soccer` | `livescore` | 17 | 100 | |
+| `livescore/4328` | `Message` | No data found | 100 | the league had no game in play |
 | `livescore/all` | `livescore` | 54 | 500 | every sport |
 
 v2 has **no league tables**; use v1 `lookuptable.php` with a premium key.
-
-"Earlier survey" rows come from a separate survey on the same day (`THESPORTSDB-API-REFERENCE.md`); there is no fixture for them.
 
 ## 5. Where the official documentation and the API disagree
 
 Useful for client authors and for anyone improving the official docs.
 
+
 1. **v2 "Limit" values are not the actual limits.**
    - Every v2 lookup is documented as "Limit: 1", but list-like lookups return many records: 315 player stats, 22 lineup entries, 18 kits.
-   - `filter/tv/day` (287) and `filter/tv/sport` (125) exceed their documented 100.
+   - `filter/tv/day` (287) and `filter/tv/sport` (189) exceed their documented 100.
    - `search/team` returned 12 against a documented 10.
    - `schedule/next/league` and `schedule/previous/league` returned 20 against 10.
 2. **Some free-key results are lower than documented:** `all_leagues.php` (5 vs 10), `search_all_leagues.php` (5 vs 10), `eventsseason.php` (5 vs 15).
-3. **`livescore.php` (v1) is undocumented** but works. The free key receives the full live feed, and `l=` is ignored.
+3. **`livescore.php` (v1) is undocumented** but works. The free key receives the full live feed (51 games, the same as premium), and `l=` is ignored.
 4. **`eventstv.php`:**
    - With `a=` (country) and no `s=` (sport), it returns an empty body rather than an error or results.
    - `id=` is a channel id, not an event id. For an event's channels, use `lookuptv.php`.
@@ -213,13 +215,16 @@ Useful for client authors and for anyone improving the official docs.
 6. **Type inconsistency:** v2 `search/…` sends ids as JSON numbers, while every other endpoint sends strings.
 7. **v2 `search/event`** needs the exact stored event name. v1 `searchevents.php` matches looser input such as `Arsenal_vs_Chelsea`.
 8. **Empty results** take three forms (section 2), and none of them is documented.
-9. **Wrong keys get HTTP 400**, with a "premium" message even on v1. Old example keys such as `1` no longer work.
+9. **The free key gets fewer fields from `all_leagues.php`:** `strLeagueAlternate` is missing. Elsewhere, the free key returns the same fields as premium, just fewer records. The docs mention only the record limits.
+10. **Wrong keys get HTTP 400**, with a "premium" message even on v1. Old example keys such as `1` no longer work.
 
 ## 6. Fields of each record type
 
-All fields returned, alphabetical, from the recorded responses. Endpoints that return the same shape are grouped. `strDescription{XX}` stands for one field per language code.
+<!-- FIELDS:BEGIN -->
+All fields returned, alphabetical, from the recorded responses. Endpoints that return the same shape
+are grouped. `strDescription{XX}` stands for one field per language code.
 
-### v1 (premium key; the free key returns the same fields)
+### v1 (premium key; the free key returns the same fields, except that `all_leagues.php` omits `strLeagueAlternate`)
 
 - `searchteams.php`, `lookupteam.php`, `search_all_teams.php` (63 fields): `idAPIfootball`, `idESPN`, `idLeague`, `idLeague2`, `idLeague3`, `idLeague4`, `idLeague5`, `idLeague6`, `idLeague7`, `idTeam`, `idVenue`, `intFormedYear`, `intLoved`, `strBadge`, `strBanner`, `strColour1`, `strColour2`, `strColour3`, `strCountry`, `strDescription{XX}` (CN, DE, EN, ES, FR, HU, IL, IT, JP, NL, NO, PL, PT, RU, SE), `strDivision`, `strEquipment`, `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strGender`, `strInstagram`, `strKeywords`, `strLeague`, `strLeague2`, `strLeague3`, `strLeague4`, `strLeague5`, `strLeague6`, `strLeague7`, `strLocation`, `strLocked`, `strLogo`, `strRSS`, `strSport`, `strStadium`, `strTeam`, `strTeamAlternate`, `strTeamShort`, `strTwitter`, `strWebsite`, `strYoutube`
 - `searchevents.php`, `searchfilename.php`, `lookupevent.php`, `eventsnext.php`, `eventslast.php`, `eventsnextleague.php`, `eventspastleague.php`, `eventsday.php` (49 fields): `dateEvent`, `dateEventLocal`, `idAPIfootball`, `idAwayTeam`, `idEvent`, `idHomeTeam`, `idLeague`, `idVenue`, `intAwayScore`, `intAwayScoreExtra`, `intHomeScore`, `intHomeScoreExtra`, `intRound`, `intScore`, `intScoreVotes`, `intSpectators`, `strAwayTeam`, `strAwayTeamBadge`, `strBanner`, `strCity`, `strCountry`, `strDescriptionEN`, `strEvent`, `strEventAlternate`, `strFanart`, `strFilename`, `strGroup`, `strHomeTeam`, `strHomeTeamBadge`, `strLeague`, `strLeagueBadge`, `strLocked`, `strMap`, `strOfficial`, `strPoster`, `strPostponed`, `strResult`, `strSeason`, `strSport`, `strSquare`, `strStatus`, `strThumb`, `strTime`, `strTimeLocal`, `strTimestamp`, `strTweet1`, `strVenue`, `strVideo`, `strWeather`
@@ -242,42 +247,46 @@ All fields returned, alphabetical, from the recorded responses. Endpoints that r
 - `all_sports.php` (7 fields): `idSport`, `strFormat`, `strSport`, `strSportDescription`, `strSportIconGreen`, `strSportThumb`, `strSportThumbBW`
 - `all_countries.php` (2 fields): `flag_url_32`, `name_en`
 - `all_leagues.php` (4 fields): `idLeague`, `strLeague`, `strLeagueAlternate`, `strSport`
-- `search_all_seasons.php` (1 fields): `strSeason`
+- `search_all_seasons.php` (1 field): `strSeason`
 - `search_all_seasons.php?…&poster=1` (2 fields): `strPoster`, `strSeason`
 - `eventsseason.php` (30 fields): `dateEvent`, `dateEventLocal`, `idAwayTeam`, `idEvent`, `idHomeTeam`, `idLeague`, `intAwayScore`, `intHomeScore`, `intRound`, `strAwayTeam`, `strAwayTeamBadge`, `strCountry`, `strEvent`, `strEventAlternate`, `strFilename`, `strHomeTeam`, `strHomeTeamBadge`, `strLeague`, `strLeagueBadge`, `strPoster`, `strPostponed`, `strSeason`, `strSport`, `strStatus`, `strThumb`, `strTime`, `strTimeLocal`, `strTimestamp`, `strVenue`, `strVideo`
 - `eventshighlights.php` (10 fields): `idEvent`, `idLeague`, `strEvent`, `strFanart`, `strLeague`, `strPoster`, `strSeason`, `strSport`, `strThumb`, `strVideo`
 - `livescore.php` (20 fields): `dateEvent`, `idAwayTeam`, `idEvent`, `idHomeTeam`, `idLeague`, `idLiveScore`, `intAwayScore`, `intDivision`, `intHomeScore`, `strAwayTeam`, `strAwayTeamBadge`, `strEventTime`, `strHomeTeam`, `strHomeTeamBadge`, `strLeague`, `strProgress`, `strSport`, `strStatus`, `strTimestamp`, `updated`
+- `search_all_seasons.php?…&badge=1` (2 fields): `strBadge`, `strSeason`
+- `search_all_seasons.php?…&description=1` (2 fields): `strDescriptionEN`, `strSeason`
 
 ### v2
 
+- `search/league/English%20Premier%20League` (7 fields): `idLeague`, `strBadge`, `strCountry`, `strCurrentSeason`, `strGender`, `strLeague`, `strSport`
+- `search/team/Arsenal` (9 fields): `idLeague`, `idTeam`, `strBadge`, `strCountry`, `strGender`, `strLeague`, `strLocation`, `strSport`, `strTeam`
+- `search/player/Danny%20Welbeck` (7 fields): `dateBorn`, `idPlayer`, `idTeam`, `strPlayer`, `strSport`, `strTeam`, `strThumb`
+- `search/venue/Wembley` (6 fields): `idVenue`, `strCountry`, `strLocation`, `strSport`, `strThumb`, `strVenue`
+- `lookup/league/4328` (47 fields): `dateFirstEvent`, `idAPIfootball`, `idAPIfootballv3`, `idCup`, `idLeague`, `intDivision`, `intFormedYear`, `strBadge`, `strBanner`, `strComplete`, `strCountry`, `strCurrentSeason`, `strDescription{XX}` (CN, DE, EN, ES, FR, HU, IL, IT, JP, NL, NO, PL, PT, RU, SE), `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strGender`, `strInstagram`, `strLeague`, `strLeagueAlternate`, `strLocked`, `strLogo`, `strNaming`, `strPoster`, `strRSS`, `strSport`, `strTrophy`, `strTvRights`, `strTwitter`, `strWebsite`, `strYoutube`
+- `lookup/team/133604` (63 fields): `idAPIfootball`, `idESPN`, `idLeague`, `idLeague2`, `idLeague3`, `idLeague4`, `idLeague5`, `idLeague6`, `idLeague7`, `idTeam`, `idVenue`, `intFormedYear`, `intLoved`, `strBadge`, `strBanner`, `strColour1`, `strColour2`, `strColour3`, `strCountry`, `strDescription{XX}` (CN, DE, EN, ES, FR, HU, IL, IT, JP, NL, NO, PL, PT, RU, SE), `strDivision`, `strEquipment`, `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strGender`, `strInstagram`, `strKeywords`, `strLeague`, `strLeague2`, `strLeague3`, `strLeague4`, `strLeague5`, `strLeague6`, `strLeague7`, `strLocation`, `strLocked`, `strLogo`, `strRSS`, `strSport`, `strStadium`, `strTeam`, `strTeamAlternate`, `strTeamShort`, `strTwitter`, `strWebsite`, `strYoutube`
+- `lookup/team_equipment/133597` (7 fields): `date`, `idEquipment`, `idTeam`, `strEquipment`, `strSeason`, `strType`, `strUsername`
+- `lookup/player/34145937` (71 fields): `dateBorn`, `dateDied`, `dateSigned`, `idAPIfootball`, `idESPN`, `idGoogle`, `idPlayer`, `idPlayerManager`, `idTeam`, `idTeam2`, `idTeamNational`, `idTransferMkt`, `idWikidata`, `intLoved`, `intSoccerXMLTeamID`, `strAgent`, `strBanner`, `strBirthLocation`, `strCartoon`, `strCollege`, `strCreativeCommons`, `strCreativeCommonsAttribution`, `strCutout`, `strDeathLocation`, `strDescription{XX}` (CN, DE, EN, ES, FR, HU, IL, IT, JP, NL, NO, PL, PT, RU, SE), `strEthnicity`, `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strGender`, `strHeight`, `strInstagram`, `strKit`, `strLastName`, `strLocked`, `strNationality`, `strNumber`, `strOutfitter`, `strPlayer`, `strPlayerAlternate`, `strPosition`, `strPoster`, `strRender`, `strSide`, `strSigning`, `strSport`, `strStatus`, `strTeam`, `strTeam2`, `strThumb`, `strTwitter`, `strWage`, `strWebsite`, `strWeight`, `strYoutube`
+- `lookup/player_contracts/34147178` (10 fields): `id`, `idPlayer`, `idTeam`, `strBadge`, `strPlayer`, `strSport`, `strTeam`, `strWage`, `strYearEnd`, `strYearStart`
+- `lookup/player_results/34160573`, `lookup/event_results/652890` (14 fields): `dateEvent`, `idEvent`, `idPlayer`, `idResult`, `idTeam`, `intPoints`, `intPosition`, `strCountry`, `strDetail`, `strEvent`, `strPlayer`, `strResult`, `strSeason`, `strSport`
+- `lookup/player_honours/34147178` (13 fields): `id`, `idHonour`, `idLeague`, `idPlayer`, `idTeam`, `strHonour`, `strHonourLogo`, `strHonourTrophy`, `strPlayer`, `strSeason`, `strSport`, `strTeam`, `strTeamBadge`
+- `lookup/player_milestones/34161397` (10 fields): `dateMilestone`, `id`, `idMilestone`, `idPlayer`, `idTeam`, `strMilestone`, `strMilestoneLogo`, `strPlayer`, `strSport`, `strTeam`
+- `lookup/player_teams/34147178` (12 fields): `id`, `idFormerTeam`, `idPlayer`, `intAppearances`, `intGoals`, `strBadge`, `strDeparted`, `strFormerTeam`, `strJoined`, `strMoveType`, `strPlayer`, `strSport`
+- `lookup/player_stats/34146304` (13 fields): `id`, `idLeague`, `idPlayer`, `idTeam`, `strLeague`, `strLeagueBadge`, `strPlayer`, `strSeason`, `strSport`, `strStatistic`, `strTeam`, `strTeamBadge`, `strValue`
+- `lookup/event/441613`, `lookup/event_highlights/441613` (49 fields): `dateEvent`, `dateEventLocal`, `idAPIfootball`, `idAwayTeam`, `idEvent`, `idHomeTeam`, `idLeague`, `idVenue`, `intAwayScore`, `intAwayScoreExtra`, `intHomeScore`, `intHomeScoreExtra`, `intRound`, `intScore`, `intScoreVotes`, `intSpectators`, `strAwayTeam`, `strAwayTeamBadge`, `strBanner`, `strCity`, `strCountry`, `strDescriptionEN`, `strEvent`, `strEventAlternate`, `strFanart`, `strFilename`, `strGroup`, `strHomeTeam`, `strHomeTeamBadge`, `strLeague`, `strLeagueBadge`, `strLocked`, `strMap`, `strOfficial`, `strPoster`, `strPostponed`, `strResult`, `strSeason`, `strSport`, `strSquare`, `strStatus`, `strThumb`, `strTime`, `strTimeLocal`, `strTimestamp`, `strTweet1`, `strVenue`, `strVideo`, `strWeather`
+- `lookup/event_lineup/1032723` (17 fields): `idAPIfootball`, `idEvent`, `idLineup`, `idPlayer`, `idTeam`, `intSquadNumber`, `strCountry`, `strCutout`, `strEvent`, `strFormation`, `strHome`, `strPlayer`, `strPosition`, `strPositionShort`, `strSeason`, `strSubstitute`, `strTeam`
+- `lookup/event_stats/1032723` (7 fields): `idApiFootball`, `idEvent`, `idStatistic`, `intAway`, `intHome`, `strEvent`, `strStat`
+- `lookup/event_timeline/1032718` (19 fields): `dateEvent`, `idAPIfootball`, `idAssist`, `idEvent`, `idPlayer`, `idTeam`, `idTimeline`, `intTime`, `strAssist`, `strComment`, `strCutout`, `strEvent`, `strHome`, `strPeriod`, `strPlayer`, `strSeason`, `strTeam`, `strTimeline`, `strTimelineDetail`
+- `lookup/event_tv/2494052`, `filter/tv/day/2026-10-05`, `filter/tv/country/Canada`, `filter/tv/channel/TSN%201`, `filter/tv/sport/Ice%20Hockey`, `filter/tv/channelid/8631` (18 fields): `dateEvent`, `id`, `idChannel`, `idEvent`, `intDivision`, `strChannel`, `strCountry`, `strEvent`, `strEventBanner`, `strEventCountry`, `strEventPoster`, `strEventSquare`, `strEventThumb`, `strLogo`, `strSeason`, `strSport`, `strTime`, `strTimeStamp`
+- `lookup/venue/16163` (29 fields): `idDupe`, `idVenue`, `intCapacity`, `intFormedYear`, `intLoved`, `strArchitect`, `strCost`, `strCountry`, `strCreativeCommons`, `strDescriptionEN`, `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strInstagram`, `strLocation`, `strLocked`, `strLogo`, `strMap`, `strSport`, `strThumb`, `strTimezone`, `strTwitter`, `strVenue`, `strVenueAlternate`, `strVenueSponsor`, `strWebsite`, `strYoutube`
+- `list/teams/4328` (14 fields): `idLeague`, `idTeam`, `strBadge`, `strBanner`, `strColour1`, `strColour2`, `strColour3`, `strCountry`, `strEquipment`, `strFanart1`, `strLeague`, `strLogo`, `strTeam`, `strTeamShort`
+- `list/seasons/4328` (4 fields): `strBadge`, `strDescriptionEN`, `strPoster`, `strSeason`
+- `list/players/133604` (9 fields): `dateBorn`, `idPlayer`, `idTeam`, `strCutout`, `strPlayer`, `strPosition`, `strRender`, `strTeam`, `strThumb`
 - `all/countries` (7 fields): `code`, `flag_url_16`, `flag_url_32`, `flag_url_64`, `idAPIfootball`, `name_en`, `name_fr`
 - `all/sports` (7 fields): `idSport`, `strFormat`, `strSport`, `strSportDescription`, `strSportIconGreen`, `strSportThumb`, `strSportThumbBW`
-- `filter/tv_channel`, `filter/tv_country`, `filter/tv_day`, `lookup/event_tv` (18 fields): `dateEvent`, `id`, `idChannel`, `idEvent`, `intDivision`, `strChannel`, `strCountry`, `strEvent`, `strEventBanner`, `strEventCountry`, `strEventPoster`, `strEventSquare`, `strEventThumb`, `strLogo`, `strSeason`, `strSport`, `strTime`, `strTimeStamp`
-- `list/players` (9 fields): `dateBorn`, `idPlayer`, `idTeam`, `strCutout`, `strPlayer`, `strPosition`, `strRender`, `strTeam`, `strThumb`
-- `list/seasons` (4 fields): `strBadge`, `strDescriptionEN`, `strPoster`, `strSeason`
-- `list/teams` (14 fields): `idLeague`, `idTeam`, `strBadge`, `strBanner`, `strColour1`, `strColour2`, `strColour3`, `strCountry`, `strEquipment`, `strFanart1`, `strLeague`, `strLogo`, `strTeam`, `strTeamShort`
-- `livescore/all` (20 fields): `dateEvent`, `idAwayTeam`, `idEvent`, `idHomeTeam`, `idLeague`, `idLiveScore`, `intAwayScore`, `intDivision`, `intHomeScore`, `strAwayTeam`, `strAwayTeamBadge`, `strEventTime`, `strHomeTeam`, `strHomeTeamBadge`, `strLeague`, `strProgress`, `strSport`, `strStatus`, `strTimestamp`, `updated`
-- `lookup/event`, `lookup/event_highlights` (49 fields): `dateEvent`, `dateEventLocal`, `idAPIfootball`, `idAwayTeam`, `idEvent`, `idHomeTeam`, `idLeague`, `idVenue`, `intAwayScore`, `intAwayScoreExtra`, `intHomeScore`, `intHomeScoreExtra`, `intRound`, `intScore`, `intScoreVotes`, `intSpectators`, `strAwayTeam`, `strAwayTeamBadge`, `strBanner`, `strCity`, `strCountry`, `strDescriptionEN`, `strEvent`, `strEventAlternate`, `strFanart`, `strFilename`, `strGroup`, `strHomeTeam`, `strHomeTeamBadge`, `strLeague`, `strLeagueBadge`, `strLocked`, `strMap`, `strOfficial`, `strPoster`, `strPostponed`, `strResult`, `strSeason`, `strSport`, `strSquare`, `strStatus`, `strThumb`, `strTime`, `strTimeLocal`, `strTimestamp`, `strTweet1`, `strVenue`, `strVideo`, `strWeather`
-- `lookup/event_lineup` (17 fields): `idAPIfootball`, `idEvent`, `idLineup`, `idPlayer`, `idTeam`, `intSquadNumber`, `strCountry`, `strCutout`, `strEvent`, `strFormation`, `strHome`, `strPlayer`, `strPosition`, `strPositionShort`, `strSeason`, `strSubstitute`, `strTeam`
-- `lookup/event_results`, `lookup/player_results` (14 fields): `dateEvent`, `idEvent`, `idPlayer`, `idResult`, `idTeam`, `intPoints`, `intPosition`, `strCountry`, `strDetail`, `strEvent`, `strPlayer`, `strResult`, `strSeason`, `strSport`
-- `lookup/event_stats` (7 fields): `idApiFootball`, `idEvent`, `idStatistic`, `intAway`, `intHome`, `strEvent`, `strStat`
-- `lookup/event_timeline` (19 fields): `dateEvent`, `idAPIfootball`, `idAssist`, `idEvent`, `idPlayer`, `idTeam`, `idTimeline`, `intTime`, `strAssist`, `strComment`, `strCutout`, `strEvent`, `strHome`, `strPeriod`, `strPlayer`, `strSeason`, `strTeam`, `strTimeline`, `strTimelineDetail`
-- `lookup/league` (47 fields): `dateFirstEvent`, `idAPIfootball`, `idAPIfootballv3`, `idCup`, `idLeague`, `intDivision`, `intFormedYear`, `strBadge`, `strBanner`, `strComplete`, `strCountry`, `strCurrentSeason`, `strDescription{XX}` (CN, DE, EN, ES, FR, HU, IL, IT, JP, NL, NO, PL, PT, RU, SE), `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strGender`, `strInstagram`, `strLeague`, `strLeagueAlternate`, `strLocked`, `strLogo`, `strNaming`, `strPoster`, `strRSS`, `strSport`, `strTrophy`, `strTvRights`, `strTwitter`, `strWebsite`, `strYoutube`
-- `lookup/player` (71 fields): `dateBorn`, `dateDied`, `dateSigned`, `idAPIfootball`, `idESPN`, `idGoogle`, `idPlayer`, `idPlayerManager`, `idTeam`, `idTeam2`, `idTeamNational`, `idTransferMkt`, `idWikidata`, `intLoved`, `intSoccerXMLTeamID`, `strAgent`, `strBanner`, `strBirthLocation`, `strCartoon`, `strCollege`, `strCreativeCommons`, `strCreativeCommonsAttribution`, `strCutout`, `strDeathLocation`, `strDescription{XX}` (CN, DE, EN, ES, FR, HU, IL, IT, JP, NL, NO, PL, PT, RU, SE), `strEthnicity`, `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strGender`, `strHeight`, `strInstagram`, `strKit`, `strLastName`, `strLocked`, `strNationality`, `strNumber`, `strOutfitter`, `strPlayer`, `strPlayerAlternate`, `strPosition`, `strPoster`, `strRender`, `strSide`, `strSigning`, `strSport`, `strStatus`, `strTeam`, `strTeam2`, `strThumb`, `strTwitter`, `strWage`, `strWebsite`, `strWeight`, `strYoutube`
-- `lookup/player_contracts` (10 fields): `id`, `idPlayer`, `idTeam`, `strBadge`, `strPlayer`, `strSport`, `strTeam`, `strWage`, `strYearEnd`, `strYearStart`
-- `lookup/player_honours` (13 fields): `id`, `idHonour`, `idLeague`, `idPlayer`, `idTeam`, `strHonour`, `strHonourLogo`, `strHonourTrophy`, `strPlayer`, `strSeason`, `strSport`, `strTeam`, `strTeamBadge`
-- `lookup/player_milestones` (10 fields): `dateMilestone`, `id`, `idMilestone`, `idPlayer`, `idTeam`, `strMilestone`, `strMilestoneLogo`, `strPlayer`, `strSport`, `strTeam`
-- `lookup/player_stats` (13 fields): `id`, `idLeague`, `idPlayer`, `idTeam`, `strLeague`, `strLeagueBadge`, `strPlayer`, `strSeason`, `strSport`, `strStatistic`, `strTeam`, `strTeamBadge`, `strValue`
-- `lookup/player_teams` (12 fields): `id`, `idFormerTeam`, `idPlayer`, `intAppearances`, `intGoals`, `strBadge`, `strDeparted`, `strFormerTeam`, `strJoined`, `strMoveType`, `strPlayer`, `strSport`
-- `lookup/team` (63 fields): `idAPIfootball`, `idESPN`, `idLeague`, `idLeague2`, `idLeague3`, `idLeague4`, `idLeague5`, `idLeague6`, `idLeague7`, `idTeam`, `idVenue`, `intFormedYear`, `intLoved`, `strBadge`, `strBanner`, `strColour1`, `strColour2`, `strColour3`, `strCountry`, `strDescription{XX}` (CN, DE, EN, ES, FR, HU, IL, IT, JP, NL, NO, PL, PT, RU, SE), `strDivision`, `strEquipment`, `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strGender`, `strInstagram`, `strKeywords`, `strLeague`, `strLeague2`, `strLeague3`, `strLeague4`, `strLeague5`, `strLeague6`, `strLeague7`, `strLocation`, `strLocked`, `strLogo`, `strRSS`, `strSport`, `strStadium`, `strTeam`, `strTeamAlternate`, `strTeamShort`, `strTwitter`, `strWebsite`, `strYoutube`
-- `lookup/team_equipment` (7 fields): `date`, `idEquipment`, `idTeam`, `strEquipment`, `strSeason`, `strType`, `strUsername`
-- `lookup/venue` (29 fields): `idDupe`, `idVenue`, `intCapacity`, `intFormedYear`, `intLoved`, `strArchitect`, `strCost`, `strCountry`, `strCreativeCommons`, `strDescriptionEN`, `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strInstagram`, `strLocation`, `strLocked`, `strLogo`, `strMap`, `strSport`, `strThumb`, `strTimezone`, `strTwitter`, `strVenue`, `strVenueAlternate`, `strVenueSponsor`, `strWebsite`, `strYoutube`
-- `schedule/full_team` (27 fields): `dateEvent`, `dateEventLocal`, `idAwayTeam`, `idEvent`, `idHomeTeam`, `idLeague`, `idVenue`, `intAwayScore`, `intHomeScore`, `intRound`, `strAwayTeam`, `strAwayTeamBadge`, `strCountry`, `strEvent`, `strFilename`, `strHomeTeam`, `strHomeTeamBadge`, `strLeague`, `strPoster`, `strPostponed`, `strSport`, `strStatus`, `strThumb`, `strTime`, `strTimeLocal`, `strTimestamp`, `strVenue`
-- `schedule/league_season`, `schedule/next_league` (31 fields): `dateEvent`, `dateEventLocal`, `idAwayTeam`, `idEvent`, `idHomeTeam`, `idLeague`, `idVenue`, `intAwayScore`, `intHomeScore`, `intRound`, `strAwayTeam`, `strAwayTeamBadge`, `strCountry`, `strEvent`, `strEventAlternate`, `strFilename`, `strHomeTeam`, `strHomeTeamBadge`, `strLeague`, `strLeagueBadge`, `strPoster`, `strPostponed`, `strSeason`, `strSport`, `strStatus`, `strThumb`, `strTime`, `strTimeLocal`, `strTimestamp`, `strVenue`, `strVideo`
-- `search/league` (7 fields): `idLeague`, `strBadge`, `strCountry`, `strCurrentSeason`, `strGender`, `strLeague`, `strSport`
-- `search/player` (7 fields): `dateBorn`, `idPlayer`, `idTeam`, `strPlayer`, `strSport`, `strTeam`, `strThumb`
-- `search/team` (9 fields): `idLeague`, `idTeam`, `strBadge`, `strCountry`, `strGender`, `strLeague`, `strLocation`, `strSport`, `strTeam`
-- `search/venue` (6 fields): `idVenue`, `strCountry`, `strLocation`, `strSport`, `strThumb`, `strVenue`
+- `schedule/next/league/4328`, `schedule/league/4328/2026-2027`, `schedule/previous/league/4328`, `schedule/next/team/133604`, `schedule/previous/team/133604`, `schedule/next/venue/16163`, `schedule/previous/venue/16163` (31 fields): `dateEvent`, `dateEventLocal`, `idAwayTeam`, `idEvent`, `idHomeTeam`, `idLeague`, `idVenue`, `intAwayScore`, `intHomeScore`, `intRound`, `strAwayTeam`, `strAwayTeamBadge`, `strCountry`, `strEvent`, `strEventAlternate`, `strFilename`, `strHomeTeam`, `strHomeTeamBadge`, `strLeague`, `strLeagueBadge`, `strPoster`, `strPostponed`, `strSeason`, `strSport`, `strStatus`, `strThumb`, `strTime`, `strTimeLocal`, `strTimestamp`, `strVenue`, `strVideo`
+- `schedule/full/team/133604` (27 fields): `dateEvent`, `dateEventLocal`, `idAwayTeam`, `idEvent`, `idHomeTeam`, `idLeague`, `idVenue`, `intAwayScore`, `intHomeScore`, `intRound`, `strAwayTeam`, `strAwayTeamBadge`, `strCountry`, `strEvent`, `strFilename`, `strHomeTeam`, `strHomeTeamBadge`, `strLeague`, `strPoster`, `strPostponed`, `strSport`, `strStatus`, `strThumb`, `strTime`, `strTimeLocal`, `strTimestamp`, `strVenue`
+- `livescore/all`, `livescore/soccer` (20 fields): `dateEvent`, `idAwayTeam`, `idEvent`, `idHomeTeam`, `idLeague`, `idLiveScore`, `intAwayScore`, `intDivision`, `intHomeScore`, `strAwayTeam`, `strAwayTeamBadge`, `strEventTime`, `strHomeTeam`, `strHomeTeamBadge`, `strLeague`, `strProgress`, `strSport`, `strStatus`, `strTimestamp`, `updated`
+- `all/leagues` (4 fields): `idLeague`, `strLeague`, `strLeagueAlternate`, `strSport`
+<!-- FIELDS:END -->
 
 ## 7. Choosing an endpoint
 

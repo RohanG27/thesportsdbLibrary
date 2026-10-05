@@ -1,0 +1,44 @@
+{
+    "name": "local/sportsdb-php",
+    "description": "PHP client for TheSportsDB API v1 and v2: typed models, rate limiting, retries, caching.",
+    "type": "library",
+    "keywords": [
+        "thesportsdb",
+        "sports",
+        "api",
+        "client"
+    ],
+    "require": {
+        "php": ">=8.2",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.5",
+        "phpstan/phpstan": "^2.1",
+        "psr/simple-cache": "^3.0"
+    },
+    "suggest": {
+        "ext-curl": "for the default HTTP transport",
+        "psr/simple-cache": "to cache responses in any PSR-16 cache (Psr16ResponseCache)"
+    },
+    "autoload": {
+        "psr-4": {
+            "SportsDb\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "SportsDb\\Tests\\": "tests/"
+        },
+        "files": [
+            "tests/Support.php"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "phpunit",
+        "analyse": "phpstan analyse"
+    }
+}

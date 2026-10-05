@@ -48,6 +48,30 @@ jobs:
           python tools/sync_fixtures.py
           git diff --exit-code -- tests/fixtures
 
+  php:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ["8.2", "8.5"]
+    defaults:
+      run:
+        working-directory: php
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: curl, json
+          tools: composer
+      - run: composer install --no-interaction --no-progress
+      # Offline tests (recorded responses); GeneratedTest checks src/Model matches the Kotlin models (uses python3).
+      - run: vendor/bin/phpunit
+      - run: vendor/bin/phpstan analyse --no-progress
+      - name: Fixtures match the Kotlin project's recordings
+        run: |
+          php tools/sync_fixtures.php
+          git diff --exit-code -- tests/fixtures
+
   docs:
     runs-on: ubuntu-latest
     defaults:
@@ -86,5 +110,13 @@ jobs:
           python-version: "3.14"
       - run: pip install -e '.[dev]' && pytest -m live
         working-directory: python
+        env:
+          THESPORTSDB_API_KEY: ${{ secrets.THESPORTSDB_API_KEY }}
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+          tools: composer
+      - run: composer install --no-interaction --no-progress && vendor/bin/phpunit --group live
+        working-directory: php
         env:
           THESPORTSDB_API_KEY: ${{ secrets.THESPORTSDB_API_KEY }}

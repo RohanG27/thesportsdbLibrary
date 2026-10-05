@@ -1,5 +1,7 @@
 # TheSportsDB API documentation
 
+**Live site: https://rohang27.github.io/thesportsdbLibrary/** (rebuilt and published by `.github/workflows/pages.yml` on every change under `docs-site/`).
+
 Proposed replacement documentation for TheSportsDB's API. TheSportsDB also publishes its own OpenAPI files (`/api/spec/v1/openapi.yaml`, `/api/spec/v2/openapi.yaml`); ours cover endpoints, parameters and fields those files miss, and leave out fields the API no longer sends (see `guides/known-issues.md`).
 
 It consists of guides plus an OpenAPI 3.1 reference for v1 and v2. It's written neutrally, so TheSportsDB could adopt it, and every count, field and example comes from real responses recorded on 5 Oct 2026.

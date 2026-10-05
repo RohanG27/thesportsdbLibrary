@@ -202,3 +202,7 @@ python3 tools/gen-futures.py   # regenerate SportsDbFutures after changing V1Api
 CI (`.github/workflows/ci.yml`) runs the offline build, the ABI check and the docs build on every push and pull request. Weekly, it also runs the live tests, to catch changes in TheSportsDB's API. Add a `THESPORTSDB_API_KEY` repository secret to include v2.
 
 See [docs/THESPORTSDB-API-BEHAVIOUR.md](docs/THESPORTSDB-API-BEHAVIOUR.md) for the measured API behaviour this library is built on, including where it differs from the official documentation.
+
+## License
+
+MIT. See [LICENSE](LICENSE). TheSportsDB's data and artwork are covered by [its own terms](https://www.thesportsdb.com/docs_terms_of_use.php), not by this license.

@@ -134,3 +134,7 @@ python tools/sync_fixtures.py        # copy re-recorded fixtures from the Kotlin
 ```
 
 `src/sportsdb/_async/` is the source of truth. `_sync/` is generated, except the hand-written `_compat.py` on each side, and a test fails if it's out of date. Behaviour shared with the Kotlin library is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
+
+## License
+
+MIT. See [LICENSE](LICENSE). TheSportsDB's data and artwork are covered by [its own terms](https://www.thesportsdb.com/docs_terms_of_use.php).

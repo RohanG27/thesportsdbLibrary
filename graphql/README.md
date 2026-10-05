@@ -139,3 +139,7 @@ Sources:
 - `src/relations.graphql` (hand-written): scalars, `@source`, `Query` and the relationships.
 - The record types: generated from `../src/main/kotlin/sportsdb/model/`.
 - Field descriptions: from `../docs-site/fields.yaml`.
+
+## License
+
+MIT. See [LICENSE](LICENSE). TheSportsDB's data and artwork are covered by [its own terms](https://www.thesportsdb.com/docs_terms_of_use.php).

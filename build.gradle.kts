@@ -62,7 +62,7 @@ dokka {
     }
 }
 
-// Placeholder coordinates (group "local.sportsdb"); set real ones and a license before publishing anywhere public.
+// Placeholder coordinates (group "local.sportsdb"); set real ones before publishing anywhere public.
 publishing {
     publications {
         create<MavenPublication>("maven") {
@@ -71,7 +71,13 @@ publishing {
             pom {
                 name.set("sportsdb-kotlin")
                 description.set("Kotlin/JVM client for TheSportsDB API v1 and v2, with typed models, rate limiting, caching and a Java CompletableFuture API.")
-                // TODO: url, licenses, developers and scm are required by Maven Central.
+                licenses {
+                    license {
+                        name.set("MIT License")
+                        url.set("https://opensource.org/license/mit")
+                    }
+                }
+                // TODO: url, developers and scm are also required by Maven Central.
             }
         }
     }

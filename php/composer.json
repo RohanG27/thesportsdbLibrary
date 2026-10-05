@@ -8,6 +8,7 @@
         "api",
         "client"
     ],
+    "license": "MIT",
     "require": {
         "php": ">=8.2",
         "ext-json": "*"

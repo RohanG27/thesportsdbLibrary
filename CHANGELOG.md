@@ -24,4 +24,6 @@ First version.
 
 ### Known issues
 
-- Placeholder Maven coordinates (`local.sportsdb`), and no license yet.
+- Placeholder Maven coordinates (`local.sportsdb`).
+
+Licensed under the MIT License.

@@ -132,3 +132,7 @@ php tools/sync_fixtures.php                 # copy re-recorded fixtures from the
 ```
 
 `src/Model/` is generated from `../src/main/kotlin/sportsdb/model/` (except the hand-written `ApiRecord`, `Socials`, `LeagueRef`, `PlayerExternalIds`, `EventStatus` and `ImageSize`), and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
+
+## License
+
+MIT. See [LICENSE](LICENSE). TheSportsDB's data and artwork are covered by [its own terms](https://www.thesportsdb.com/docs_terms_of_use.php).

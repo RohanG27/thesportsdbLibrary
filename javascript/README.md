@@ -135,3 +135,7 @@ npm run sync-fixtures       # copy re-recorded fixtures from the Kotlin project
 Vitest needs Node 22.12+ (it fails to start on Node 18), while the library supports Node 18+. So `test/smoke-node18.mjs` checks the built package on Node 18 without a test framework: parsing, time zones via `Intl`, de-duplication, the timeout and, with `LIVE=1`, real calls. Verified on Node 18.20.8.
 
 `src/models.ts` is generated from `../src/main/kotlin/sportsdb/model/`, and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
+
+## License
+
+MIT. See [LICENSE](LICENSE). TheSportsDB's data and artwork are covered by [its own terms](https://www.thesportsdb.com/docs_terms_of_use.php).

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Copies the recorded API responses from the Kotlin project (../src/test/resources/fixtures),
+"""Copies the recorded API responses from the Kotlin project (../kotlin/src/test/resources/fixtures),
 which records them with ../tools/record-fixtures.sh, into tests/fixtures. Both libraries are
 tested against the same real responses."""
 
@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 
 here = Path(__file__).resolve().parent.parent
-source = here.parent / "src" / "test" / "resources" / "fixtures"
+source = here.parent / "kotlin" / "src" / "test" / "resources" / "fixtures"
 target = here / "tests" / "fixtures"
 if target.exists():
     shutil.rmtree(target)

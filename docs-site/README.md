@@ -8,7 +8,7 @@ It consists of guides plus an OpenAPI 3.1 reference for v1 and v2. It's written 
 
 | Part | Source | Built by |
 |---|---|---|
-| `openapi/v1.yaml`, `openapi/v2.yaml` | the endpoint table in `tools/build_openapi.py`, the recorded responses (`../src/test/resources/fixtures/`), `fields.yaml`, `openapi/intro-*.md` | `tools/build_openapi.py` (generated: don't edit by hand) |
+| `openapi/v1.yaml`, `openapi/v2.yaml` | the endpoint table in `tools/build_openapi.py`, the recorded responses (`../kotlin/src/test/resources/fixtures/`), `fields.yaml`, `openapi/intro-*.md` | `tools/build_openapi.py` (generated: don't edit by hand) |
 | `fields.yaml` | a hand-written glossary of every record field | — (the build fails if a recorded field is missing) |
 | `guides/*.md` | hand-written | — |
 | `site/` (git-ignored) | everything above | `tools/build_site.py` (Python Markdown plus the Redocly CLI, which needs Node) |

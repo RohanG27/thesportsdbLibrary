@@ -1,6 +1,6 @@
 # sportsdb-php
 
-A PHP client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the PHP sibling of the Kotlin library (`../`) and the Python library (`../python/`): same behaviour, same lessons, tested against the same recorded responses.
+A PHP client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the PHP sibling of the Kotlin library (`../kotlin/`) and the Python library (`../python/`): same behaviour, same lessons, tested against the same recorded responses.
 
 - **Every documented endpoint**, plus the useful undocumented ones, one method each, for v1 and v2.
 - **Typed, read-only models**, generated from the Kotlin models, so all three libraries have the same fields:
@@ -131,7 +131,7 @@ python3 tools/gen_models.py                 # regenerate src/Model/ after changi
 php tools/sync_fixtures.php                 # copy re-recorded fixtures from the Kotlin project
 ```
 
-`src/Model/` is generated from `../src/main/kotlin/sportsdb/model/` (except the hand-written `ApiRecord`, `Socials`, `LeagueRef`, `PlayerExternalIds`, `EventStatus` and `ImageSize`), and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
+`src/Model/` is generated from `../kotlin/src/main/kotlin/sportsdb/model/` (except the hand-written `ApiRecord`, `Socials`, `LeagueRef`, `PlayerExternalIds`, `EventStatus` and `ImageSize`), and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
 
 ## License
 

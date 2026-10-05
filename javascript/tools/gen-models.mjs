@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Generates src/models.ts from the Kotlin models (../src/main/kotlin/sportsdb/model/*.kt), so the
+// Generates src/models.ts from the Kotlin models (../kotlin/src/main/kotlin/sportsdb/model/*.kt), so the
 // JavaScript models have exactly the same fields, sources and documentation as the other libraries.
 //
 //   node tools/gen-models.mjs          regenerate
@@ -10,7 +10,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const kotlinDir = join(here, "..", "..", "src", "main", "kotlin", "sportsdb", "model");
+const kotlinDir = join(here, "..", "..", "kotlin", "src", "main", "kotlin", "sportsdb", "model");
 const out = join(here, "..", "src", "models.ts");
 
 const TYPES = {

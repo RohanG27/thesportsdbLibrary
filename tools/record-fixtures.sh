@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Records real TheSportsDB responses into src/test/resources/fixtures/ for the parser tests.
+# Records real TheSportsDB responses into kotlin/src/test/resources/fixtures/, the shared test fixtures
+# (python/, php/ and javascript/ copy them with their sync-fixtures scripts).
 #
 #   tools/record-fixtures.sh            # v1 with the public free key 123
 #   THESPORTSDB_PREMIUM_KEY=... tools/record-fixtures.sh   # also v1-premium and v2
@@ -9,7 +10,7 @@
 # never printed. Fixtures contain response bodies only, never keys.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-OUT=src/test/resources/fixtures
+OUT=kotlin/src/test/resources/fixtures
 DELAY=${DELAY:-2.5}   # free tier allows 30 calls a minute
 
 V1=(

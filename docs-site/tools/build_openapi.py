@@ -4,7 +4,7 @@
 Three sources:
 - ENDPOINTS below: paths, parameters, record keys and documented limits (written by hand from the
   official documentation and the measurements in docs/THESPORTSDB-API-BEHAVIOUR.md).
-- The recorded responses in src/test/resources/fixtures/: one schema per record type with every
+- The recorded responses in kotlin/src/test/resources/fixtures/: one schema per record type with every
   field ever seen, the measured free/premium counts, and real (trimmed) examples.
 - The field comments in python/src/sportsdb/models.py, for field descriptions.
 
@@ -22,7 +22,7 @@ from typing import Any
 import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
-FIXTURES = ROOT / "src" / "test" / "resources" / "fixtures"
+FIXTURES = ROOT / "kotlin" / "src" / "test" / "resources" / "fixtures"
 MODELS = ROOT / "python" / "src" / "sportsdb" / "models.py"
 OUT = ROOT / "docs-site" / "openapi"
 MEASURED = "5 Oct 2026"

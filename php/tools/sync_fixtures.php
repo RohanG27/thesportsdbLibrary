@@ -1,11 +1,11 @@
 <?php
 
-// Copies the recorded API responses from the Kotlin project (../src/test/resources/fixtures, recorded by
-// ../tools/record-fixtures.sh) into tests/fixtures, so all three libraries test against the same responses.
+// Copies the recorded API responses from the Kotlin project (../kotlin/src/test/resources/fixtures, recorded by
+// ../tools/record-fixtures.sh) into tests/fixtures, so every library tests against the same responses.
 
 declare(strict_types=1);
 
-$source = dirname(__DIR__, 2) . '/src/test/resources/fixtures';
+$source = dirname(__DIR__, 2) . '/kotlin/src/test/resources/fixtures';
 $target = dirname(__DIR__) . '/tests/fixtures';
 
 $remove = static function (string $dir) use (&$remove): void {

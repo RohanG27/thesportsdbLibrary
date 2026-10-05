@@ -5,7 +5,7 @@ in sync. The section sits between the FIELDS:BEGIN and FIELDS:END markers."""
 import json, pathlib, re
 
 root = pathlib.Path(__file__).resolve().parent.parent
-fixtures = root / "src/test/resources/fixtures"
+fixtures = root / "kotlin/src/test/resources/fixtures"
 doc = root / "docs/THESPORTSDB-API-BEHAVIOUR.md"
 script = (root / "tools/record-fixtures.sh").read_text()
 

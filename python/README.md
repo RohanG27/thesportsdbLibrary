@@ -1,6 +1,6 @@
 # sportsdb-python
 
-A Python client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the Python twin of the Kotlin library in this repository (`../`): same behaviour, same lessons, tested against the same recorded responses.
+A Python client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the Python twin of the Kotlin library in this repository (`../kotlin/`): same behaviour, same lessons, tested against the same recorded responses.
 
 - **Every documented endpoint**, plus the useful undocumented ones, one method each, for v1 and v2.
 - **Blocking and async:** `SportsDB` and `AsyncSportsDB` (asyncio or trio) share one implementation. The async code is the source, and the blocking client is generated from it.

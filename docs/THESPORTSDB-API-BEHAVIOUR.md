@@ -4,7 +4,7 @@ How TheSportsDB's API really behaves, measured with real calls on **5 Oct 2026**
 
 - Official documentation: https://www.thesportsdb.com/documentation
 - Terms of use: https://www.thesportsdb.com/docs_terms_of_use.php
-- **Evidence:** every count and field list here comes from the recorded responses in `src/test/resources/fixtures/`: `v1-free/`, `v1-premium/` and `v2/`, one JSON file per call. Re-record them with `tools/record-fixtures.sh`.
+- **Evidence:** every count and field list here comes from the recorded responses in `kotlin/src/test/resources/fixtures/`: `v1-free/`, `v1-premium/` and `v2/`, one JSON file per call. Re-record them with `tools/record-fixtures.sh`.
 - **Counts change.** Schedules, TV listings and live scores change from hour to hour, so treat counts as "about this many on that day". Documented limits are quoted from the official page on the same date.
 - No API key appears in this document or in the recordings.
 

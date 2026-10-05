@@ -137,7 +137,7 @@ npm run build
 
 Sources:
 - `src/relations.graphql` (hand-written): scalars, `@source`, `Query` and the relationships.
-- The record types: generated from `../src/main/kotlin/sportsdb/model/`.
+- The record types: generated from `../kotlin/src/main/kotlin/sportsdb/model/`.
 - Field descriptions: from `../docs-site/fields.yaml`.
 
 ## License

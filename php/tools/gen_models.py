@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generates php/src/Model/*.php from the Kotlin models (../src/main/kotlin/sportsdb/model/*.kt), so
+"""Generates php/src/Model/*.php from the Kotlin models (../kotlin/src/main/kotlin/sportsdb/model/*.kt), so
 the PHP models have exactly the same fields, sources and documentation as the Kotlin (and Python) ones.
 
     python3 php/tools/gen_models.py          # regenerate
@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 PHP = Path(__file__).resolve().parents[1]
-KOTLIN = PHP.parent / "src" / "main" / "kotlin" / "sportsdb" / "model"
+KOTLIN = PHP.parent / "kotlin" / "src" / "main" / "kotlin" / "sportsdb" / "model"
 OUT = PHP / "src" / "Model"
 
 TYPES = {

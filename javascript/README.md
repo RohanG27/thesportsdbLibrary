@@ -1,6 +1,6 @@
 # sportsdb-js
 
-A JavaScript and TypeScript client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the JS sibling of the Kotlin (`../`), Python (`../python/`) and PHP (`../php/`) libraries: same behaviour, same lessons, tested against the same recorded responses.
+A JavaScript and TypeScript client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the JS sibling of the Kotlin (`../kotlin/`), Python (`../python/`) and PHP (`../php/`) libraries: same behaviour, same lessons, tested against the same recorded responses.
 
 - **Every documented endpoint**, plus the useful undocumented ones, one method each, for v1 and v2.
 - **Typed, frozen, plain-object models**, generated from the Kotlin models, so every library has the same fields:
@@ -134,7 +134,7 @@ npm run sync-fixtures       # copy re-recorded fixtures from the Kotlin project
 
 Vitest needs Node 22.12+ (it fails to start on Node 18), while the library supports Node 18+. So `test/smoke-node18.mjs` checks the built package on Node 18 without a test framework: parsing, time zones via `Intl`, de-duplication, the timeout and, with `LIVE=1`, real calls. Verified on Node 18.20.8.
 
-`src/models.ts` is generated from `../src/main/kotlin/sportsdb/model/`, and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
+`src/models.ts` is generated from `../kotlin/src/main/kotlin/sportsdb/model/`, and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
 
 ## License
 

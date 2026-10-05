@@ -28,6 +28,7 @@ from ..models import (
     Player,
     PlayerStat,
     Season,
+    SeasonPoster,
     Sport,
     Team,
     TimelineEntry,
@@ -150,6 +151,10 @@ class V2Lists:
 
     def seasons(self, league_id: int) -> list[Season]:
         return self._r.v2("list", SLOW, Season._from, "list", "seasons", league_id)
+
+    def season_posters(self, league_id: int) -> list[SeasonPoster]:
+        """Every season poster and badge uploaded for a league, with the uploader. In the official OpenAPI description."""
+        return self._r.v2("list", SLOW, SeasonPoster._from, "list", "seasonposters", league_id)
 
     def players(self, team_id: int) -> list[Player]:
         return self._r.v2("list", SLOW, Player._from, "list", "players", team_id)

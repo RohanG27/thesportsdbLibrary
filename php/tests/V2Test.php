@@ -38,6 +38,7 @@ final class V2Test extends TestCase
             ['list_teams', 'list/teams/4328', fn (SportsDb $c) => $c->v2->list->teams(4328), 20],
             ['list_seasons', 'list/seasons/4328', fn (SportsDb $c) => $c->v2->list->seasons(4328), 35],
             ['list_players', 'list/players/133604', fn (SportsDb $c) => $c->v2->list->players(133604), 27],
+            ['list_seasonposters', 'list/seasonposters/4328', fn (SportsDb $c) => $c->v2->list->seasonPosters(4328), 9],
             ['all_countries', 'all/countries', fn (SportsDb $c) => $c->v2->all->countries(), 256],
             ['all_sports', 'all/sports', fn (SportsDb $c) => $c->v2->all->sports(), 37],
             ['all_leagues', 'all/leagues', fn (SportsDb $c) => $c->v2->all->leagues(), 1547],

@@ -4217,7 +4217,7 @@ components:
           type:
           - string
           - 'null'
-          description: TheSportsDB user who uploaded the record.
+          description: TheSportsDB user who uploaded the record (or the artwork).
           examples:
           - smudgie
     Event:

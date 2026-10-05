@@ -20,6 +20,7 @@ import sportsdb.model.Milestone
 import sportsdb.model.Player
 import sportsdb.model.PlayerStat
 import sportsdb.model.Season
+import sportsdb.model.SeasonPoster
 import sportsdb.model.Sport
 import sportsdb.model.Team
 import sportsdb.model.TimelineEntry
@@ -40,6 +41,7 @@ import sportsdb.model.toMilestone
 import sportsdb.model.toPlayer
 import sportsdb.model.toPlayerStat
 import sportsdb.model.toSeason
+import sportsdb.model.toSeasonPoster
 import sportsdb.model.toSport
 import sportsdb.model.toTeam
 import sportsdb.model.toTimelineEntry
@@ -124,6 +126,14 @@ public class V2Api internal constructor(r: Requester) {
         /** A league's seasons with badges, posters and descriptions. */
         public suspend fun seasons(leagueId: Long): List<Season> =
             r.v2("list", SLOW, "list", "seasons", leagueId).mapNotNull { it.toSeason() }
+
+        /**
+         * A league's season posters and badges: every piece of season artwork, with who uploaded
+         * it (several per season are possible). Listed in the official OpenAPI description; not on
+         * the HTML documentation page.
+         */
+        public suspend fun seasonPosters(leagueId: Long): List<SeasonPoster> =
+            r.v2("list", SLOW, "list", "seasonposters", leagueId).map { it.toSeasonPoster() }
 
         /** A team's squad (summary fields). */
         public suspend fun players(teamId: Long): List<Player> = r.v2("list", SLOW, "list", "players", teamId).map { it.toPlayer() }

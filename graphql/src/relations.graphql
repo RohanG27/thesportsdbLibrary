@@ -242,6 +242,8 @@ extend type League {
   teams: [Team!]! @source(v1: "search_all_teams.php?l={name}", v2: "list/teams/{id}")
   "The league's seasons, with badges and posters where available."
   seasons: [Season!]! @source(v1: "search_all_seasons.php?id={id}", v2: "list/seasons/{id}")
+  "Every season poster and badge uploaded for the league, with the uploader (premium keys)."
+  seasonPosters: [SeasonPoster!]! @source(v2: "list/seasonposters/{id}")
   "The table; omit `season` for the current one."
   table(season: String): [Standing!]! @source(v1: "lookuptable.php?l={id}&s={season}")
   "The league's next events. Free keys: 1."

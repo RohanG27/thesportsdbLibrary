@@ -286,6 +286,25 @@ class Season(ApiRecord):
 
 
 @dataclass(frozen=True, kw_only=True, eq=False, repr=False)
+class SeasonPoster(ApiRecord):
+    """One season poster or badge uploaded for a league (v2 ``list/seasonposters``); several per season are possible."""
+
+    _summary = ("id", "season")
+    id: int | None  # idArt: this artwork's id
+    league_id: int | None  # idLeague
+    season: str | None  # strSeason
+    poster: str | None  # strPoster
+    badge: str | None  # strBadge
+    description: str | None  # strDescriptionEN
+    uploaded_by: str | None  # strUsername
+
+    @classmethod
+    def _read(cls, r: Rec) -> dict[str, Any]:
+        return dict(id=r.id_("idArt"), league_id=r.id_("idLeague"), season=r.s("strSeason"), poster=r.s("strPoster"),
+                    badge=r.s("strBadge"), description=r.s("strDescriptionEN"), uploaded_by=r.s("strUsername"))
+
+
+@dataclass(frozen=True, kw_only=True, eq=False, repr=False)
 class Team(ApiRecord):
     """A team. Search and list endpoints fill only some fields; a lookup by id fills them all."""
 

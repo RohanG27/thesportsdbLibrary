@@ -45,6 +45,7 @@ from .models import (
     PlayerStat,
     RoundStage,
     Season,
+    SeasonPoster,
     Socials,
     Sport,
     Standing,
@@ -65,6 +66,6 @@ __all__ = [
     "ResponseParseError", "ApiMessageError", "NetworkError",
     "ApiRecord", "Contract", "Country", "Equipment", "Event", "EventResult", "EventStat", "EventStatus",
     "FormerTeam", "Honour", "ImageSize", "League", "LeagueRef", "LineupEntry", "LiveScore", "Milestone",
-    "Player", "PlayerExternalIds", "PlayerStat", "RoundStage", "Season", "Socials", "Sport", "Standing", "Team",
+    "Player", "PlayerExternalIds", "PlayerStat", "RoundStage", "Season", "SeasonPoster", "Socials", "Sport", "Standing", "Team",
     "TimelineEntry", "TvListing", "Venue", "sized",
 ]

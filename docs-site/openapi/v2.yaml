@@ -1858,6 +1858,63 @@ paths:
           $ref: '#/components/responses/InvalidKey'
         '429':
           $ref: '#/components/responses/RateLimited'
+  /api/v2/json/list/seasonposters/{id}:
+    get:
+      operationId: listSeasonPosters
+      tags:
+      - Lists
+      summary: A league's season posters
+      description: |-
+        Every season poster and badge uploaded for the league, with the uploader; several per season are possible. In TheSportsDB's OpenAPI description but not on its HTML documentation page.
+
+        Records measured 5 Oct 2026: **9**.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: The league id.
+        schema:
+          type: integer
+        example: 4328
+      responses:
+        '200':
+          description: The records under `list`.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    list:
+                      oneOf:
+                      - type: array
+                        items:
+                          $ref: '#/components/schemas/SeasonPoster'
+                      - type: 'null'
+                        description: No results.
+                - $ref: '#/components/schemas/NoData'
+              example:
+                list:
+                - idArt: '3221'
+                  idLeague: '4328'
+                  strSeason: 2025-2026
+                  strDescriptionEN: The 2025–26 Premier League is the 34th season of the Premier League and the 127th season
+                    of top-flight English football. The fixtures were released on 18 Jun…
+                  strBadge: https://r2.thesportsdb.com/images/media/league/badgearchive/gr1dy11751542162.png
+                  strPoster: https://r2.thesportsdb.com/images/media/league/posterarchive/z16csb1763671333.jpg
+                  strUsername: zag
+                - idArt: '1965'
+                  idLeague: '4328'
+                  strSeason: 2024-2025
+                  strDescriptionEN: The 2024–25 Premier League was the 33rd season of the Premier League and the 126th season
+                    of top-flight English football overall. Manchester City entered the…
+                  strBadge: https://r2.thesportsdb.com/images/media/league/badgearchive/dfhoqa1719226584.png
+                  strPoster: https://r2.thesportsdb.com/images/media/league/posterarchive/fty05k1719226108.jpg
+                  strUsername: zag
+        '400':
+          $ref: '#/components/responses/InvalidKey'
+        '429':
+          $ref: '#/components/responses/RateLimited'
   /api/v2/json/all/countries:
     get:
       operationId: allCountries
@@ -3549,7 +3606,7 @@ components:
           type:
           - string
           - 'null'
-          description: TheSportsDB user who uploaded the record.
+          description: TheSportsDB user who uploaded the record (or the artwork).
           examples:
           - smudgie
     Event:
@@ -5460,6 +5517,60 @@ components:
           description: Season name, e.g. `2026-2027`, or `2026` for single-year leagues.
           examples:
           - 1992-1993
+    SeasonPoster:
+      type: object
+      description: SeasonPoster record. Every value is a string or null; `""` also means no value.
+      properties:
+        idArt:
+          type:
+          - string
+          - 'null'
+          description: Id of this piece of artwork (season posters).
+          examples:
+          - '3221'
+        idLeague:
+          type:
+          - string
+          - 'null'
+          description: League id.
+          examples:
+          - '4328'
+        strBadge:
+          type:
+          - string
+          - 'null'
+          description: Badge image URL.
+          examples:
+          - https://r2.thesportsdb.com/images/media/league/badgearchive/gr1dy11751542162.png
+        strDescriptionEN:
+          type:
+          - string
+          - 'null'
+          description: Description in language `EN`.
+          examples:
+          - The 2025–26 Premier League is the 34th season of the Premier League and the 127th season of top-flight English
+            football. The fixtures were released on 18 Jun…
+        strPoster:
+          type:
+          - string
+          - 'null'
+          description: Poster image URL (tall).
+          examples:
+          - https://r2.thesportsdb.com/images/media/league/posterarchive/z16csb1763671333.jpg
+        strSeason:
+          type:
+          - string
+          - 'null'
+          description: Season name, e.g. `2026-2027`, or `2026` for single-year leagues.
+          examples:
+          - 2025-2026
+        strUsername:
+          type:
+          - string
+          - 'null'
+          description: TheSportsDB user who uploaded the record (or the artwork).
+          examples:
+          - zag
     Sport:
       type: object
       description: Sport record. Every value is a string or null; `""` also means no value.

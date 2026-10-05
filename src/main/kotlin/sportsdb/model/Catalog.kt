@@ -143,6 +143,34 @@ public class Season internal constructor(
     override fun toString(): String = "Season(name=$name)"
 }
 
+/**
+ * One season poster or badge uploaded for a league (v2 `list/seasonposters`). A season can have
+ * several; each is a separate piece of artwork with its own id.
+ */
+public class SeasonPoster internal constructor(
+    /** `idArt`: this artwork's id */ public val id: Long?,
+    /** `idLeague` */ public val leagueId: Long?,
+    /** `strSeason`, e.g. `2025-2026` */ public val season: String?,
+    /** `strPoster` */ public val poster: String?,
+    /** `strBadge` */ public val badge: String?,
+    /** `strDescriptionEN` */ public val description: String?,
+    /** `strUsername`: who uploaded it */ public val uploadedBy: String?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "SeasonPoster(id=$id, season=$season)"
+}
+
+internal fun JsonObject.toSeasonPoster() = SeasonPoster(
+    id = id("idArt"),
+    leagueId = id("idLeague"),
+    season = str("strSeason"),
+    poster = str("strPoster"),
+    badge = str("strBadge"),
+    description = str("strDescriptionEN"),
+    uploadedBy = str("strUsername"),
+    raw = raw(),
+)
+
 internal fun JsonObject.toSeason(): Season? = str("strSeason")?.let {
     Season(name = it, badge = str("strBadge"), poster = str("strPoster"), description = str("strDescriptionEN"), raw = raw())
 }

@@ -27,6 +27,7 @@ from ..models import (
     Player,
     PlayerStat,
     Season,
+    SeasonPoster,
     Sport,
     Team,
     TimelineEntry,
@@ -149,6 +150,10 @@ class AsyncV2Lists:
 
     async def seasons(self, league_id: int) -> list[Season]:
         return await self._r.v2("list", SLOW, Season._from, "list", "seasons", league_id)
+
+    async def season_posters(self, league_id: int) -> list[SeasonPoster]:
+        """Every season poster and badge uploaded for a league, with the uploader. In the official OpenAPI description."""
+        return await self._r.v2("list", SLOW, SeasonPoster._from, "list", "seasonposters", league_id)
 
     async def players(self, team_id: int) -> list[Player]:
         return await self._r.v2("list", SLOW, Player._from, "list", "players", team_id)

@@ -124,6 +124,29 @@ export interface Season extends ApiRecord {
 }
 
 /**
+ * One season poster or badge uploaded for a league (v2 `list/seasonposters`). A season can have
+ * several; each is a separate piece of artwork with its own id.
+ *
+ */
+export interface SeasonPoster extends ApiRecord {
+  readonly kind: "SeasonPoster";
+  /** `idArt`: this artwork's id */
+  readonly id: number | null;
+  /** `idLeague` */
+  readonly leagueId: number | null;
+  /** `strSeason`, e.g. `2025-2026` */
+  readonly season: string | null;
+  /** `strPoster` */
+  readonly poster: string | null;
+  /** `strBadge` */
+  readonly badge: string | null;
+  /** `strDescriptionEN` */
+  readonly description: string | null;
+  /** `strUsername`: who uploaded it */
+  readonly uploadedBy: string | null;
+}
+
+/**
  * A team. Search and list endpoints fill only some fields (v2 `list/teams` has no
  * alternate names, for example); a lookup by id fills them all.
  *
@@ -922,7 +945,7 @@ export interface Venue extends ApiRecord {
 }
 
 /** Every record type. */
-export type AnyRecord = Sport | Country | League | Season | Team | Event | Standing | LineupEntry | TimelineEntry | EventStat | TvListing | LiveScore | Player | Honour | FormerTeam | Milestone | Contract | EventResult | PlayerStat | Equipment | Venue;
+export type AnyRecord = Sport | Country | League | Season | SeasonPoster | Team | Event | Standing | LineupEntry | TimelineEntry | EventStat | TvListing | LiveScore | Player | Honour | FormerTeam | Milestone | Contract | EventResult | PlayerStat | Equipment | Venue;
 
 /** @internal */
 export function parseSport(raw: RawRecord): Sport {
@@ -1002,6 +1025,22 @@ export function parseSeason(raw: RawRecord): Season {
     badge: r.s("strBadge"),
     poster: r.s("strPoster"),
     description: r.s("strDescriptionEN"),
+  });
+}
+
+/** @internal */
+export function parseSeasonPoster(raw: RawRecord): SeasonPoster {
+  const r = new Rec(raw);
+  return Object.freeze({
+    kind: "SeasonPoster",
+    raw,
+    id: r.id("idArt"),
+    leagueId: r.id("idLeague"),
+    season: r.s("strSeason"),
+    poster: r.s("strPoster"),
+    badge: r.s("strBadge"),
+    description: r.s("strDescriptionEN"),
+    uploadedBy: r.s("strUsername"),
   });
 }
 

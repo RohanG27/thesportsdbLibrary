@@ -8,6 +8,7 @@ use SportsDb\Cache\Freshness;
 use SportsDb\Internal\Requester;
 use SportsDb\Model\Player;
 use SportsDb\Model\Season;
+use SportsDb\Model\SeasonPoster;
 use SportsDb\Model\Team;
 
 /** list/... */
@@ -28,6 +29,12 @@ final class Lists
     public function seasons(int $leagueId): array
     {
         return $this->r->v2('list', Freshness::Slow, static fn ($x) => new Season($x), ['list', 'seasons', $leagueId]);
+    }
+
+    /** @return list<SeasonPoster> every season poster and badge uploaded for a league, with the uploader */
+    public function seasonPosters(int $leagueId): array
+    {
+        return $this->r->v2('list', Freshness::Slow, static fn ($x) => new SeasonPoster($x), ['list', 'seasonposters', $leagueId]);
     }
 
     /** @return list<Player> */

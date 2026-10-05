@@ -126,6 +126,11 @@ export class V2Lists {
     return this.r.v2("list", "slow", m.parseSeason, ["list", "seasons", leagueId]);
   }
 
+  /** Every season poster and badge uploaded for a league, with the uploader (in the official OpenAPI description). */
+  seasonPosters(leagueId: number): Promise<m.SeasonPoster[]> {
+    return this.r.v2("list", "slow", m.parseSeasonPoster, ["list", "seasonposters", leagueId]);
+  }
+
   players(teamId: number): Promise<m.Player[]> {
     return this.r.v2("list", "slow", m.parsePlayer, ["list", "players", teamId]);
   }

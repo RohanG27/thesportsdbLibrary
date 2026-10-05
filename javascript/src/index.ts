@@ -18,5 +18,5 @@ export {
 } from "./model-support.js";
 export type {
   AnyRecord, Contract, Country, Equipment, Event, EventResult, EventStat, FormerTeam, Honour, League, LineupEntry, LiveScore, Milestone,
-  Player, PlayerStat, Season, Sport, Standing, Team, TimelineEntry, TvListing, Venue,
+  Player, PlayerStat, Season, SeasonPoster, Sport, Standing, Team, TimelineEntry, TvListing, Venue,
 } from "./models.js";

@@ -122,6 +122,7 @@ Premium keys only. The record key is always the first path segment. "No results"
 | `list/teams/{idLeague}` | `v2.list.teams(leagueId)` | `List<Team>` (no alternate names) |
 | `list/seasons/{idLeague}` | `v2.list.seasons(leagueId)` | `List<Season>` |
 | `list/players/{idTeam}` | `v2.list.players(teamId)` | `List<Player>` (summary) |
+| `list/seasonposters/{idLeague}` | `v2.list.seasonPosters(leagueId)` | `List<SeasonPoster>` (in the official OpenAPI file only) |
 | `filter/tv/day/{date}` | `v2.tv.day(date)` | `List<TvListing>` |
 | `filter/tv/country/{country}` | `v2.tv.country(country)` | `List<TvListing>`, about a week |
 | `filter/tv/sport/{sport}` | `v2.tv.sport(sport)` | `List<TvListing>` |

@@ -225,6 +225,10 @@ V2: list[E] = [
       "list_seasons", "100", "With badge, poster and description."),
     E("list/players/{id}", "listPlayers", "Lists", "A team's squad", "list", "Player", [id_("id", "team", 133604)],
       "list_players", "100"),
+    E("list/seasonposters/{id}", "listSeasonPosters", "Lists", "A league's season posters", "list", "SeasonPoster",
+      [id_("id", "league", 4328)], "list_seasonposters", None,
+      "Every season poster and badge uploaded for the league, with the uploader; several per season are possible. "
+      "In TheSportsDB's OpenAPI description but not on its HTML documentation page."),
     E("all/countries", "allCountries", "All", "All countries", "all", "Country", [], "all_countries", "500"),
     E("all/sports", "allSports", "All", "All sports", "all", "Sport", [], "all_sports", "500"),
     E("all/leagues", "allLeagues", "All", "All leagues", "all", "League", [], "all_leagues", "3000"),

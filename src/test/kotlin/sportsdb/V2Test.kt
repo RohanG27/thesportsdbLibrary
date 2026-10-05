@@ -91,6 +91,9 @@ class V2Test {
         val seasons = check("list_seasons", "list/seasons/4328") { v2.list.seasons(4328) }
         assertNotNull(seasons.last().description)
         check("list_players", "list/players/133604") { v2.list.players(133604) }
+        val posters = check("list_seasonposters", "list/seasonposters/4328") { v2.list.seasonPosters(4328) }
+        assertEquals(9, posters.size)
+        assertTrue(posters.all { it.leagueId == 4328L && it.id != null && it.poster != null })
 
         val countries = check("all_countries", "all/countries") { v2.all.countries() }
         with(countries.first { it.name == "Andorra" }) {

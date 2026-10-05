@@ -25,6 +25,7 @@ const CASES: Case[] = [
   ["list_teams", "list/teams/4328", (c) => c.v2.list.teams(4328), 20],
   ["list_seasons", "list/seasons/4328", (c) => c.v2.list.seasons(4328), 35],
   ["list_players", "list/players/133604", (c) => c.v2.list.players(133604), 27],
+  ["list_seasonposters", "list/seasonposters/4328", (c) => c.v2.list.seasonPosters(4328), 9],
   ["all_countries", "all/countries", (c) => c.v2.all.countries(), 256],
   ["all_sports", "all/sports", (c) => c.v2.all.sports(), 37],
   ["all_leagues", "all/leagues", (c) => c.v2.all.leagues(), 1547],

@@ -103,6 +103,7 @@ V2=(
   "lookup_venue|lookup/venue/16163"
   "list_teams|list/teams/4328"
   "list_seasons|list/seasons/4328"
+  "list_seasonposters|list/seasonposters/4328"
   "list_players|list/players/133604"
   "filter_tv_day|filter/tv/day/2026-10-05"
   "filter_tv_country|filter/tv/country/Canada"

@@ -310,6 +310,8 @@ type League {
   teams: [Team!]! @source(v1: "search_all_teams.php?l={name}", v2: "list/teams/{id}")
   "The league's seasons, with badges and posters where available."
   seasons: [Season!]! @source(v1: "search_all_seasons.php?id={id}", v2: "list/seasons/{id}")
+  "Every season poster and badge uploaded for the league, with the uploader (premium keys)."
+  seasonPosters: [SeasonPoster!]! @source(v2: "list/seasonposters/{id}")
   "The table; omit `season` for the current one."
   table(season: String): [Standing!]! @source(v1: "lookuptable.php?l={id}&s={season}")
   "The league's next events. Free keys: 1."
@@ -332,6 +334,34 @@ type Season {
   poster: String
   "`strDescriptionEN` (v2, or v1 with `description=1`)"
   description: String
+  "Every field as the API sent it (blank strings as null), for fields not modelled here."
+  raw: JSONObject!
+}
+
+"""
+One season poster or badge uploaded for a league (v2 `list/seasonposters`). A season can have several; each is a separate piece of artwork with its own id.
+"""
+type SeasonPoster {
+  "`idArt`: Id of this piece of artwork (season posters)."
+  id: ID
+  "`idLeague`: League id."
+  leagueId: ID
+  "`strSeason`: Season name, e.g. `2026-2027`, or `2026` for single-year leagues."
+  season: String
+  "`strPoster`: Poster image URL (tall)."
+  poster(
+    "A smaller copy of the image."
+    size: ImageSize
+  ): String
+  "`strBadge`: Badge image URL."
+  badge(
+    "A smaller copy of the image."
+    size: ImageSize
+  ): String
+  "`strDescriptionEN`"
+  description: String
+  "`strUsername`: TheSportsDB user who uploaded the record (or the artwork)."
+  uploadedBy: String
   "Every field as the API sent it (blank strings as null), for fields not modelled here."
   raw: JSONObject!
 }
@@ -1247,7 +1277,7 @@ type Equipment {
     "A smaller copy of the image."
     size: ImageSize
   ): String
-  "`strUsername`: TheSportsDB user who uploaded the record."
+  "`strUsername`: TheSportsDB user who uploaded the record (or the artwork)."
   uploadedBy: String
   "`date`: When the kit was added, `YYYY-MM-DD HH:MM:SS` (zone not stated)."
   added: LocalDateTime

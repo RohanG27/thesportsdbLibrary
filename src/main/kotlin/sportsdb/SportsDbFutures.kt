@@ -385,6 +385,14 @@ public class SportsDbFutures(
         public fun seasons(leagueId: Long): CompletableFuture<List<Season>> =
             call { client.v2.list.seasons(leagueId) }
 
+        /**
+         * A league's season posters and badges: every piece of season artwork, with who uploaded
+         * it (several per season are possible). Listed in the official OpenAPI description; not on
+         * the HTML documentation page.
+         */
+        public fun seasonPosters(leagueId: Long): CompletableFuture<List<SeasonPoster>> =
+            call { client.v2.list.seasonPosters(leagueId) }
+
         /** A team's squad (summary fields). */
         public fun players(teamId: Long): CompletableFuture<List<Player>> =
             call { client.v2.list.players(teamId) }

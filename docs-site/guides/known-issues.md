@@ -30,6 +30,21 @@ Places where the API behaves differently from its older documentation, or in sur
 - **v2 `search/event` needs the exact stored event name.** v1 `searchevents.php` matches looser input such as `Arsenal_vs_Chelsea`.
 - **`livescore.php` (v1) is undocumented** but works. The free keys get the full live feed (51 games, the same as premium), and `l=` is ignored.
 
+## The official OpenAPI files
+
+TheSportsDB publishes [v1](https://www.thesportsdb.com/api/spec/v1/openapi.yaml) and [v2](https://www.thesportsdb.com/api/spec/v2/openapi.yaml) OpenAPI files. Compared with the API:
+- **Missing endpoints** that work and are documented in HTML: v1 `searchfilename.php`, `playerresults.php` and `lookupplayerstats.php`; v2 `lookup/player_results`, `lookup/player_stats` and `filter/tv/channelid`.
+- **Missing parameters:** `eventstv.php` `c=` and `id=`; `search_all_seasons.php` `description=1`.
+- **Only there:** v2 `list/seasonposters/{idLeague}`, which isn't in the HTML documentation.
+- **Fields that are no longer sent:** `idSoccerXML`, `intStadiumCapacity`, `strTweet2`, `strTweet3`, `intEventScore`, `intEventScoreTotal`.
+
+The reference on this site covers all of these.
+
+## Data
+
+- **An event's `strLeague` can be an old name** for its `idLeague` (e.g. `Colombia Categoría Primera A` for the league now called `Colombian Liga DIMAYOR`). Match leagues by id.
+- **`strWeather` is rarely filled in** (1 of 901 events on 4 Oct 2026).
+
 ## Legacy endpoints
 
 These aren't in the current documentation. They answer the free keys but **return HTTP 404 (an HTML page) to premium keys**, so an app built on the free key can break when it upgrades.

@@ -189,6 +189,7 @@ These aren't in the current documentation. They **answer the free keys but retur
 | `list/teams/4328` | `list` | 20 | 100 | badges and colours, **no alternate names** |
 | `list/seasons/4328` | `list` | 35 | 100 | with badge, poster, description |
 | `list/players/133604` | `list` | 27 | 100 | |
+| `list/seasonposters/4328` | `list` | 9 | — | every season poster/badge with `idArt` and the uploader; **only in the official OpenAPI file**, not the HTML docs |
 | `filter/tv/day/2026-10-05` | `filter` | 287 | 100 | every listing worldwide that day |
 | `filter/tv/country/Canada` | `filter` | 90 | 100 | about a week of a country's listings |
 | `filter/tv/sport/Ice%20Hockey` | `filter` | 189 | 100 | |
@@ -235,6 +236,23 @@ Useful for client authors and for anyone improving the official docs.
 11. **Rejected parameters come back as HTTP 200** with the error text where the records belong (section 2), not as an error status or a `Message`.
 12. **A second free key, `3`, still works.** The documentation mentions only `123`.
 13. **Wrong keys get HTTP 400**, with a "premium" message even on v1. Old example keys such as `1` no longer work.
+
+## 5b. TheSportsDB's own OpenAPI files, and its roadmap
+
+TheSportsDB publishes OpenAPI descriptions at `https://www.thesportsdb.com/api/spec/v1/openapi.yaml` and `/api/spec/v2/openapi.yaml`, plus Postman collections linked from the documentation page. Compared with the API's actual behaviour (5 Oct 2026):
+- **They miss endpoints that work and are documented in HTML:** v1 `searchfilename.php`, `playerresults.php` and `lookupplayerstats.php`; v2 `lookup/player_results`, `lookup/player_stats` and `filter/tv/channelid`. They also miss the `eventstv.php` parameters `c=` and `id=`, and the `search_all_seasons.php` option `description=1`.
+- **They have one endpoint the HTML docs don't:** v2 `list/seasonposters/{idLeague}` (recorded: 9 posters for the Premier League).
+- **They list fields the API no longer sends:** `idSoccerXML`, `intStadiumCapacity`, `strTweet2`, `strTweet3`, `intEventScore`, `intEventScoreTotal`. None appear in any recorded response.
+- **The v1 file is titled "Search API"** and describes only team search in its summary.
+
+Data quality, from the recordings and the project's bug list:
+- **An event's `strLeague` can be an old name for its `idLeague`:** 16 events carry `Colombia Categoría Primera A` under id 4497, which the league list calls `Colombian Liga DIMAYOR`. Match leagues by id, not by name. A related open bug: Champions League events whose league fields show the home team's league.
+- **`strWeather` is rarely filled:** 1 of 901 events on 4 Oct 2026.
+- **An open bug: NFL live scores break at 00:00 UTC.** Events crossing midnight UTC are where date handling goes wrong.
+
+Planned changes, from the public roadmap (trello.com/b/PMumZYQg, v2 "todo" list). Clients should tolerate them:
+- **Format changes:** standardised event times and dates; normalised null versus empty strings; removal of `strFilename`; merged lookup and search methods.
+- **New data:** a round endpoint; head-to-head; team honours; collections; latest transfers; all players of a sport (with paging); one call grouping lineups, stats and timelines.
 
 ## 6. Fields of each record type
 
@@ -297,6 +315,7 @@ are grouped. `strDescription{XX}` stands for one field per language code.
 - `lookup/venue/16163` (29 fields): `idDupe`, `idVenue`, `intCapacity`, `intFormedYear`, `intLoved`, `strArchitect`, `strCost`, `strCountry`, `strCreativeCommons`, `strDescriptionEN`, `strFacebook`, `strFanart1`, `strFanart2`, `strFanart3`, `strFanart4`, `strInstagram`, `strLocation`, `strLocked`, `strLogo`, `strMap`, `strSport`, `strThumb`, `strTimezone`, `strTwitter`, `strVenue`, `strVenueAlternate`, `strVenueSponsor`, `strWebsite`, `strYoutube`
 - `list/teams/4328` (14 fields): `idLeague`, `idTeam`, `strBadge`, `strBanner`, `strColour1`, `strColour2`, `strColour3`, `strCountry`, `strEquipment`, `strFanart1`, `strLeague`, `strLogo`, `strTeam`, `strTeamShort`
 - `list/seasons/4328` (4 fields): `strBadge`, `strDescriptionEN`, `strPoster`, `strSeason`
+- `list/seasonposters/4328` (7 fields): `idArt`, `idLeague`, `strBadge`, `strDescriptionEN`, `strPoster`, `strSeason`, `strUsername`
 - `list/players/133604` (9 fields): `dateBorn`, `idPlayer`, `idTeam`, `strCutout`, `strPlayer`, `strPosition`, `strRender`, `strTeam`, `strThumb`
 - `all/countries` (7 fields): `code`, `flag_url_16`, `flag_url_32`, `flag_url_64`, `idAPIfootball`, `name_en`, `name_fr`
 - `all/sports` (7 fields): `idSport`, `strFormat`, `strSport`, `strSportDescription`, `strSportIconGreen`, `strSportThumb`, `strSportThumbBW`

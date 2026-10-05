@@ -34,6 +34,7 @@ idHonour: 'Id of the honour (trophy or award) itself, shared by everyone who won
 idMilestone: 'Id of the milestone type.'
 idFormerTeam: 'Team id of the former team.'
 idResult: 'Id of this result record.'
+idArt: 'Id of this piece of artwork (season posters).'
 idLineup: 'Id of this lineup record.'
 idTimeline: 'Id of this timeline entry.'
 idStanding: 'Id of this table row.'
@@ -105,7 +106,7 @@ strComment: 'Commentary for this timeline entry.'
 strTimeline: 'Kind of timeline entry, e.g. `Goal`, `Card`, `subst`.'
 strTimelineDetail: 'Detail of the entry, e.g. `Yellow Card`, `Normal Goal`, or the player coming on.'
 strAssist: 'Name of the assisting player.'
-strUsername: 'TheSportsDB user who uploaded the record.'
+strUsername: 'TheSportsDB user who uploaded the record (or the artwork).'
 Message: 'A message instead of data, e.g. `No data found` or `Invalid Premium API key: ...`.'
 
 # --- Places, people -------------------------------------------------------------------------

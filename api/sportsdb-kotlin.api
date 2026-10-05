@@ -288,6 +288,7 @@ public final class sportsdb/SportsDbFutures$V2All {
 
 public final class sportsdb/SportsDbFutures$V2Lists {
 	public final fun players (J)Ljava/util/concurrent/CompletableFuture;
+	public final fun seasonPosters (J)Ljava/util/concurrent/CompletableFuture;
 	public final fun seasons (J)Ljava/util/concurrent/CompletableFuture;
 	public final fun teams (J)Ljava/util/concurrent/CompletableFuture;
 }
@@ -446,6 +447,7 @@ public final class sportsdb/V2Api$All {
 
 public final class sportsdb/V2Api$Lists {
 	public final fun players (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun seasonPosters (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun seasons (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public final fun teams (JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
@@ -982,6 +984,17 @@ public final class sportsdb/model/Season : sportsdb/model/ApiRecord {
 	public final fun getDescription ()Ljava/lang/String;
 	public final fun getName ()Ljava/lang/String;
 	public final fun getPoster ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class sportsdb/model/SeasonPoster : sportsdb/model/ApiRecord {
+	public final fun getBadge ()Ljava/lang/String;
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/Long;
+	public final fun getLeagueId ()Ljava/lang/Long;
+	public final fun getPoster ()Ljava/lang/String;
+	public final fun getSeason ()Ljava/lang/String;
+	public final fun getUploadedBy ()Ljava/lang/String;
 	public fun toString ()Ljava/lang/String;
 }
 

@@ -88,10 +88,22 @@ final class ParsingTest extends TestCase
     {
         foreach (['NS' => EventStatus::NotStarted, '2H' => EventStatus::InPlay, 'Q3' => EventStatus::InPlay, 'P2' => EventStatus::InPlay,
                      'IN7' => EventStatus::InPlay, 'FT' => EventStatus::Finished, 'aet' => EventStatus::Finished,
-                     'PST' => EventStatus::Postponed, '???' => EventStatus::Unknown] as $code => $status) {
+                     'PST' => EventStatus::Postponed, '???' => EventStatus::Unknown,
+                     // Codes from TheSportsDB's data documentation that the first version missed or misread.
+                     'POST' => EventStatus::Postponed, 'S3' => EventStatus::InPlay, 'PT' => EventStatus::InPlay, 'AW' => EventStatus::Finished,
+                     'INT' => EventStatus::Interrupted, 'INTR' => EventStatus::Interrupted, 'SUSP' => EventStatus::Interrupted] as $code => $status) {
             self::assertSame($status, EventStatus::of((string) $code), (string) $code);
         }
         self::assertSame(EventStatus::Unknown, EventStatus::of(null));
+    }
+
+    public function testRoundStages(): void
+    {
+        self::assertSame(\SportsDb\Model\RoundStage::Final, \SportsDb\Model\RoundStage::of(200));
+        self::assertSame(\SportsDb\Model\RoundStage::PreSeason, \SportsDb\Model\RoundStage::of(500));
+        self::assertNull(\SportsDb\Model\RoundStage::of(38));
+        self::assertNull(\SportsDb\Model\RoundStage::of(226)); // seen in the data; not a documented code
+        self::assertNull(\SportsDb\Model\RoundStage::of(null));
     }
 
     public function testImageSizes(): void

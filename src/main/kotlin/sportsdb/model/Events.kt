@@ -36,7 +36,7 @@ public class Event internal constructor(
     /** `strLeague` */ public val league: String?,
     /** `strLeagueBadge` */ public val leagueBadge: String?,
     /** `strSeason` */ public val season: String?,
-    /** `intRound`: matchday or round number */ public val round: Int?,
+    /** `intRound`: matchday or round number, or a stage code (125 quarter-final … 500 pre-season); see [stage] */ public val round: Int?,
     /** `strGroup`: a cup group or conference */ public val group: String?,
     /** `idHomeTeam` */ public val homeTeamId: Long?,
     /** `strHomeTeam` */ public val homeTeam: String?,
@@ -82,6 +82,9 @@ public class Event internal constructor(
 
     /** [statusCode] read as a broad status. */
     public val status: EventStatus get() = EventStatus.of(statusCode)
+
+    /** The stage when [round] is a stage code (e.g. 200 = final), or null for an ordinary round. */
+    public val stage: RoundStage? get() = RoundStage.of(round)
 }
 
 internal fun JsonObject.toEvent() = Event(

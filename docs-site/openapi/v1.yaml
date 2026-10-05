@@ -4308,7 +4308,8 @@ components:
           type:
           - string
           - 'null'
-          description: Round or matchday number.
+          description: 'Round or matchday number, or a stage code: 125 quarter-final, 150 semi-final, 160 playoff, 170 playoff
+            semi-final, 180 playoff final, 200 final, 400 qualifier, 500 pre-season.'
           examples:
           - '3'
         intScore:
@@ -4504,8 +4505,8 @@ components:
           type:
           - string
           - 'null'
-          description: Status code, e.g. `NS` (not started), `1H`, `HT`, `2H`, `FT`, `Q3`, `P2`, `PST` (postponed). Older
-            events often have none.
+          description: Status code, e.g. `NS` (not started), `1H`, `HT`, `2H`, `FT`, `Q3`, `P2`, `S1` (set), `PST`/`POST`
+            (postponed), `SUSP`/`INT` (interrupted), `CANC`, `ABD`. Codes differ by sport. Older events often have none.
           examples:
           - FT
         strThumb:
@@ -5466,8 +5467,8 @@ components:
           type:
           - string
           - 'null'
-          description: Status code, e.g. `NS` (not started), `1H`, `HT`, `2H`, `FT`, `Q3`, `P2`, `PST` (postponed). Older
-            events often have none.
+          description: Status code, e.g. `NS` (not started), `1H`, `HT`, `2H`, `FT`, `Q3`, `P2`, `S1` (set), `PST`/`POST`
+            (postponed), `SUSP`/`INT` (interrupted), `CANC`, `ABD`. Codes differ by sport. Older events often have none.
           examples:
           - 1H
         strTimestamp:

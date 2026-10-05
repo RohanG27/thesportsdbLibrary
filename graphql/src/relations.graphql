@@ -37,16 +37,40 @@ scalar JSONObject
 enum EventStatus {
   "`NS`"
   NOT_STARTED
-  "`1H`, `HT`, `2H`, `Q1`–`Q4`, `OT`, `P1`–`P3`, `SO`, `IN1`…"
+  "`1H`, `HT`, `2H`, `ET`, `BT`, `P`, `PT`, `Q1`–`Q4`, `OT`, `P1`–`P3`, `SO`, `IN1`…, `S1`–`S5`"
   IN_PLAY
-  "`FT`, `AET`, `PEN`"
+  "`FT`, `AET`, `PEN`, `AOT`, `AP`, and awarded results (`AWD`, `AW`, `WO`)"
   FINISHED
-  "`PST`"
+  "`PST`, `POST`"
   POSTPONED
+  "`SUSP`, `INT`, `INTR`: suspended or interrupted; may resume."
+  INTERRUPTED
+  "`CANC`"
   CANCELLED
+  "`ABD`"
   ABANDONED
   "No code (common on older events), or a code not listed here."
   UNKNOWN
+}
+
+"The stage a special `intRound` value stands for. Other values are ordinary round numbers."
+enum RoundStage {
+  "`intRound` 125"
+  QUARTER_FINAL
+  "`intRound` 150"
+  SEMI_FINAL
+  "`intRound` 160"
+  PLAYOFF
+  "`intRound` 170"
+  PLAYOFF_SEMI_FINAL
+  "`intRound` 180"
+  PLAYOFF_FINAL
+  "`intRound` 200"
+  FINAL
+  "`intRound` 400"
+  QUALIFIER
+  "`intRound` 500"
+  PRE_SEASON
 }
 
 "Smaller copies TheSportsDB serves for its own images (append `/medium`, `/small` or `/tiny` to the URL)."

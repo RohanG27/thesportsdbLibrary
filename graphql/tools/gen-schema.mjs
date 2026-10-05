@@ -34,7 +34,8 @@ const EXTRAS = {
   Team: ['"The English description (`strDescriptionEN`)."\n  description: String'],
   Player: ['"The English description (`strDescriptionEN`)."\n  description: String'],
   Venue: ['"The English description (`strDescriptionEN`)."\n  description: String', '"`strMap` as coordinates, when it holds them."\n  coordinates: Coordinates'],
-  Event: ['"`strStatus` read as a broad status."\n  status: EventStatus!'],
+  Event: ['"`strStatus` read as a broad status."\n  status: EventStatus!',
+          '"The stage when `intRound` is a stage code (e.g. 200 = final); null for an ordinary round."\n  stage: RoundStage'],
   LiveScore: ['"`strStatus` read as a broad status."\n  status: EventStatus!'],
   PlayerStat: ['"`strValue` as a number, when it is one."\n  numericValue: Float'],
 };

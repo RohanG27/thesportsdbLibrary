@@ -68,6 +68,9 @@ def test_envelopes() -> None:
     ("NS", EventStatus.NOT_STARTED), ("2H", EventStatus.IN_PLAY), ("Q3", EventStatus.IN_PLAY), ("P2", EventStatus.IN_PLAY),
     ("IN7", EventStatus.IN_PLAY), ("FT", EventStatus.FINISHED), ("aet", EventStatus.FINISHED), ("PST", EventStatus.POSTPONED),
     (None, EventStatus.UNKNOWN), ("???", EventStatus.UNKNOWN),
+    # Codes from TheSportsDB's data documentation that the first version missed or misread.
+    ("POST", EventStatus.POSTPONED), ("S3", EventStatus.IN_PLAY), ("PT", EventStatus.IN_PLAY), ("AW", EventStatus.FINISHED),
+    ("INT", EventStatus.INTERRUPTED), ("INTR", EventStatus.INTERRUPTED), ("SUSP", EventStatus.INTERRUPTED),
 ])
 def test_event_status(code: str | None, status: EventStatus) -> None:
     assert EventStatus.of(code) is status
@@ -82,3 +85,13 @@ def test_image_sizes() -> None:
     thumb = "https://www.thesportsdb.com/images/sports/soccer.jpg"  # /tiny 404s here
     assert sized(thumb, ImageSize.TINY) == thumb
     assert sized(None, ImageSize.TINY) is None
+
+
+def test_round_stages() -> None:
+    from sportsdb import RoundStage
+
+    assert RoundStage.of(200) is RoundStage.FINAL
+    assert RoundStage.of(500) is RoundStage.PRE_SEASON
+    assert RoundStage.of(38) is None
+    assert RoundStage.of(226) is None  # seen in the data; not a documented code
+    assert RoundStage.of(None) is None

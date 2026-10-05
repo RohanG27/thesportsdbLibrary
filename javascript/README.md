@@ -79,7 +79,8 @@ await h.tvListings("Canada", { sport: "Ice Hockey", days: 3 });
   - `timestamp` fields are `Date`s (UTC instants);
   - date-only fields (`date`, `born`, …) are `"YYYY-MM-DD"` strings and times of day (`time`, `localTime`) are `"HH:MM:SS"`, because JS `Date` handles date-only values badly;
   - `Event.date` and `time` are UTC; `localDate` and `localTime` are the venue's.
-- **Status:** `event.statusCode` is the raw code; `event.status` is `"NOT_STARTED"`, `"IN_PLAY"`, `"FINISHED"`, …. Older events often have no code.
+- **Status:** `event.statusCode` is the raw code; `event.status` is `"NOT_STARTED"`, `"IN_PLAY"`, `"FINISHED"`, `"INTERRUPTED"`, …, covering every sport's documented codes. Older events often have no code.
+- **Stages:** `event.stage` reads stage codes in `round` (200 = final, 500 = pre-season…) as `"FINAL"`, `"PRE_SEASON"`, …, or `null` for an ordinary round.
 - To test your own code, fake the HTTP layer with a `Transport` rather than building records.
 
 ## Errors

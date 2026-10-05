@@ -97,8 +97,24 @@ class ParsingTest {
         assertEquals(EventStatus.FINISHED, EventStatus.of("FT"))
         assertEquals(EventStatus.FINISHED, EventStatus.of("aet"))
         assertEquals(EventStatus.POSTPONED, EventStatus.of("PST"))
+        // Codes from TheSportsDB's data documentation that the first version missed or misread.
+        assertEquals(EventStatus.POSTPONED, EventStatus.of("POST"))
+        assertEquals(EventStatus.IN_PLAY, EventStatus.of("S3"))
+        assertEquals(EventStatus.IN_PLAY, EventStatus.of("PT"))
+        assertEquals(EventStatus.FINISHED, EventStatus.of("AW"))
+        assertEquals(EventStatus.INTERRUPTED, EventStatus.of("INT"))
+        assertEquals(EventStatus.INTERRUPTED, EventStatus.of("INTR"))
+        assertEquals(EventStatus.INTERRUPTED, EventStatus.of("SUSP"))
         assertEquals(EventStatus.UNKNOWN, EventStatus.of(null))
         assertEquals(EventStatus.UNKNOWN, EventStatus.of("???"))
+    }
+
+    @Test fun roundStages() {
+        assertEquals(sportsdb.model.RoundStage.FINAL, sportsdb.model.RoundStage.of(200))
+        assertEquals(sportsdb.model.RoundStage.PRE_SEASON, sportsdb.model.RoundStage.of(500))
+        assertEquals(null, sportsdb.model.RoundStage.of(38))
+        assertEquals(null, sportsdb.model.RoundStage.of(226)) // seen in the data; not a documented code
+        assertEquals(null, sportsdb.model.RoundStage.of(null))
     }
 
     @Test fun imageSizes() {

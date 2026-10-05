@@ -37,7 +37,7 @@ final readonly class Event extends ApiRecord
     public ?string $leagueBadge;
     /** `strSeason` */
     public ?string $season;
-    /** `intRound`: matchday or round number */
+    /** `intRound`: matchday or round number, or a stage code (125 quarter-final … 500 pre-season); see [stage] */
     public ?int $round;
     /** `strGroup`: a cup group or conference */
     public ?string $group;
@@ -186,5 +186,11 @@ final readonly class Event extends ApiRecord
     public function status(): EventStatus
     {
         return EventStatus::of($this->statusCode);
+    }
+
+    /** The stage when `round` is a stage code (e.g. 200 = final), or null for an ordinary round. */
+    public function stage(): ?RoundStage
+    {
+        return RoundStage::of($this->round);
     }
 }

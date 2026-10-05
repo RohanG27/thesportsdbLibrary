@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { normalize, parseRecords } from "../src/envelope.js";
 import { Rec } from "../src/fields.js";
-import { ApiMessageError, InvalidApiKeyError, ResponseParseError, eventStatus, sized } from "../src/index.js";
+import { ApiMessageError, InvalidApiKeyError, ResponseParseError, eventStatus, roundStage, sized } from "../src/index.js";
 
 const rec = (values: Record<string, unknown>) => new Rec(normalize(values));
 
@@ -52,8 +52,14 @@ describe("envelopes", () => {
 
 describe("event status and images", () => {
   it.each([["NS", "NOT_STARTED"], ["2H", "IN_PLAY"], ["Q3", "IN_PLAY"], ["P2", "IN_PLAY"], ["IN7", "IN_PLAY"], ["FT", "FINISHED"],
-    ["aet", "FINISHED"], ["PST", "POSTPONED"], [null, "UNKNOWN"], ["???", "UNKNOWN"]] as const)("%s is %s", (code, status) => {
+    ["aet", "FINISHED"], ["PST", "POSTPONED"], [null, "UNKNOWN"], ["???", "UNKNOWN"],
+    // Codes from TheSportsDB's data documentation that the first version missed or misread.
+    ["POST", "POSTPONED"], ["S3", "IN_PLAY"], ["PT", "IN_PLAY"], ["AW", "FINISHED"],
+    ["INT", "INTERRUPTED"], ["INTR", "INTERRUPTED"], ["SUSP", "INTERRUPTED"]] as const)("%s is %s", (code, status) => {
     expect(eventStatus(code)).toBe(status);
+  });
+  it("reads round stage codes", () => {
+    expect([roundStage(200), roundStage(500), roundStage(38), roundStage(226), roundStage(null)]).toEqual(["FINAL", "PRE_SEASON", null, null, null]);
   });
   it("sizes only TheSportsDB media images", () => {
     const badge = "https://r2.thesportsdb.com/images/media/team/badge/uyhbfe1612467038.png";

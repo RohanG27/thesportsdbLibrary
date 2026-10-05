@@ -662,6 +662,7 @@ public final class sportsdb/model/Event : sportsdb/model/ApiRecord {
 	public final fun getSpectators ()Ljava/lang/Integer;
 	public final fun getSport ()Ljava/lang/String;
 	public final fun getSquare ()Ljava/lang/String;
+	public final fun getStage ()Lsportsdb/model/RoundStage;
 	public final fun getStatus ()Lsportsdb/model/EventStatus;
 	public final fun getStatusCode ()Ljava/lang/String;
 	public final fun getThumb ()Ljava/lang/String;
@@ -711,6 +712,7 @@ public final class sportsdb/model/EventStatus : java/lang/Enum {
 	public static final field CANCELLED Lsportsdb/model/EventStatus;
 	public static final field Companion Lsportsdb/model/EventStatus$Companion;
 	public static final field FINISHED Lsportsdb/model/EventStatus;
+	public static final field INTERRUPTED Lsportsdb/model/EventStatus;
 	public static final field IN_PLAY Lsportsdb/model/EventStatus;
 	public static final field NOT_STARTED Lsportsdb/model/EventStatus;
 	public static final field POSTPONED Lsportsdb/model/EventStatus;
@@ -953,6 +955,26 @@ public final class sportsdb/model/RawRecord {
 	public final fun getFields ()Ljava/util/Map;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class sportsdb/model/RoundStage : java/lang/Enum {
+	public static final field Companion Lsportsdb/model/RoundStage$Companion;
+	public static final field FINAL Lsportsdb/model/RoundStage;
+	public static final field PLAYOFF Lsportsdb/model/RoundStage;
+	public static final field PLAYOFF_FINAL Lsportsdb/model/RoundStage;
+	public static final field PLAYOFF_SEMI_FINAL Lsportsdb/model/RoundStage;
+	public static final field PRE_SEASON Lsportsdb/model/RoundStage;
+	public static final field QUALIFIER Lsportsdb/model/RoundStage;
+	public static final field QUARTER_FINAL Lsportsdb/model/RoundStage;
+	public static final field SEMI_FINAL Lsportsdb/model/RoundStage;
+	public final fun getCode ()I
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lsportsdb/model/RoundStage;
+	public static fun values ()[Lsportsdb/model/RoundStage;
+}
+
+public final class sportsdb/model/RoundStage$Companion {
+	public final fun of (Ljava/lang/Integer;)Lsportsdb/model/RoundStage;
 }
 
 public final class sportsdb/model/Season : sportsdb/model/ApiRecord {

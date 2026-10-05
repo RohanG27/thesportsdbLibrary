@@ -43,26 +43,45 @@ export interface PlayerExternalIds {
   readonly soccerXmlTeam: string | null; // intSoccerXMLTeamID
 }
 
-/** A broad reading of a strStatus code, so you don't need every sport's codes. */
-export type EventStatus = "NOT_STARTED" | "IN_PLAY" | "FINISHED" | "POSTPONED" | "CANCELLED" | "ABANDONED" | "UNKNOWN";
+/**
+ * A broad reading of a strStatus code, so you don't need every sport's codes. Covers the codes in
+ * TheSportsDB's data documentation (docs_api_data) for every sport. "INTERRUPTED" means suspended
+ * or interrupted (SUSP, INT, INTR): stopped, and may resume.
+ */
+export type EventStatus = "NOT_STARTED" | "IN_PLAY" | "FINISHED" | "POSTPONED" | "INTERRUPTED" | "CANCELLED" | "ABANDONED" | "UNKNOWN";
 
 const STATUS: Record<string, EventStatus> = {};
 for (const [status, codes] of [
   ["NOT_STARTED", "NS,TBD,NOT STARTED,SCHEDULED"],
-  ["FINISHED", "FT,AET,PEN,AOT,AP,FINISHED,MATCH FINISHED,FINAL,ENDED,AWD,WO"],
-  ["POSTPONED", "PST,POSTPONED,DELAYED,SUSP,INTERRUPTED"],
+  ["FINISHED", "FT,AET,PEN,AOT,AP,AWD,AW,WO,FINISHED,MATCH FINISHED,FINAL,ENDED"],
+  ["POSTPONED", "PST,POST,POSTPONED,DELAYED"],
+  ["INTERRUPTED", "SUSP,INT,INTR,SUSPENDED,INTERRUPTED"],
   ["CANCELLED", "CANC,CANCELLED,CANCELED"],
   ["ABANDONED", "ABD,ABANDONED"],
-  ["IN_PLAY", "1H,2H,HT,ET,BT,P,LIVE,INT,BREAK,Q1,Q2,Q3,Q4,OT,P1,P2,P3,SO,IN PROGRESS"],
+  ["IN_PLAY", "1H,2H,HT,ET,BT,P,PT,LIVE,BREAK,Q1,Q2,Q3,Q4,OT,P1,P2,P3,SO,IN PROGRESS"],
 ] as const) {
   for (const code of codes.split(",")) STATUS[code] = status;
 }
 
-/** Classifies a raw code (NS, 2H, Q3, P2, IN4, FT, PST...); null and unknown codes give "UNKNOWN". */
+/** Classifies a raw code (NS, 2H, Q3, P2, IN4, S2, FT, PST...); null and unknown codes give "UNKNOWN". */
 export function eventStatus(code: string | null | undefined): EventStatus {
   const c = (code ?? "").trim().toUpperCase();
   if (c === "") return "UNKNOWN";
-  return STATUS[c] ?? (/^IN\d+$/.test(c) ? "IN_PLAY" : "UNKNOWN"); // IN1.. = baseball innings
+  return STATUS[c] ?? (/^(IN\d+|S\d)$/.test(c) ? "IN_PLAY" : "UNKNOWN"); // baseball innings, volleyball sets
+}
+
+/** The stage a special intRound value stands for (docs_api_data). Other values are ordinary round numbers. */
+export type RoundStage =
+  | "QUARTER_FINAL" | "SEMI_FINAL" | "PLAYOFF" | "PLAYOFF_SEMI_FINAL" | "PLAYOFF_FINAL" | "FINAL" | "QUALIFIER" | "PRE_SEASON";
+
+const STAGES: Record<number, RoundStage> = {
+  125: "QUARTER_FINAL", 150: "SEMI_FINAL", 160: "PLAYOFF", 170: "PLAYOFF_SEMI_FINAL",
+  180: "PLAYOFF_FINAL", 200: "FINAL", 400: "QUALIFIER", 500: "PRE_SEASON",
+};
+
+/** The stage for an intRound value, or null for an ordinary round number. */
+export function roundStage(round: number | null | undefined): RoundStage | null {
+  return round == null ? null : (STAGES[round] ?? null);
 }
 
 /** Image sizes TheSportsDB serves by appending a path suffix. */

@@ -80,7 +80,8 @@ $h->tvListings('Canada', sport: 'Ice Hockey', days: 3);
   - `timestamp` properties are UTC `DateTimeImmutable`s;
   - date-only fields (`date`, `born`, …) are `DateTimeImmutable`s at midnight UTC;
   - times of day (`time`, `localTime`) are `HH:MM:SS` strings.
-- **Status:** `$event->statusCode` is the raw code; `$event->status()` is an `EventStatus` (`NotStarted`, `InPlay`, `Finished`, …). Older events often have no code.
+- **Status:** `$event->statusCode` is the raw code; `$event->status()` is an `EventStatus` (`NotStarted`, `InPlay`, `Finished`, `Interrupted`, …), covering every sport's documented codes. Older events often have no code.
+- **Stages:** `$event->stage()` reads stage codes in `round` (200 = final, 500 = pre-season…) as a `RoundStage`, or `null` for an ordinary round.
 - To test your own code, fake the HTTP layer with a `Transport` rather than building records.
 
 ## Errors

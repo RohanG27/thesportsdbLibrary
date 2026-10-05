@@ -2,8 +2,8 @@
 /* eslint-disable */
 import { Rec, type RawRecord } from "./fields.js";
 import {
-  coordinates, eventStatus, externalIds, leagueRefs, numeric, socials,
-  type ApiRecord, type EventStatus, type LeagueRef, type PlayerExternalIds, type Socials,
+  coordinates, eventStatus, externalIds, leagueRefs, numeric, roundStage, socials,
+  type ApiRecord, type EventStatus, type LeagueRef, type PlayerExternalIds, type RoundStage, type Socials,
 } from "./model-support.js";
 
 /**
@@ -219,7 +219,7 @@ export interface Event extends ApiRecord {
   readonly leagueBadge: string | null;
   /** `strSeason` */
   readonly season: string | null;
-  /** `intRound`: matchday or round number */
+  /** `intRound`: matchday or round number, or a stage code (125 quarter-final … 500 pre-season); see [stage] */
   readonly round: number | null;
   /** `strGroup`: a cup group or conference */
   readonly group: string | null;
@@ -301,6 +301,8 @@ export interface Event extends ApiRecord {
   readonly apiFootballId: number | null;
   /** The status code read as a broad status. */
   readonly status: EventStatus;
+  /** The stage when `round` is a stage code (e.g. 200 = final), or null for an ordinary round. */
+  readonly stage: RoundStage | null;
 }
 
 /**
@@ -1045,6 +1047,7 @@ export function parseTeam(raw: RawRecord): Team {
 /** @internal */
 export function parseEvent(raw: RawRecord): Event {
   const r = new Rec(raw);
+  const round = r.int("intRound");
   const statusCode = r.s("strStatus");
   return Object.freeze({
     kind: "Event",
@@ -1058,7 +1061,7 @@ export function parseEvent(raw: RawRecord): Event {
     league: r.s("strLeague"),
     leagueBadge: r.s("strLeagueBadge"),
     season: r.s("strSeason"),
-    round: r.int("intRound"),
+    round,
     group: r.s("strGroup"),
     homeTeamId: r.id("idHomeTeam"),
     homeTeam: r.s("strHomeTeam"),
@@ -1099,6 +1102,7 @@ export function parseEvent(raw: RawRecord): Event {
     isLocked: r.locked(),
     apiFootballId: r.id("idAPIfootball"),
     status: eventStatus(statusCode),
+    stage: roundStage(round),
   });
 }
 

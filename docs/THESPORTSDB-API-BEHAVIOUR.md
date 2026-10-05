@@ -45,15 +45,16 @@ How TheSportsDB's API really behaves, measured with real calls on **5 Oct 2026**
   - **TV listings use `strTimeStamp`** (capital S) with a **space**: `2026-10-10 11:30:00`, also UTC.
   - `strEventTime` (live scores) is `HH:mm`.
   - `dateUpdated` (tables), `updated` (live scores) and `date` (equipment) are `yyyy-MM-dd HH:mm:ss` with no stated zone.
-- **Status codes** (`strStatus`), as seen:
-  - Not started: `NS`.
-  - Soccer: `1H`, `2H`, `HT`, `FT`, `AET`, `PEN`.
-  - Basketball and American football: `Q1`–`Q4`, `OT`.
-  - Hockey: `P1`–`P3`, `OT`, `SO`.
-  - Baseball innings: `IN1`, …
-  - Postponed: `PST`.
+- **Status codes** (`strStatus`) are listed per sport in TheSportsDB's [data documentation](https://www.thesportsdb.com/docs_api_data):
+  - Not started: `NS`, `TBD`.
+  - In play: `1H`, `HT`, `2H`, `ET`, `BT`, `P`, `PT`, `Q1`–`Q4`, `OT`, `P1`–`P3`, `SO`, `IN1`–`IN9`, `S1`–`S5`.
+  - Finished: `FT`, `AET`, `PEN`, `AOT`, `AP`. Awarded: `AWD`, `AW`, `WO`.
+  - Postponed: `PST` and `POST`. Suspended or interrupted: `SUSP`, `INT`, `INTR`. Cancelled: `CANC`. Abandoned: `ABD`.
+  - The same state has different codes in different sports (postponed is `PST` in soccer and `POST` elsewhere).
+  - Seen in the recordings: `NS`, `1H`, `HT`, `2H`, `BT`, `OT`, `Q2`–`Q4`, `P3`, `FT`, `AOT`, `AP`, `PEN`, `AWD`, `PST`, `CANC`.
   - `strProgress` (live scores) is the minute, or `Final`.
   - **Older events often have no `strStatus` at all**, even with a final score (e.g. event 441613).
+- **Stage codes in `intRound`:** 125 quarter-final, 150 semi-final, 160 playoff, 170 playoff semi-final, 180 playoff final, 200 final, 400 qualifier, 500 pre-season (from the data documentation). Confirmed in the recordings: the 2017 FA Cup final has `200`, the May 2026 EFL play-off finals `180`, the EFL Cup semi-final `150`, and NBA pre-season games `500`. A value of `226` (a Russian lower-league game) is not a listed code, so treat unlisted values as round numbers.
 - **Images** are served from `r2.thesportsdb.com`. Append `/medium`, `/small` or `/tiny` for a smaller copy. Measured for one badge: original 128 KB, `/medium` 92 KB, `/small` 46 KB, `/tiny` 14 KB.
 - **Image rights.** Under the terms, artwork whose `strCreativeCommons` is not "Yes" must not be used in published apps.
 - **Live scores can be stale.** The live feed still listed a game from 4 Oct, in its third period, when it was recorded on 5 Oct. Check `updated` before treating a score as live.

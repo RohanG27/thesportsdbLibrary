@@ -100,6 +100,12 @@ class V1FixtureTest {
         assertNull(event.statusCode)
         assertEquals(EventStatus.UNKNOWN, event.status)
         assertEquals(4, event.homeScore)
+        // The 2017 FA Cup final is recorded with intRound 200: the "final" stage code.
+        t.respond(fixture("v1-free/search_events_season.json"))
+        val final = v1.search.events("Arsenal_vs_Chelsea", season = "2016-2017").single()
+        assertEquals(200, final.round)
+        assertEquals(sportsdb.model.RoundStage.FINAL, final.stage)
+        assertEquals("FA Cup", final.league)
 
         t.respond(fixture("v1-free/lookup_venue.json"))
         val venue = assertNotNull(v1.lookup.venue(16163))

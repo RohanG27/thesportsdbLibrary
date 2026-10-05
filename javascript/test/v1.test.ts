@@ -90,6 +90,10 @@ describe("v1 fields", () => {
     expect(event?.statusCode).toBeNull();
     expect(event?.status).toBe("UNKNOWN");
     expect(event?.homeScore).toBe(4);
+    // The 2017 FA Cup final is recorded with intRound 200: the "final" stage code.
+    const [final] = await client(new FakeTransport().respond(fixture("v1-free/search_events_season.json")))
+      .v1.search.events("Arsenal_vs_Chelsea", { season: "2016-2017" });
+    expect([final?.round, final?.stage, final?.league]).toEqual([200, "FINAL", "FA Cup"]);
   });
 
   it("parses league, player and venue", async () => {

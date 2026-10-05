@@ -82,7 +82,8 @@ h.tv_listings("Canada", sport="Ice Hockey", days=3)
 - **Times:**
   - `Event.timestamp`, `date` and `time` are UTC; `local_date` and `local_time` are the venue's.
   - `TvListing.timestamp` is UTC too (the API writes it as `strTimeStamp`, with a space).
-- **Status:** `event.status_code` is the raw code; `event.status` is an `EventStatus` (`NOT_STARTED`, `IN_PLAY`, `FINISHED`, …). Older events often have no code.
+- **Status:** `event.status_code` is the raw code; `event.status` is an `EventStatus` (`NOT_STARTED`, `IN_PLAY`, `FINISHED`, `INTERRUPTED`, …), covering every sport's documented codes. Older events often have no code.
+- **Stages:** `event.stage` reads stage codes in `round` (200 = final, 500 = pre-season…) as a `RoundStage`, or `None` for an ordinary round.
 - To test your own code, fake the HTTP layer with a transport rather than building models.
 
 ## Errors

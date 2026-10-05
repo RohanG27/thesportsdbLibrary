@@ -27,23 +27,46 @@ For time zones ahead of UTC (e.g. Tokyo), the range starts on the previous UTC d
 
 ## Event status
 
-`strStatus` is a short code. The codes differ by sport. These were seen in responses:
+`strStatus` is a short code. The codes differ by sport. TheSportsDB documents them on its [data page](https://www.thesportsdb.com/docs_api_data):
 
 | Meaning | Codes |
 |---|---|
-| Not started | `NS` |
-| In play (soccer) | `1H`, `HT`, `2H` |
-| In play (basketball, American football) | `Q1`–`Q4`, `OT` |
-| In play (ice hockey) | `P1`–`P3`, `OT`, `SO` |
-| In play (baseball) | `IN1`, `IN2`, … (innings) |
-| Finished | `FT`, `AET` (after extra time), `PEN` (after penalties) |
-| Postponed | `PST` |
+| Not started | `NS`, `TBD` (time to be defined) |
+| In play (soccer) | `1H`, `HT`, `2H`, `ET` (extra time), `BT` (break), `P` (penalties in progress) |
+| In play (basketball, American football) | `Q1`–`Q4`, `OT`, `HT`, `BT` |
+| In play (ice hockey) | `P1`–`P3`, `OT`, `PT` (penalties), `BT` |
+| In play (handball, rugby) | `1H`, `HT`, `2H`, `ET`, `BT`, `PT` |
+| In play (baseball) | `IN1`–`IN9` (innings) |
+| In play (volleyball) | `S1`–`S5` (sets) |
+| Finished | `FT`, `AET` (after extra time), `PEN` (after penalties), `AOT` (after overtime), `AP` (after penalties) |
+| Awarded | `AWD`, `AW`, `WO` (walkover) |
+| Postponed | `PST`, `POST` |
+| Suspended or interrupted | `SUSP`, `INT`, `INTR` |
+| Cancelled | `CANC` |
+| Abandoned | `ABD` |
 
-Other codes can appear. Treat a code you don't recognise as unknown, rather than as finished or not started.
+The same idea is spelled differently by different sports: postponed is `PST` in soccer and `POST` elsewhere, and interrupted is `INT` or `INTR`. Treat an unrecognised code as unknown, rather than as finished or not started.
 
 - **Older events often have no `strStatus`**, even with a final score.
 - `strPostponed` (`yes`/`no`) is a separate flag.
 - In live scores, `strProgress` is the minute, or `Final`.
+
+## Round numbers and stages
+
+`intRound` is usually the round or matchday number. Some values are **stage codes** instead:
+
+| `intRound` | Stage |
+|---|---|
+| 125 | Quarter-final |
+| 150 | Semi-final |
+| 160 | Playoff |
+| 170 | Playoff semi-final |
+| 180 | Playoff final |
+| 200 | Final |
+| 400 | Qualifier |
+| 500 | Pre-season |
+
+For example, the 2017 FA Cup final is recorded with `intRound: "200"`, the EFL play-off finals with `180`, and NBA pre-season games with `500`. Values not in this list are ordinary round numbers.
 
 ## Live scores can be stale
 

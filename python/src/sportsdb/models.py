@@ -114,39 +114,65 @@ def sized(url: str | None, size: ImageSize) -> str | None:
 
 
 class EventStatus(Enum):
-    """A broad reading of a ``strStatus`` code, so you don't need every sport's codes."""
+    """A broad reading of a ``strStatus`` code, so you don't need every sport's codes.
+
+    Covers the codes in TheSportsDB's data documentation (docs_api_data) for every sport.
+    """
 
     NOT_STARTED = "not_started"
     IN_PLAY = "in_play"
     FINISHED = "finished"
     POSTPONED = "postponed"
+    INTERRUPTED = "interrupted"  # suspended or interrupted (SUSP, INT, INTR): stopped, and may resume
     CANCELLED = "cancelled"
     ABANDONED = "abandoned"
     UNKNOWN = "unknown"  # None, or a code this library doesn't know
 
     @staticmethod
     def of(code: str | None) -> EventStatus:
-        """Classifies a raw code (``NS``, ``2H``, ``Q3``, ``P2``, ``IN4``, ``FT``, ``PST``...)."""
+        """Classifies a raw code (``NS``, ``2H``, ``Q3``, ``P2``, ``IN4``, ``S2``, ``FT``, ``PST``...)."""
         c = (code or "").strip().upper()
         if not c:
             return EventStatus.UNKNOWN
         for status, codes in _STATUS_CODES:
             if c in codes:
                 return status
-        if re.fullmatch(r"IN\d+", c):  # baseball innings
+        if re.fullmatch(r"IN\d+|S\d", c):  # baseball innings, volleyball sets
             return EventStatus.IN_PLAY
         return EventStatus.UNKNOWN
 
 
 _STATUS_CODES = (
     (EventStatus.NOT_STARTED, {"NS", "TBD", "NOT STARTED", "SCHEDULED"}),
-    (EventStatus.FINISHED, {"FT", "AET", "PEN", "AOT", "AP", "FINISHED", "MATCH FINISHED", "FINAL", "ENDED", "AWD", "WO"}),
-    (EventStatus.POSTPONED, {"PST", "POSTPONED", "DELAYED", "SUSP", "INTERRUPTED"}),
+    (EventStatus.FINISHED, {"FT", "AET", "PEN", "AOT", "AP", "AWD", "AW", "WO", "FINISHED", "MATCH FINISHED", "FINAL", "ENDED"}),
+    (EventStatus.POSTPONED, {"PST", "POST", "POSTPONED", "DELAYED"}),
+    (EventStatus.INTERRUPTED, {"SUSP", "INT", "INTR", "SUSPENDED", "INTERRUPTED"}),
     (EventStatus.CANCELLED, {"CANC", "CANCELLED", "CANCELED"}),
     (EventStatus.ABANDONED, {"ABD", "ABANDONED"}),
-    (EventStatus.IN_PLAY, {"1H", "2H", "HT", "ET", "BT", "P", "LIVE", "INT", "BREAK", "Q1", "Q2", "Q3", "Q4", "OT",
+    (EventStatus.IN_PLAY, {"1H", "2H", "HT", "ET", "BT", "P", "PT", "LIVE", "BREAK", "Q1", "Q2", "Q3", "Q4", "OT",
                            "P1", "P2", "P3", "SO", "IN PROGRESS"}),
 )
+
+
+class RoundStage(Enum):
+    """The stage a special ``intRound`` value stands for (docs_api_data). Other values are ordinary rounds."""
+
+    QUARTER_FINAL = 125
+    SEMI_FINAL = 150
+    PLAYOFF = 160
+    PLAYOFF_SEMI_FINAL = 170
+    PLAYOFF_FINAL = 180
+    FINAL = 200
+    QUALIFIER = 400
+    PRE_SEASON = 500
+
+    @staticmethod
+    def of(round: int | None) -> RoundStage | None:
+        """The stage for an ``intRound`` value, or None for an ordinary round number."""
+        try:
+            return RoundStage(round) if round is not None else None
+        except ValueError:
+            return None
 
 
 # ---------------------------------------------------------------------------------------------
@@ -662,7 +688,7 @@ class Event(ApiRecord):
     league: str | None  # strLeague
     league_badge: str | None  # strLeagueBadge
     season: str | None  # strSeason
-    round: int | None  # intRound
+    round: int | None  # intRound: round number, or a stage code (125 quarter-final … 500 pre-season); see stage
     group: str | None  # strGroup
     home_team_id: int | None  # idHomeTeam
     home_team: str | None  # strHomeTeam
@@ -706,6 +732,11 @@ class Event(ApiRecord):
     @property
     def status(self) -> EventStatus:
         return EventStatus.of(self.status_code)
+
+    @property
+    def stage(self) -> RoundStage | None:
+        """The stage when ``round`` is a stage code (e.g. 200 = final), or None for an ordinary round."""
+        return RoundStage.of(self.round)
 
     @classmethod
     def _read(cls, r: Rec) -> dict[str, Any]:

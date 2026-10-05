@@ -13,7 +13,8 @@ export {
 } from "./errors.js";
 export type { RawRecord } from "./fields.js";
 export {
-  eventStatus, sameRecord, sized, type ApiRecord, type EventStatus, type ImageSize, type LeagueRef, type PlayerExternalIds, type Socials,
+  eventStatus, roundStage, sameRecord, sized, type ApiRecord, type EventStatus, type ImageSize, type LeagueRef, type PlayerExternalIds,
+  type RoundStage, type Socials,
 } from "./model-support.js";
 export type {
   AnyRecord, Contract, Country, Equipment, Event, EventResult, EventStat, FormerTeam, Honour, League, LineupEntry, LiveScore, Milestone,

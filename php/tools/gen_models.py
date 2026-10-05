@@ -39,7 +39,7 @@ SPECIAL = {
 
 EXTRAS = {
     "League": ["description"], "Team": ["description", "leagues"], "Player": ["description"],
-    "Venue": ["description", "coordinates"], "Event": ["status"], "LiveScore": ["status"], "PlayerStat": ["numericValue"],
+    "Venue": ["description", "coordinates"], "Event": ["status", "stage"], "LiveScore": ["status"], "PlayerStat": ["numericValue"],
 }
 
 EXTRA_CODE = {
@@ -55,6 +55,13 @@ EXTRA_CODE = {
     public function status(): EventStatus
     {
         return EventStatus::of($this->statusCode);
+    }
+''',
+    "stage": '''
+    /** The stage when `round` is a stage code (e.g. 200 = final), or null for an ordinary round. */
+    public function stage(): ?RoundStage
+    {
+        return RoundStage::of($this->round);
     }
 ''',
     "coordinates": '''

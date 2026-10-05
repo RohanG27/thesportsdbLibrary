@@ -77,12 +77,18 @@ public fun String.sized(size: ImageSize): String {
     return bare + size.suffix
 }
 
-/** A broad reading of a `strStatus` code, so you don't need to know every sport's codes. */
+/**
+ * A broad reading of a `strStatus` code, so you don't need every sport's codes. Covers the codes
+ * in TheSportsDB's data documentation (docs_api_data) for every sport.
+ */
 public enum class EventStatus {
     NOT_STARTED,
     IN_PLAY,
     FINISHED,
     POSTPONED,
+
+    /** Suspended or interrupted (`SUSP`, `INT`, `INTR`): stopped, and may resume. */
+    INTERRUPTED,
     CANCELLED,
     ABANDONED,
 
@@ -91,31 +97,54 @@ public enum class EventStatus {
     ;
 
     public companion object {
-        private val finished = setOf(
-            "FT", "AET", "PEN", "AOT", "AP", "FINISHED", "MATCH FINISHED", "FINAL", "ENDED", "AWD", "WO",
-        )
+        private val notStarted = setOf("NS", "TBD", "NOT STARTED", "SCHEDULED")
         private val inPlay = setOf(
-            "1H", "2H", "HT", "ET", "BT", "P", "LIVE", "INT", "BREAK", "Q1", "Q2", "Q3", "Q4", "OT",
+            "1H", "2H", "HT", "ET", "BT", "P", "PT", "LIVE", "BREAK", "Q1", "Q2", "Q3", "Q4", "OT",
             "P1", "P2", "P3", "SO", "IN PROGRESS",
         )
-        private val notStarted = setOf("NS", "TBD", "NOT STARTED", "SCHEDULED")
-        private val postponed = setOf("PST", "POSTPONED", "DELAYED", "SUSP", "INTERRUPTED")
+        private val finished = setOf(
+            "FT", "AET", "PEN", "AOT", "AP", "AWD", "AW", "WO", "FINISHED", "MATCH FINISHED", "FINAL", "ENDED",
+        )
+        private val postponed = setOf("PST", "POST", "POSTPONED", "DELAYED")
+        private val interrupted = setOf("SUSP", "INT", "INTR", "SUSPENDED", "INTERRUPTED")
         private val cancelled = setOf("CANC", "CANCELLED", "CANCELED")
         private val abandoned = setOf("ABD", "ABANDONED")
+        private val numbered = Regex("""(IN\d+|S\d)""") // baseball innings, volleyball sets
 
-        /** Classifies a raw `strStatus` code (`NS`, `2H`, `Q3`, `P2`, `IN4`, `FT`, `PST`...). */
+        /** Classifies a raw `strStatus` code (`NS`, `2H`, `Q3`, `P2`, `IN4`, `S2`, `FT`, `PST`...). */
         public fun of(code: String?): EventStatus {
             val c = code?.trim()?.uppercase() ?: return UNKNOWN
             return when {
                 c in notStarted -> NOT_STARTED
                 c in finished -> FINISHED
                 c in postponed -> POSTPONED
+                c in interrupted -> INTERRUPTED
                 c in cancelled -> CANCELLED
                 c in abandoned -> ABANDONED
-                c in inPlay -> IN_PLAY
-                c.matches(Regex("""IN\d+""")) -> IN_PLAY // baseball innings
+                c in inPlay || numbered.matches(c) -> IN_PLAY
                 else -> UNKNOWN
             }
         }
+    }
+}
+
+/**
+ * The stage a special `intRound` value stands for. TheSportsDB uses these codes in place of a
+ * round number (docs_api_data); any other value is an ordinary round number.
+ */
+public enum class RoundStage(public val code: Int) {
+    QUARTER_FINAL(125),
+    SEMI_FINAL(150),
+    PLAYOFF(160),
+    PLAYOFF_SEMI_FINAL(170),
+    PLAYOFF_FINAL(180),
+    FINAL(200),
+    QUALIFIER(400),
+    PRE_SEASON(500),
+    ;
+
+    public companion object {
+        /** The stage for an `intRound` value, or null for an ordinary round number. */
+        public fun of(round: Int?): RoundStage? = entries.firstOrNull { it.code == round }
     }
 }

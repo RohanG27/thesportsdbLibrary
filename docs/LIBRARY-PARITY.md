@@ -32,8 +32,9 @@ All four client libraries implement the same behaviour, learned from the API (se
 | 20 | `eventsOnLocalDate` / `events_on_local_date` fetches every UTC day a local day overlaps | Events are filed under their UTC date | `HelpersTest.eventsOnLocalDate…` | `test_helpers.test_events_on_local_date…` | `HelpersTest::testEventsOnLocalDate…` | `helpers.test.ts` "events on a local date…" (offsets via `Intl`) |
 | 21 | `roundEvents` / `round_events`: the v2 season filtered by round for premium keys, `eventsround.php` for free keys | `eventsround.php` returns 404 to premium keys | `HelpersTest.roundEvents` | `test_helpers.test_round_events_take_different_routes` | `HelpersTest::testRoundEventsTakeDifferentRoutes` | `helpers.test.ts` "round events take different routes" |
 | 22 | Image sizes only for `r2.thesportsdb.com` and `www…/images/media/` URLs | `/tiny` returns 404 elsewhere | `model/Common.kt sized` · `ParsingTest.imageSizes` | `models.sized` · `test_parsing.test_image_sizes` | `ImageSize::of` · `ParsingTest::testImageSizes` | `sized()` · `parsing.test.ts` "sizes only TheSportsDB media images" |
-| 23 | `EventStatus` groups every sport's codes; older events often have no code | Measured | `EventStatus.of` · `ParsingTest.eventStatus` | `EventStatus.of` · `test_parsing.test_event_status` | `EventStatus::of` · `ParsingTest::testEventStatus` | `eventStatus()` · `parsing.test.ts` |
+| 23 | `EventStatus` covers every code in TheSportsDB's data documentation (including `POST`, `S1`–`S5`, `PT`, `AW`), with `INTERRUPTED` for `SUSP`/`INT`/`INTR`; older events often have no code | docs_api_data; the first version misread `INT` as in play | `EventStatus.of` · `ParsingTest.eventStatus` | `EventStatus.of` · `test_parsing.test_event_status` | `EventStatus::of` · `ParsingTest::testEventStatus` | `eventStatus()` · `parsing.test.ts` |
 | 24 | Two APIs from one source, with a test that fails if the generated one is stale | Avoids hand-copying | Java `SportsDbFutures` from `tools/gen-futures.py` · `FuturesCoverageTest` | blocking `SportsDB` from `tools/unasync.py` · `test_generated` | models generated from the Kotlin ones by `tools/gen_models.py` · `GeneratedTest` | `src/models.ts` generated from the Kotlin models by `tools/gen-models.mjs` · `generated.test.ts` |
+| 25 | `intRound` stage codes (125 quarter-final … 200 final … 500 pre-season) are read into `stage`; other values are round numbers | docs_api_data; confirmed in the recordings (2017 FA Cup final = 200) | `RoundStage` · `ParsingTest.roundStages`, `V1FixtureTest.lookup` | `RoundStage` · `test_parsing.test_round_stages` | `RoundStage::of`, `Event::stage()` · `ParsingTest::testRoundStages` | `roundStage()`, `event.stage` · `parsing.test.ts` "reads round stage codes" |
 
 ## Deliberate differences
 
@@ -58,6 +59,7 @@ All four client libraries implement the same behaviour, learned from the API (se
 - Lists are never null.
 - Image sizes apply only where TheSportsDB supports them.
 - `eventsOnLocalDate` describes the UTC-day rule.
+- `EventStatus` (with `INTERRUPTED`) and `RoundStage` match the libraries.
 - `@source` notes record the tier rules: `eventsround.php` is for free keys only, `eventstv.php` needs a sport with a country, `livescore.php` ignores leagues, and league teams come by name, not via `lookup_all_teams.php`.
 
 Its tests check every `@source` against the OpenAPI specs in `docs-site/openapi/`.

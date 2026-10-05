@@ -35,16 +35,40 @@ scalar JSONObject
 enum EventStatus {
   "`NS`"
   NOT_STARTED
-  "`1H`, `HT`, `2H`, `Q1`–`Q4`, `OT`, `P1`–`P3`, `SO`, `IN1`…"
+  "`1H`, `HT`, `2H`, `ET`, `BT`, `P`, `PT`, `Q1`–`Q4`, `OT`, `P1`–`P3`, `SO`, `IN1`…, `S1`–`S5`"
   IN_PLAY
-  "`FT`, `AET`, `PEN`"
+  "`FT`, `AET`, `PEN`, `AOT`, `AP`, and awarded results (`AWD`, `AW`, `WO`)"
   FINISHED
-  "`PST`"
+  "`PST`, `POST`"
   POSTPONED
+  "`SUSP`, `INT`, `INTR`: suspended or interrupted; may resume."
+  INTERRUPTED
+  "`CANC`"
   CANCELLED
+  "`ABD`"
   ABANDONED
   "No code (common on older events), or a code not listed here."
   UNKNOWN
+}
+
+"The stage a special `intRound` value stands for. Other values are ordinary round numbers."
+enum RoundStage {
+  "`intRound` 125"
+  QUARTER_FINAL
+  "`intRound` 150"
+  SEMI_FINAL
+  "`intRound` 160"
+  PLAYOFF
+  "`intRound` 170"
+  PLAYOFF_SEMI_FINAL
+  "`intRound` 180"
+  PLAYOFF_FINAL
+  "`intRound` 200"
+  FINAL
+  "`intRound` 400"
+  QUALIFIER
+  "`intRound` 500"
+  PRE_SEASON
 }
 
 "Smaller copies TheSportsDB serves for its own images (append `/medium`, `/small` or `/tiny` to the URL)."
@@ -429,7 +453,7 @@ type Event {
   ): String
   "`strSeason`: Season name, e.g. `2026-2027`, or `2026` for single-year leagues."
   season: String
-  "`intRound`: Round or matchday number."
+  "`intRound`: Round or matchday number, or a stage code: 125 quarter-final, 150 semi-final, 160 playoff, 170 playoff semi-final, 180 playoff final, 200 final, 400 qualifier, 500 pre-season."
   round: Int
   "`strGroup`: Group or conference within a competition."
   group: String
@@ -469,7 +493,7 @@ type Event {
   localDate: Date
   "`strTimeLocal`: Start time at the venue, `HH:MM:SS`. Often missing for future events."
   localTime: LocalTime
-  "`strStatus`: Status code, e.g. `NS` (not started), `1H`, `HT`, `2H`, `FT`, `Q3`, `P2`, `PST` (postponed). Older events often have none."
+  "`strStatus`: Status code, e.g. `NS` (not started), `1H`, `HT`, `2H`, `FT`, `Q3`, `P2`, `S1` (set), `PST`/`POST` (postponed), `SUSP`/`INT` (interrupted), `CANC`, `ABD`. Codes differ by sport. Older events often have none."
   statusCode: String
   "`strPostponed`: `yes` or `no`."
   isPostponed: Boolean
@@ -532,6 +556,8 @@ type Event {
   apiFootballId: ID
   "`strStatus` read as a broad status."
   status: EventStatus!
+  "The stage when `intRound` is a stage code (e.g. 200 = final); null for an ordinary round."
+  stage: RoundStage
   "Every field as the API sent it (blank strings as null), for fields not modelled here."
   raw: JSONObject!
   "The home team's full record."
@@ -828,7 +854,7 @@ type LiveScore {
   homeScore: Int
   "`intAwayScore`: Away score. Null until the event has a score."
   awayScore: Int
-  "`strStatus`: Status code, e.g. `NS` (not started), `1H`, `HT`, `2H`, `FT`, `Q3`, `P2`, `PST` (postponed). Older events often have none."
+  "`strStatus`: Status code, e.g. `NS` (not started), `1H`, `HT`, `2H`, `FT`, `Q3`, `P2`, `S1` (set), `PST`/`POST` (postponed), `SUSP`/`INT` (interrupted), `CANC`, `ABD`. Codes differ by sport. Older events often have none."
   statusCode: String
   "`strProgress`: Progress of a live game, e.g. the minute, or `Final`."
   progress: String

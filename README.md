@@ -143,4 +143,4 @@ tools/record-fixtures.sh   # re-record test fixtures (THESPORTSDB_PREMIUM_KEY=..
 python3 tools/gen-futures.py   # regenerate SportsDbFutures after changing V1Api/V2Api
 ```
 
-See [docs/THESPORTSDB-API-REFERENCE.md](docs/THESPORTSDB-API-REFERENCE.md) for the measured API behaviour this library is built on.
+See [docs/THESPORTSDB-API-BEHAVIOUR.md](docs/THESPORTSDB-API-BEHAVIOUR.md) for the measured API behaviour this library is built on, including where it differs from the official documentation.

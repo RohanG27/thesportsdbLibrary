@@ -12,3 +12,7 @@ Community libraries that handle the details on these pages: response formats, "n
 All four are tested against the same recorded real responses, and handle every behaviour described in these guides.
 
 You can also generate a client in any language from the OpenAPI descriptions: [v1](openapi/v1.yaml), [v2](openapi/v2.yaml).
+
+## GraphQL
+
+`sportsdb-graphql-schema` is a GraphQL schema for the same data. It has every record type, the relationships between them (an event's teams, lineup and TV channels; a team's squad and schedule; a player's honours) and the queries a client needs. Each query and relationship is annotated with the v1 and v2 endpoints that resolve it, so it can serve as the blueprint for a GraphQL gateway.

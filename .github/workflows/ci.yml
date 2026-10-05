@@ -112,6 +112,23 @@ jobs:
           node-version: 18
       - run: node test/smoke-node18.mjs
 
+  graphql:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: graphql
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: npm install
+      # The schema is valid, up to date with the models/glossary, fully documented, every @source matches
+      # the OpenAPI specs, and the README's example queries validate and run.
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
   docs:
     runs-on: ubuntu-latest
     defaults:

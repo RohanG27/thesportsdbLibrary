@@ -1,0 +1,332 @@
+# Hand-written part of the TheSportsDB GraphQL schema: scalars, the @source directive, enums,
+# support types, the Query root and the relationships between records. The record types
+# themselves are generated from the Kotlin models by tools/gen-schema.mjs, which merges this
+# file in to produce ../schema.graphql.
+
+"""
+Where a field's data comes from: the TheSportsDB endpoint that resolves it, for v1 (free and
+premium keys) and v2 (premium keys only). `{name}` placeholders refer to the parent record's
+fields, or to the field's arguments. Optional query parameters whose placeholder has no value are
+left out. An implementation would typically use v2 with a premium key and v1 otherwise.
+"""
+directive @source(
+  "A v1 endpoint, relative to /api/v1/json/{key}/, e.g. `lookupteam.php?id={teamId}`."
+  v1: String
+  "A v2 endpoint, relative to /api/v2/json/, e.g. `lookup/team/{teamId}`."
+  v2: String
+  "How to use the endpoints, when it isn't a plain call."
+  note: String
+) on FIELD_DEFINITION
+
+"A calendar date, `YYYY-MM-DD`. TheSportsDB files events under their **UTC** date."
+scalar Date @specifiedBy(url: "https://scalars.graphql.org/andimarek/local-date.html")
+
+"An instant in time, RFC 3339 with an offset, e.g. `2026-10-10T11:30:00Z`. The API's timestamps are UTC."
+scalar DateTime @specifiedBy(url: "https://scalars.graphql.org/andimarek/date-time.html")
+
+"A time of day, `HH:MM:SS`."
+scalar LocalTime @specifiedBy(url: "https://scalars.graphql.org/chillicream/local-time.html")
+
+"A date and time with no stated time zone, `YYYY-MM-DDTHH:MM:SS`, as the API writes it."
+scalar LocalDateTime @specifiedBy(url: "https://scalars.graphql.org/chillicream/local-date-time.html")
+
+"A JSON object: every field of a record exactly as the API sent it (strings or null)."
+scalar JSONObject
+
+"A broad reading of a `strStatus` code, so clients don't need every sport's codes."
+enum EventStatus {
+  "`NS`"
+  NOT_STARTED
+  "`1H`, `HT`, `2H`, `Q1`–`Q4`, `OT`, `P1`–`P3`, `SO`, `IN1`…"
+  IN_PLAY
+  "`FT`, `AET`, `PEN`"
+  FINISHED
+  "`PST`"
+  POSTPONED
+  CANCELLED
+  ABANDONED
+  "No code (common on older events), or a code not listed here."
+  UNKNOWN
+}
+
+"Smaller copies TheSportsDB serves for its own images (append `/medium`, `/small` or `/tiny` to the URL)."
+enum ImageSize {
+  "About 70% of the original's bytes."
+  MEDIUM
+  "About 35%."
+  SMALL
+  "About 10%."
+  TINY
+}
+
+"A description in one language."
+type LocalizedText {
+  "Two-letter language code from the field name, e.g. `EN`, `DE`."
+  language: String!
+  text: String!
+}
+
+"Web and social links, often without a scheme (`www.facebook.com/Arsenal`)."
+type Socials {
+  "`strWebsite`"
+  website: String
+  "`strFacebook`"
+  facebook: String
+  "`strTwitter`"
+  twitter: String
+  "`strInstagram`"
+  instagram: String
+  "`strYoutube`"
+  youtube: String
+  "`strRSS`"
+  rss: String
+}
+
+"A league or cup a team plays in: one of `idLeague`/`strLeague` … `idLeague7`/`strLeague7`."
+type LeagueRef {
+  id: ID!
+  name: String
+  "The full league record."
+  details: League @source(v1: "lookupleague.php?id={id}", v2: "lookup/league/{id}")
+}
+
+"Ids of the same player in other databases."
+type PlayerExternalIds {
+  "`idAPIfootball`"
+  apiFootball: ID
+  "`idESPN`"
+  espn: String
+  "`idGoogle`, e.g. `/g/11cpprmr81`"
+  google: String
+  "`idTransferMkt`"
+  transfermarkt: String
+  "`idWikidata`, e.g. `Q9144353`"
+  wikidata: String
+  "`intSoccerXMLTeamID`"
+  soccerXmlTeam: String
+}
+
+"A latitude/longitude pair."
+type Coordinates {
+  latitude: Float!
+  longitude: Float!
+}
+
+"""
+Entry points. Each query's @source names the endpoints that answer it; lookups by id return null
+when nothing is found, and lists are empty rather than null.
+"""
+type Query {
+  "Every sport."
+  sports: [Sport!]! @source(v1: "all_sports.php", v2: "all/sports")
+
+  "Every country, with flags."
+  countries: [Country!]! @source(v1: "all_countries.php", v2: "all/countries")
+
+  "Every league: id, name and sport only (look one up for the rest)."
+  leagues: [League!]! @source(v1: "all_leagues.php", v2: "all/leagues")
+
+  "Full league records in a country, optionally for one sport."
+  leaguesInCountry(country: String!, sport: String): [League!]! @source(v1: "search_all_leagues.php?c={country}&s={sport}")
+
+  "A league by id, with every field."
+  league(id: ID!): League @source(v1: "lookupleague.php?id={id}", v2: "lookup/league/{id}")
+
+  "Search leagues by name (summary fields)."
+  searchLeagues(name: String!): [League!]! @source(v2: "search/league/{name}", note: "v2 only; with v1, filter `leagues`.")
+
+  "A team by id, with every field."
+  team(id: ID!): Team @source(v1: "lookupteam.php?id={id}", v2: "lookup/team/{id}")
+
+  "Search teams by name."
+  searchTeams(name: String!): [Team!]! @source(v1: "searchteams.php?t={name}", v2: "search/team/{name}")
+
+  "A player by id, with every field."
+  player(id: ID!): Player @source(v1: "lookupplayer.php?id={id}", v2: "lookup/player/{id}")
+
+  "Search players by name (summary fields)."
+  searchPlayers(name: String!): [Player!]! @source(v1: "searchplayers.php?p={name}", v2: "search/player/{name}")
+
+  "A venue by id, with every field."
+  venue(id: ID!): Venue @source(v1: "lookupvenue.php?id={id}", v2: "lookup/venue/{id}")
+
+  "Search venues by name."
+  searchVenues(name: String!): [Venue!]! @source(v1: "searchvenues.php?v={name}", v2: "search/venue/{name}")
+
+  "An event by id, with every field."
+  event(id: ID!): Event @source(v1: "lookupevent.php?id={id}", v2: "lookup/event/{id}")
+
+  "Search events by name, `Home vs Away`, optionally narrowed to a season or a date (not both)."
+  searchEvents(name: String!, season: String, date: Date): [Event!]!
+    @source(
+      v1: "searchevents.php?e={name}&s={season}&d={date}"
+      v2: "search/event/{name}"
+      note: "v2 needs the exact stored event name and has no season or date filter; v1 matches looser names."
+    )
+
+  "Every event on a UTC date, optionally for one sport or league."
+  eventsOnDay(date: Date!, sport: String, leagueId: ID): [Event!]! @source(v1: "eventsday.php?d={date}&s={sport}&l={leagueId}")
+
+  "Events starting on a calendar day in an IANA time zone, e.g. `America/Toronto`."
+  eventsOnLocalDate(date: Date!, timeZone: String!, sport: String, leagueId: ID): [Event!]!
+    @source(
+      v1: "eventsday.php?d={date}&s={sport}&l={leagueId}"
+      note: "The API files events under their UTC date: call it for each UTC date the local day overlaps, then keep the events whose `strTimestamp` falls inside the local day."
+    )
+
+  "Every event of a league's season (default: the current season, from `League.currentSeason`)."
+  seasonEvents(leagueId: ID!, season: String): [Event!]!
+    @source(v1: "eventsseason.php?id={leagueId}&s={season}", v2: "schedule/league/{leagueId}/{season}")
+
+  "Every event of one round (matchday) of a season."
+  roundEvents(leagueId: ID!, round: Int!, season: String): [Event!]!
+    @source(
+      v1: "eventsround.php?id={leagueId}&r={round}&s={season}"
+      v2: "schedule/league/{leagueId}/{season}"
+      note: "eventsround.php is undocumented and answers free keys only (premium keys get HTTP 404); with a premium key, filter the v2 season by `intRound`."
+    )
+
+  "A league table (standings); omit `season` for the current one. Only some leagues have tables. v2 has no tables."
+  table(leagueId: ID!, season: String): [Standing!]! @source(v1: "lookuptable.php?l={leagueId}&s={season}")
+
+  "TV listings for a day, optionally for a sport, or for a country and sport; or for a country over about a week (v2)."
+  tvListings(date: Date, country: String, sport: String): [TvListing!]!
+    @source(
+      v1: "eventstv.php?d={date}&a={country}&s={sport}"
+      v2: "filter/tv/country/{country}"
+      note: "v1 needs `date`, and needs `sport` whenever `country` is given (otherwise the body is empty). v2 also offers filter/tv/day/{date} and filter/tv/sport/{sport}."
+    )
+
+  "Upcoming listings on one channel, by name (TheSportsDB's spelling, e.g. `TSN 1`) or by channel id."
+  channelListings(name: String, channelId: ID): [TvListing!]!
+    @source(v1: "eventstv.php?c={name}&id={channelId}", v2: "filter/tv/channel/{name}", note: "Pass one of `name` or `channelId`; v2 uses filter/tv/channelid/{channelId} for ids.")
+
+  "Events with highlight videos on a day."
+  highlights(date: Date!, leagueId: ID, sport: String): [Event!]! @source(v1: "eventshighlights.php?d={date}&l={leagueId}&s={sport}")
+
+  "Games in progress, optionally for one sport or league. Entries can be stale: check `updated`."
+  liveScores(sport: String, leagueId: ID): [LiveScore!]!
+    @source(
+      v1: "livescore.php?s={sport}"
+      v2: "livescore/{sport}"
+      note: "v1 is undocumented, needs a sport and ignores leagues (filter by `idLeague`); v2 also takes a league id or `all` in place of the sport."
+    )
+}
+
+extend type League {
+  "The league's teams. v1 takes the league **name**; `lookup_all_teams.php` returns another league's teams, so it isn't used."
+  teams: [Team!]! @source(v1: "search_all_teams.php?l={name}", v2: "list/teams/{id}")
+  "The league's seasons, with badges and posters where available."
+  seasons: [Season!]! @source(v1: "search_all_seasons.php?id={id}", v2: "list/seasons/{id}")
+  "The table; omit `season` for the current one."
+  table(season: String): [Standing!]! @source(v1: "lookuptable.php?l={id}&s={season}")
+  "The league's next events. Free keys: 1."
+  nextEvents: [Event!]! @source(v1: "eventsnextleague.php?id={id}", v2: "schedule/next/league/{id}")
+  "The league's latest results. Free keys: 1."
+  previousEvents: [Event!]! @source(v1: "eventspastleague.php?id={id}", v2: "schedule/previous/league/{id}")
+  "A whole season (default: `currentSeason`)."
+  seasonEvents(season: String): [Event!]! @source(v1: "eventsseason.php?id={id}&s={season}", v2: "schedule/league/{id}/{season}")
+  "The league's games in progress (premium keys)."
+  liveScores: [LiveScore!]! @source(v2: "livescore/{id}")
+}
+
+extend type Team {
+  "The team's main league."
+  leagueDetails: League @source(v1: "lookupleague.php?id={leagueId}", v2: "lookup/league/{leagueId}")
+  "The home venue."
+  venueDetails: Venue @source(v1: "lookupvenue.php?id={venueId}", v2: "lookup/venue/{venueId}")
+  "The squad."
+  players: [Player!]! @source(v1: "lookup_all_players.php?id={id}", v2: "list/players/{id}")
+  "Kits over the seasons."
+  kits: [Equipment!]! @source(v1: "lookupequipment.php?id={id}", v2: "lookup/team_equipment/{id}")
+  "Free keys: home games only."
+  nextEvents: [Event!]! @source(v1: "eventsnext.php?id={id}", v2: "schedule/next/team/{id}")
+  "Free keys: home games only."
+  previousEvents: [Event!]! @source(v1: "eventslast.php?id={id}", v2: "schedule/previous/team/{id}")
+  "Past and future events across all competitions."
+  schedule: [Event!]! @source(v2: "schedule/full/team/{id}")
+}
+
+extend type Player {
+  "The player's current team."
+  teamDetails: Team @source(v1: "lookupteam.php?id={teamId}", v2: "lookup/team/{teamId}")
+  "Trophies and awards the player won."
+  honours: [Honour!]! @source(v1: "lookuphonours.php?id={id}", v2: "lookup/player_honours/{id}")
+  "Teams the player used to play for."
+  formerTeams: [FormerTeam!]! @source(v1: "lookupformerteams.php?id={id}", v2: "lookup/player_teams/{id}")
+  "Career milestones and awards."
+  milestones: [Milestone!]! @source(v1: "lookupmilestones.php?id={id}", v2: "lookup/player_milestones/{id}")
+  "The player's contracts."
+  contracts: [Contract!]! @source(v1: "lookupcontracts.php?id={id}", v2: "lookup/player_contracts/{id}")
+  "Season statistics."
+  stats: [PlayerStat!]! @source(v1: "lookupplayerstats.php?id={id}", v2: "lookup/player_stats/{id}")
+  "Results in individual sports (races, golf...)."
+  results: [EventResult!]! @source(v1: "playerresults.php?id={id}", v2: "lookup/player_results/{id}")
+}
+
+extend type Venue {
+  "The venue's next events (premium keys)."
+  nextEvents: [Event!]! @source(v2: "schedule/next/venue/{id}")
+  "The venue's latest events (premium keys)."
+  previousEvents: [Event!]! @source(v2: "schedule/previous/venue/{id}")
+}
+
+extend type Event {
+  "The home team's full record."
+  homeTeamDetails: Team @source(v1: "lookupteam.php?id={homeTeamId}", v2: "lookup/team/{homeTeamId}")
+  "The away team's full record."
+  awayTeamDetails: Team @source(v1: "lookupteam.php?id={awayTeamId}", v2: "lookup/team/{awayTeamId}")
+  "The league's full record."
+  leagueDetails: League @source(v1: "lookupleague.php?id={leagueId}", v2: "lookup/league/{leagueId}")
+  "The venue's full record."
+  venueDetails: Venue @source(v1: "lookupvenue.php?id={venueId}", v2: "lookup/venue/{venueId}")
+  "Both teams' lineups."
+  lineup: [LineupEntry!]! @source(v1: "lookuplineup.php?id={id}", v2: "lookup/event_lineup/{id}")
+  "Goals, cards and substitutions."
+  timeline: [TimelineEntry!]! @source(v1: "lookuptimeline.php?id={id}", v2: "lookup/event_timeline/{id}")
+  "Team statistics, home vs away."
+  stats: [EventStat!]! @source(v1: "lookupeventstats.php?id={id}", v2: "lookup/event_stats/{id}")
+  "Every competitor's result (individual sports)."
+  results: [EventResult!]! @source(v1: "eventresults.php?id={id}", v2: "lookup/event_results/{id}")
+  "The channels showing the event."
+  tvListings: [TvListing!]! @source(v1: "lookuptv.php?id={id}", v2: "lookup/event_tv/{id}")
+}
+
+extend type Standing {
+  "The team's full record."
+  teamDetails: Team @source(v1: "lookupteam.php?id={teamId}", v2: "lookup/team/{teamId}")
+}
+
+extend type TvListing {
+  "The full record of the event being broadcast."
+  eventDetails: Event @source(v1: "lookupevent.php?id={eventId}", v2: "lookup/event/{eventId}")
+}
+
+extend type LiveScore {
+  "The event's full record."
+  eventDetails: Event @source(v1: "lookupevent.php?id={eventId}", v2: "lookup/event/{eventId}")
+  "The home team's full record."
+  homeTeamDetails: Team @source(v1: "lookupteam.php?id={homeTeamId}", v2: "lookup/team/{homeTeamId}")
+  "The away team's full record."
+  awayTeamDetails: Team @source(v1: "lookupteam.php?id={awayTeamId}", v2: "lookup/team/{awayTeamId}")
+}
+
+extend type LineupEntry {
+  "The player's full record."
+  playerDetails: Player @source(v1: "lookupplayer.php?id={playerId}", v2: "lookup/player/{playerId}")
+}
+
+extend type TimelineEntry {
+  "The full record of the player involved."
+  playerDetails: Player @source(v1: "lookupplayer.php?id={playerId}", v2: "lookup/player/{playerId}")
+}
+
+extend type Honour {
+  "The full record of the team the honour was won with."
+  teamDetails: Team @source(v1: "lookupteam.php?id={teamId}", v2: "lookup/team/{teamId}")
+}
+
+extend type FormerTeam {
+  "The former team's full record."
+  teamDetails: Team @source(v1: "lookupteam.php?id={teamId}", v2: "lookup/team/{teamId}")
+}

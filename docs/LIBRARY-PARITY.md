@@ -48,3 +48,16 @@ All four client libraries implement the same behaviour, learned from the API (se
 | Naive times (`dateUpdated`, `updated`) | `LocalDateTime` | naive `datetime` | `DateTimeImmutable` in the default zone, as written | `"YYYY-MM-DDTHH:MM:SS"` strings |
 | Models generated from | (source) | hand-written, same fields | the Kotlin models (`php/tools/gen_models.py`) | the Kotlin models (`javascript/tools/gen-models.mjs`) |
 | Records | `ApiRecord` classes (internal constructors) | frozen dataclasses | readonly classes (`==`) | frozen plain objects with `kind` (`sameRecord()`), JSON-serialisable |
+
+## The GraphQL schema
+
+`graphql/` isn't a client, but it encodes the same lessons for anyone building a GraphQL gateway:
+- Field names come from the shared models.
+- `DateTime` is UTC.
+- Ids are `ID`, because some exceed 32 bits.
+- Lists are never null.
+- Image sizes apply only where TheSportsDB supports them.
+- `eventsOnLocalDate` describes the UTC-day rule.
+- `@source` notes record the tier rules: `eventsround.php` is for free keys only, `eventstv.php` needs a sport with a country, `livescore.php` ignores leagues, and league teams come by name, not via `lookup_all_teams.php`.
+
+Its tests check every `@source` against the OpenAPI specs in `docs-site/openapi/`.

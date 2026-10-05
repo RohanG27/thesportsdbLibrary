@@ -1,6 +1,7 @@
 package sportsdb.internal
 
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import kotlinx.serialization.json.JsonObject
 import okhttp3.HttpUrl
@@ -10,6 +11,7 @@ import sportsdb.InvalidApiKeyException
 import sportsdb.NetworkException
 import sportsdb.PremiumRequiredException
 import sportsdb.RateLimitException
+import sportsdb.RequestEvent
 import sportsdb.SportsDbConfig
 import sportsdb.cache.Freshness
 import sportsdb.http.HttpResponse
@@ -18,7 +20,11 @@ import java.io.IOException
 import kotlin.time.Duration.Companion.seconds
 
 /** Builds URLs and runs every call through the rate limiter, retries, cache and parser. */
-internal class Requester(private val config: SportsDbConfig, now: () -> Long = System::currentTimeMillis) {
+internal class Requester(
+    private val config: SportsDbConfig,
+    now: () -> Long = System::currentTimeMillis,
+    private val clock: () -> Long = System::currentTimeMillis,
+) {
     private val base = config.baseUrl.toHttpUrl()
     private val limiter = run {
         val rpm = config.requestsPerMinute ?: if (config.isFreeKey) 30 else 100
@@ -67,23 +73,106 @@ internal class Requester(private val config: SportsDbConfig, now: () -> Long = S
         cacheKey: String,
         freshness: Freshness,
     ): String {
-        val cache = config.cache
-        val ttl = config.cachePolicy.ttl(freshness)
-        if (cache != null && ttl.isPositive()) cache.get(cacheKey)?.let { return it }
+        val started = clock()
+        val trace = Trace()
+        var outcome: Throwable? = null
+        try {
+            val cache = config.cache
+            val ttl = config.cachePolicy.ttl(freshness)
+            if (cache != null && ttl.isPositive()) {
+                cache.get(cacheKey)?.let { trace.fromCache = true; return it }
+            }
 
-        val body = send(url, headers + ("User-Agent" to config.userAgent), display)
+            val allHeaders = headers + ("User-Agent" to config.userAgent)
+            val body = if (config.deduplicateRequests) {
+                shared(cacheKey, trace) { send(url, allHeaders, display, it) }
+            } else {
+                send(url, allHeaders, display, trace)
+            }
 
-        // Don't cache an empty body: for v1 it can mean a transient problem, not "no results".
-        if (cache != null && ttl.isPositive() && body.isNotBlank()) cache.put(cacheKey, body, ttl)
-        return body
+            // Don't cache an empty body: for v1 it can mean a transient problem, not "no results".
+            if (cache != null && ttl.isPositive() && body.isNotBlank()) cache.put(cacheKey, body, ttl)
+            return body
+        } catch (e: Throwable) {
+            outcome = e
+            throw e
+        } finally {
+            notify(display, trace, clock() - started, outcome)
+        }
     }
 
-    private suspend fun send(url: HttpUrl, headers: Map<String, String>, display: String): String {
+    /** What happened during one call, for [RequestListener]. */
+    private class Trace(
+        var status: Int? = null,
+        var attempts: Int = 0,
+        var fromCache: Boolean = false,
+        var shared: Boolean = false,
+    )
+
+    private class Outcome(val body: String, val status: Int?, val attempts: Int)
+
+    /** Calls in flight, by cache key. A null result means the caller making the request was cancelled. */
+    private val inFlight = HashMap<String, CompletableDeferred<Result<Outcome>?>>()
+
+    /**
+     * Single-flight: the first caller for [key] runs [block]; identical calls that arrive
+     * meanwhile wait for its result instead of making their own request. If that first caller
+     * is cancelled, a waiter takes over rather than being cancelled too.
+     */
+    private suspend fun shared(key: String, trace: Trace, block: suspend (Trace) -> String): String {
+        while (true) {
+            var leader = false
+            val deferred = synchronized(inFlight) {
+                inFlight[key] ?: CompletableDeferred<Result<Outcome>?>().also { inFlight[key] = it; leader = true }
+            }
+            if (!leader) {
+                val result = deferred.await() ?: continue
+                trace.shared = true
+                result.getOrNull()?.let { trace.status = it.status }
+                return result.getOrThrow().body
+            }
+            var result: Result<Outcome>? = null
+            try {
+                result = try {
+                    Result.success(Outcome(block(trace), trace.status, trace.attempts))
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Throwable) {
+                    Result.failure(e)
+                }
+                return result.getOrThrow().body
+            } finally {
+                synchronized(inFlight) { inFlight.remove(key) }
+                deferred.complete(result)
+            }
+        }
+    }
+
+    private fun notify(display: String, trace: Trace, elapsedMillis: Long, error: Throwable?) {
+        val listener = config.requestListener ?: return
+        val status = trace.status ?: when (error) {
+            is HttpStatusException -> error.status
+            is RateLimitException -> 429
+            else -> null
+        }
+        try {
+            listener.onRequest(
+                RequestEvent(display, status, trace.attempts, trace.fromCache, trace.shared, elapsedMillis, error),
+            )
+        } catch (e: CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            // A failing listener must not break the call it is observing.
+        }
+    }
+
+    private suspend fun send(url: HttpUrl, headers: Map<String, String>, display: String, trace: Trace): String {
         var attempt = 0
         var rateLimitRetried = false
         var backoff = config.retryBackoff
         while (true) {
             limiter?.acquire()
+            trace.attempts++
             val response: HttpResponse = try {
                 config.transport.get(url, headers)
             } catch (e: CancellationException) {
@@ -95,6 +184,7 @@ internal class Requester(private val config: SportsDbConfig, now: () -> Long = S
                 throw NetworkException("Request to $display failed: ${e.message}", e)
             }
 
+            trace.status = response.status
             when (val status = response.status) {
                 in 200..299 -> return response.body
                 429 -> {

@@ -26,60 +26,62 @@ import java.time.LocalTime
  * **Times:** [timestamp], [date] and [time] are UTC. [localDate] and [localTime] are the
  * venue's local time and are often missing for future events.
  */
-public data class Event(
-    /** `idEvent` */ val id: Long?,
-    /** `strEvent`, e.g. `Arsenal vs Chelsea` */ val name: String?,
-    /** `strEventAlternate`, e.g. `Chelsea @ Arsenal` */ val alternateName: String?,
-    /** `strFilename`: `{league} {date} {home} vs {away}`, searchable with `searchfilename.php` */ val filename: String?,
-    /** `strSport` */ val sport: String?,
-    /** `idLeague` */ val leagueId: Long?,
-    /** `strLeague` */ val league: String?,
-    /** `strLeagueBadge` */ val leagueBadge: String?,
-    /** `strSeason` */ val season: String?,
-    /** `intRound`: matchday or round number */ val round: Int?,
-    /** `strGroup`: a cup group or conference */ val group: String?,
-    /** `idHomeTeam` */ val homeTeamId: Long?,
-    /** `strHomeTeam` */ val homeTeam: String?,
-    /** `strHomeTeamBadge` */ val homeTeamBadge: String?,
-    /** `idAwayTeam` */ val awayTeamId: Long?,
-    /** `strAwayTeam` */ val awayTeam: String?,
-    /** `strAwayTeamBadge` */ val awayTeamBadge: String?,
-    /** `intHomeScore`: null until the event has a score */ val homeScore: Int?,
-    /** `intAwayScore` */ val awayScore: Int?,
-    /** `intHomeScoreExtra`: extra time or shoot-out */ val homeScoreExtra: Int?,
-    /** `intAwayScoreExtra` */ val awayScoreExtra: Int?,
-    /** `strTimestamp`: the start time (UTC) */ val timestamp: Instant?,
-    /** `dateEvent` (UTC) */ val date: LocalDate?,
-    /** `strTime` (UTC) */ val time: LocalTime?,
-    /** `dateEventLocal`: the venue's local date */ val localDate: LocalDate?,
-    /** `strTimeLocal`: the venue's local time */ val localTime: LocalTime?,
-    /** `strStatus`: the raw code (`NS`, `2H`, `FT`, `Q3`, `PST`...); see [status] */ val statusCode: String?,
-    /** `strPostponed` */ val isPostponed: Boolean?,
-    /** `idVenue` */ val venueId: Long?,
-    /** `strVenue` */ val venue: String?,
-    /** `strCity` */ val city: String?,
-    /** `strCountry` */ val country: String?,
-    /** `intSpectators` */ val spectators: Int?,
-    /** `strOfficial`: the referee */ val official: String?,
-    /** `strResult`: free-text result, sometimes with HTML `<br>` */ val resultText: String?,
-    /** `strDescriptionEN` */ val description: String?,
-    /** `strThumb` */ val thumb: String?,
-    /** `strPoster` */ val poster: String?,
-    /** `strBanner` */ val banner: String?,
-    /** `strSquare` */ val square: String?,
-    /** `strFanart` */ val fanart: String?,
-    /** `strMap` */ val map: String?,
-    /** `strVideo`: a highlights video, usually YouTube */ val video: String?,
-    /** `strTweet1` */ val tweet: String?,
-    /** `strWeather` */ val weather: String?,
-    /** `intScore`: the users' rating of the event */ val rating: Double?,
-    /** `intScoreVotes` */ val ratingVotes: Int?,
-    /** `strLocked` */ val isLocked: Boolean?,
-    /** `idAPIfootball` */ val apiFootballId: Long?,
-    val raw: RawRecord,
-) {
+public class Event internal constructor(
+    /** `idEvent` */ public val id: Long?,
+    /** `strEvent`, e.g. `Arsenal vs Chelsea` */ public val name: String?,
+    /** `strEventAlternate`, e.g. `Chelsea @ Arsenal` */ public val alternateName: String?,
+    /** `strFilename`: `{league} {date} {home} vs {away}`, searchable with `searchfilename.php` */ public val filename: String?,
+    /** `strSport` */ public val sport: String?,
+    /** `idLeague` */ public val leagueId: Long?,
+    /** `strLeague` */ public val league: String?,
+    /** `strLeagueBadge` */ public val leagueBadge: String?,
+    /** `strSeason` */ public val season: String?,
+    /** `intRound`: matchday or round number */ public val round: Int?,
+    /** `strGroup`: a cup group or conference */ public val group: String?,
+    /** `idHomeTeam` */ public val homeTeamId: Long?,
+    /** `strHomeTeam` */ public val homeTeam: String?,
+    /** `strHomeTeamBadge` */ public val homeTeamBadge: String?,
+    /** `idAwayTeam` */ public val awayTeamId: Long?,
+    /** `strAwayTeam` */ public val awayTeam: String?,
+    /** `strAwayTeamBadge` */ public val awayTeamBadge: String?,
+    /** `intHomeScore`: null until the event has a score */ public val homeScore: Int?,
+    /** `intAwayScore` */ public val awayScore: Int?,
+    /** `intHomeScoreExtra`: extra time or shoot-out */ public val homeScoreExtra: Int?,
+    /** `intAwayScoreExtra` */ public val awayScoreExtra: Int?,
+    /** `strTimestamp`: the start time (UTC) */ public val timestamp: Instant?,
+    /** `dateEvent` (UTC) */ public val date: LocalDate?,
+    /** `strTime` (UTC) */ public val time: LocalTime?,
+    /** `dateEventLocal`: the venue's local date */ public val localDate: LocalDate?,
+    /** `strTimeLocal`: the venue's local time */ public val localTime: LocalTime?,
+    /** `strStatus`: the raw code (`NS`, `2H`, `FT`, `Q3`, `PST`...); see [status] */ public val statusCode: String?,
+    /** `strPostponed` */ public val isPostponed: Boolean?,
+    /** `idVenue` */ public val venueId: Long?,
+    /** `strVenue` */ public val venue: String?,
+    /** `strCity` */ public val city: String?,
+    /** `strCountry` */ public val country: String?,
+    /** `intSpectators` */ public val spectators: Int?,
+    /** `strOfficial`: the referee */ public val official: String?,
+    /** `strResult`: free-text result, sometimes with HTML `<br>` */ public val resultText: String?,
+    /** `strDescriptionEN` */ public val description: String?,
+    /** `strThumb` */ public val thumb: String?,
+    /** `strPoster` */ public val poster: String?,
+    /** `strBanner` */ public val banner: String?,
+    /** `strSquare` */ public val square: String?,
+    /** `strFanart` */ public val fanart: String?,
+    /** `strMap` */ public val map: String?,
+    /** `strVideo`: a highlights video, usually YouTube */ public val video: String?,
+    /** `strTweet1` */ public val tweet: String?,
+    /** `strWeather` */ public val weather: String?,
+    /** `intScore`: the users' rating of the event */ public val rating: Double?,
+    /** `intScoreVotes` */ public val ratingVotes: Int?,
+    /** `strLocked` */ public val isLocked: Boolean?,
+    /** `idAPIfootball` */ public val apiFootballId: Long?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "Event(id=$id, name=$name, timestamp=$timestamp, statusCode=$statusCode)"
+
     /** [statusCode] read as a broad status. */
-    val status: EventStatus get() = EventStatus.of(statusCode)
+    public val status: EventStatus get() = EventStatus.of(statusCode)
 }
 
 internal fun JsonObject.toEvent() = Event(
@@ -136,29 +138,31 @@ internal fun JsonObject.toEvent() = Event(
 )
 
 /** One row of a league table (`lookuptable.php`). v1 only; there is no v2 equivalent. */
-public data class Standing(
-    /** `idStanding` */ val id: Long?,
-    /** `intRank` */ val rank: Int?,
-    /** `idTeam` */ val teamId: Long?,
-    /** `strTeam` */ val team: String?,
-    /** `strBadge` */ val badge: String?,
-    /** `idLeague` */ val leagueId: Long?,
-    /** `strLeague` */ val league: String?,
-    /** `strSeason` */ val season: String?,
-    /** `strGroup` */ val group: String?,
-    /** `strForm`: recent results, newest last, e.g. `WWDLW` */ val form: String?,
-    /** `strDescription`: what this position leads to, e.g. `Promotion - Champions League` */ val description: String?,
-    /** `intPlayed` */ val played: Int?,
-    /** `intWin` */ val won: Int?,
-    /** `intDraw` */ val drawn: Int?,
-    /** `intLoss` */ val lost: Int?,
-    /** `intGoalsFor` */ val goalsFor: Int?,
-    /** `intGoalsAgainst` */ val goalsAgainst: Int?,
-    /** `intGoalDifference` */ val goalDifference: Int?,
-    /** `intPoints` */ val points: Int?,
-    /** `dateUpdated` (zone not stated) */ val updated: LocalDateTime?,
-    val raw: RawRecord,
-)
+public class Standing internal constructor(
+    /** `idStanding` */ public val id: Long?,
+    /** `intRank` */ public val rank: Int?,
+    /** `idTeam` */ public val teamId: Long?,
+    /** `strTeam` */ public val team: String?,
+    /** `strBadge` */ public val badge: String?,
+    /** `idLeague` */ public val leagueId: Long?,
+    /** `strLeague` */ public val league: String?,
+    /** `strSeason` */ public val season: String?,
+    /** `strGroup` */ public val group: String?,
+    /** `strForm`: recent results, newest last, e.g. `WWDLW` */ public val form: String?,
+    /** `strDescription`: what this position leads to, e.g. `Promotion - Champions League` */ public val description: String?,
+    /** `intPlayed` */ public val played: Int?,
+    /** `intWin` */ public val won: Int?,
+    /** `intDraw` */ public val drawn: Int?,
+    /** `intLoss` */ public val lost: Int?,
+    /** `intGoalsFor` */ public val goalsFor: Int?,
+    /** `intGoalsAgainst` */ public val goalsAgainst: Int?,
+    /** `intGoalDifference` */ public val goalDifference: Int?,
+    /** `intPoints` */ public val points: Int?,
+    /** `dateUpdated` (zone not stated) */ public val updated: LocalDateTime?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "Standing(rank=$rank, team=$team, points=$points)"
+}
 
 internal fun JsonObject.toStanding() = Standing(
     id = id("idStanding"),
@@ -185,28 +189,30 @@ internal fun JsonObject.toStanding() = Standing(
 )
 
 /** One player in an event's lineup (`lookuplineup.php`, `lookup/event_lineup`). */
-public data class LineupEntry(
-    /** `idLineup` */ val id: Long?,
-    /** `idEvent` */ val eventId: Long?,
-    /** `strEvent` (v2) */ val event: String?,
-    /** `idPlayer` */ val playerId: Long?,
-    /** `strPlayer` */ val player: String?,
-    /** `idTeam` */ val teamId: Long?,
-    /** `strTeam` */ val team: String?,
-    /** `strHome`: true for the home side */ val isHome: Boolean?,
-    /** `strSubstitute`: true for the bench */ val isSubstitute: Boolean?,
-    /** `strPosition` */ val position: String?,
-    /** `strPositionShort` (v2), e.g. `G`, `D` */ val positionShort: String?,
-    /** `strFormation` (v2), e.g. `4-3-3` */ val formation: String?,
-    /** `intSquadNumber` */ val squadNumber: Int?,
-    /** `strCountry` (v2) */ val country: String?,
-    /** `strSeason` (v2) */ val season: String?,
-    /** `strThumb` (v1) */ val thumb: String?,
-    /** `strCutout` */ val cutout: String?,
-    /** `strRender` (v1) */ val render: String?,
-    /** `idAPIfootball` (v2) */ val apiFootballId: Long?,
-    val raw: RawRecord,
-)
+public class LineupEntry internal constructor(
+    /** `idLineup` */ public val id: Long?,
+    /** `idEvent` */ public val eventId: Long?,
+    /** `strEvent` (v2) */ public val event: String?,
+    /** `idPlayer` */ public val playerId: Long?,
+    /** `strPlayer` */ public val player: String?,
+    /** `idTeam` */ public val teamId: Long?,
+    /** `strTeam` */ public val team: String?,
+    /** `strHome`: true for the home side */ public val isHome: Boolean?,
+    /** `strSubstitute`: true for the bench */ public val isSubstitute: Boolean?,
+    /** `strPosition` */ public val position: String?,
+    /** `strPositionShort` (v2), e.g. `G`, `D` */ public val positionShort: String?,
+    /** `strFormation` (v2), e.g. `4-3-3` */ public val formation: String?,
+    /** `intSquadNumber` */ public val squadNumber: Int?,
+    /** `strCountry` (v2) */ public val country: String?,
+    /** `strSeason` (v2) */ public val season: String?,
+    /** `strThumb` (v1) */ public val thumb: String?,
+    /** `strCutout` */ public val cutout: String?,
+    /** `strRender` (v1) */ public val render: String?,
+    /** `idAPIfootball` (v2) */ public val apiFootballId: Long?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "LineupEntry(eventId=$eventId, player=$player, team=$team)"
+}
 
 internal fun JsonObject.toLineupEntry() = LineupEntry(
     id = id("idLineup"),
@@ -232,28 +238,30 @@ internal fun JsonObject.toLineupEntry() = LineupEntry(
 )
 
 /** A goal, card or substitution during an event (`lookuptimeline.php`, `lookup/event_timeline`). */
-public data class TimelineEntry(
-    /** `idTimeline` */ val id: Long?,
-    /** `idEvent` */ val eventId: Long?,
-    /** `strEvent` */ val event: String?,
-    /** `dateEvent` */ val date: LocalDate?,
-    /** `strSeason` */ val season: String?,
-    /** `intTime`: the minute */ val minute: Int?,
-    /** `strPeriod` */ val period: String?,
-    /** `strTimeline`: the kind of entry, e.g. `Goal`, `Card`, `subst` */ val type: String?,
-    /** `strTimelineDetail`, e.g. `Yellow Card`, `Normal Goal`, or the player coming on */ val detail: String?,
-    /** `strComment` */ val comment: String?,
-    /** `idPlayer` */ val playerId: Long?,
-    /** `strPlayer` */ val player: String?,
-    /** `strCutout` */ val cutout: String?,
-    /** `idAssist` */ val assistId: Long?,
-    /** `strAssist` */ val assist: String?,
-    /** `idTeam` */ val teamId: Long?,
-    /** `strTeam` */ val team: String?,
-    /** `strHome` */ val isHome: Boolean?,
-    /** `idAPIfootball` */ val apiFootballId: Long?,
-    val raw: RawRecord,
-)
+public class TimelineEntry internal constructor(
+    /** `idTimeline` */ public val id: Long?,
+    /** `idEvent` */ public val eventId: Long?,
+    /** `strEvent` */ public val event: String?,
+    /** `dateEvent` */ public val date: LocalDate?,
+    /** `strSeason` */ public val season: String?,
+    /** `intTime`: the minute */ public val minute: Int?,
+    /** `strPeriod` */ public val period: String?,
+    /** `strTimeline`: the kind of entry, e.g. `Goal`, `Card`, `subst` */ public val type: String?,
+    /** `strTimelineDetail`, e.g. `Yellow Card`, `Normal Goal`, or the player coming on */ public val detail: String?,
+    /** `strComment` */ public val comment: String?,
+    /** `idPlayer` */ public val playerId: Long?,
+    /** `strPlayer` */ public val player: String?,
+    /** `strCutout` */ public val cutout: String?,
+    /** `idAssist` */ public val assistId: Long?,
+    /** `strAssist` */ public val assist: String?,
+    /** `idTeam` */ public val teamId: Long?,
+    /** `strTeam` */ public val team: String?,
+    /** `strHome` */ public val isHome: Boolean?,
+    /** `idAPIfootball` */ public val apiFootballId: Long?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "TimelineEntry(eventId=$eventId, minute=$minute, type=$type, player=$player)"
+}
 
 internal fun JsonObject.toTimelineEntry() = TimelineEntry(
     id = id("idTimeline"),
@@ -279,16 +287,18 @@ internal fun JsonObject.toTimelineEntry() = TimelineEntry(
 )
 
 /** One team statistic for an event, home vs away (`lookupeventstats.php`, `lookup/event_stats`). */
-public data class EventStat(
-    /** `idStatistic` */ val id: Long?,
-    /** `idEvent` */ val eventId: Long?,
-    /** `strEvent` */ val event: String?,
-    /** `strStat`, e.g. `Shots on Goal`, `Ball Possession` */ val name: String?,
-    /** `intHome` */ val home: Double?,
-    /** `intAway` */ val away: Double?,
-    /** `idApiFootball` (note the different capitalisation in the API) */ val apiFootballId: Long?,
-    val raw: RawRecord,
-)
+public class EventStat internal constructor(
+    /** `idStatistic` */ public val id: Long?,
+    /** `idEvent` */ public val eventId: Long?,
+    /** `strEvent` */ public val event: String?,
+    /** `strStat`, e.g. `Shots on Goal`, `Ball Possession` */ public val name: String?,
+    /** `intHome` */ public val home: Double?,
+    /** `intAway` */ public val away: Double?,
+    /** `idApiFootball` (note the different capitalisation in the API) */ public val apiFootballId: Long?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "EventStat(eventId=$eventId, name=$name, home=$home, away=$away)"
+}
 
 internal fun JsonObject.toEventStat() = EventStat(
     id = id("idStatistic"),
@@ -302,27 +312,29 @@ internal fun JsonObject.toEventStat() = EventStat(
 )
 
 /** One broadcast of an event on one channel (v1 `lookuptv.php`/`eventstv.php`, v2 `lookup/event_tv`/`filter/tv`). */
-public data class TvListing(
-    /** `id` */ val id: Long?,
-    /** `idEvent` */ val eventId: Long?,
-    /** `strEvent` */ val event: String?,
-    /** `strSport` */ val sport: String?,
-    /** `strSeason` */ val season: String?,
-    /** `idChannel` */ val channelId: Long?,
-    /** `strChannel`, e.g. `TSN 1` */ val channel: String?,
-    /** `strLogo`: the channel logo */ val channelLogo: String?,
-    /** `strCountry`: the channel's country */ val country: String?,
-    /** `strEventCountry`: where the event takes place */ val eventCountry: String?,
-    /** `strTimeStamp` (capital S, space-separated in the API): broadcast start, UTC */ val timestamp: Instant?,
-    /** `dateEvent` */ val date: LocalDate?,
-    /** `strTime` */ val time: LocalTime?,
-    /** `intDivision` */ val division: Int?,
-    /** `strEventThumb` */ val eventThumb: String?,
-    /** `strEventPoster` */ val eventPoster: String?,
-    /** `strEventBanner` */ val eventBanner: String?,
-    /** `strEventSquare` */ val eventSquare: String?,
-    val raw: RawRecord,
-)
+public class TvListing internal constructor(
+    /** `id` */ public val id: Long?,
+    /** `idEvent` */ public val eventId: Long?,
+    /** `strEvent` */ public val event: String?,
+    /** `strSport` */ public val sport: String?,
+    /** `strSeason` */ public val season: String?,
+    /** `idChannel` */ public val channelId: Long?,
+    /** `strChannel`, e.g. `TSN 1` */ public val channel: String?,
+    /** `strLogo`: the channel logo */ public val channelLogo: String?,
+    /** `strCountry`: the channel's country */ public val country: String?,
+    /** `strEventCountry`: where the event takes place */ public val eventCountry: String?,
+    /** `strTimeStamp` (capital S, space-separated in the API): broadcast start, UTC */ public val timestamp: Instant?,
+    /** `dateEvent` */ public val date: LocalDate?,
+    /** `strTime` */ public val time: LocalTime?,
+    /** `intDivision` */ public val division: Int?,
+    /** `strEventThumb` */ public val eventThumb: String?,
+    /** `strEventPoster` */ public val eventPoster: String?,
+    /** `strEventBanner` */ public val eventBanner: String?,
+    /** `strEventSquare` */ public val eventSquare: String?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "TvListing(eventId=$eventId, channel=$channel, timestamp=$timestamp)"
+}
 
 internal fun JsonObject.toTvListing() = TvListing(
     id = id("id"),
@@ -347,30 +359,32 @@ internal fun JsonObject.toTvListing() = TvListing(
 )
 
 /** A game in progress (`livescore.php`, `livescore/...`). */
-public data class LiveScore(
-    /** `idLiveScore` */ val id: Long?,
-    /** `idEvent` */ val eventId: Long?,
-    /** `strSport` */ val sport: String?,
-    /** `idLeague` */ val leagueId: Long?,
-    /** `strLeague` */ val league: String?,
-    /** `intDivision` */ val division: Int?,
-    /** `idHomeTeam` */ val homeTeamId: Long?,
-    /** `strHomeTeam` */ val homeTeam: String?,
-    /** `strHomeTeamBadge` */ val homeTeamBadge: String?,
-    /** `idAwayTeam` */ val awayTeamId: Long?,
-    /** `strAwayTeam` */ val awayTeam: String?,
-    /** `strAwayTeamBadge` */ val awayTeamBadge: String?,
-    /** `intHomeScore` */ val homeScore: Int?,
-    /** `intAwayScore` */ val awayScore: Int?,
-    /** `strStatus`: the raw code; see [status] */ val statusCode: String?,
-    /** `strProgress`: the minute (soccer) or `Final` */ val progress: String?,
-    /** `strEventTime`: kick-off, `HH:mm` */ val eventTime: LocalTime?,
-    /** `dateEvent` */ val date: LocalDate?,
-    /** `strTimestamp`: kick-off, UTC */ val timestamp: Instant?,
-    /** `updated`: when this score was last refreshed (zone not stated) */ val updated: LocalDateTime?,
-    val raw: RawRecord,
-) {
-    val status: EventStatus get() = EventStatus.of(statusCode)
+public class LiveScore internal constructor(
+    /** `idLiveScore` */ public val id: Long?,
+    /** `idEvent` */ public val eventId: Long?,
+    /** `strSport` */ public val sport: String?,
+    /** `idLeague` */ public val leagueId: Long?,
+    /** `strLeague` */ public val league: String?,
+    /** `intDivision` */ public val division: Int?,
+    /** `idHomeTeam` */ public val homeTeamId: Long?,
+    /** `strHomeTeam` */ public val homeTeam: String?,
+    /** `strHomeTeamBadge` */ public val homeTeamBadge: String?,
+    /** `idAwayTeam` */ public val awayTeamId: Long?,
+    /** `strAwayTeam` */ public val awayTeam: String?,
+    /** `strAwayTeamBadge` */ public val awayTeamBadge: String?,
+    /** `intHomeScore` */ public val homeScore: Int?,
+    /** `intAwayScore` */ public val awayScore: Int?,
+    /** `strStatus`: the raw code; see [status] */ public val statusCode: String?,
+    /** `strProgress`: the minute (soccer) or `Final` */ public val progress: String?,
+    /** `strEventTime`: kick-off, `HH:mm` */ public val eventTime: LocalTime?,
+    /** `dateEvent` */ public val date: LocalDate?,
+    /** `strTimestamp`: kick-off, UTC */ public val timestamp: Instant?,
+    /** `updated`: when this score was last refreshed (zone not stated) */ public val updated: LocalDateTime?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "LiveScore(eventId=$eventId, homeTeam=$homeTeam, homeScore=$homeScore, awayScore=$awayScore, awayTeam=$awayTeam, statusCode=$statusCode)"
+
+    public val status: EventStatus get() = EventStatus.of(statusCode)
 }
 
 internal fun JsonObject.toLiveScore() = LiveScore(

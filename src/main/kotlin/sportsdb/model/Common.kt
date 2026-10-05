@@ -1,10 +1,7 @@
 package sportsdb.model
 
-/**
- * Every field of a record exactly as the API sent it (blank strings as null).
- * Use it for fields this library does not model yet: `team.raw["strKeywords"]`.
- */
-public class RawRecord(public val fields: Map<String, String?>) {
+/** Every field of a record exactly as the API sent it, with blank strings as null. */
+public class RawRecord internal constructor(public val fields: Map<String, String?>) {
     public operator fun get(field: String): String? = fields[field]
 
     override fun equals(other: Any?): Boolean = other is RawRecord && other.fields == fields
@@ -12,18 +9,46 @@ public class RawRecord(public val fields: Map<String, String?>) {
     override fun toString(): String = "RawRecord(${fields.size} fields)"
 }
 
+/**
+ * Base class of every record the API returns ([Team], [Event], ...).
+ *
+ * A record's properties are all read from [raw], so two records are equal when the API sent
+ * the same fields. Records are created only by the library: constructors are internal, so new
+ * properties can be added in later versions without breaking compiled code. To test code
+ * that uses them, fake the HTTP layer ([sportsdb.http.HttpTransport]) instead.
+ */
+public abstract class ApiRecord internal constructor(
+    /** Every field as the API sent it. Use it for fields not modelled yet: `team.raw["strKeywords"]`. */
+    public val raw: RawRecord,
+) {
+    final override fun equals(other: Any?): Boolean =
+        this === other || (other != null && other.javaClass == javaClass && (other as ApiRecord).raw == raw)
+
+    final override fun hashCode(): Int = 31 * javaClass.hashCode() + raw.hashCode()
+}
+
 /** Social and web links. TheSportsDB often gives these without a scheme (`www.facebook.com/Arsenal`). */
-public data class Socials(
-    val website: String?,
-    val facebook: String?,
-    val twitter: String?,
-    val instagram: String?,
-    val youtube: String?,
-    val rss: String?,
-)
+public class Socials internal constructor(
+    public val website: String?,
+    public val facebook: String?,
+    public val twitter: String?,
+    public val instagram: String?,
+    public val youtube: String?,
+    public val rss: String?,
+) {
+    private val all get() = listOf(website, facebook, twitter, instagram, youtube, rss)
+    override fun equals(other: Any?): Boolean = other is Socials && other.all == all
+    override fun hashCode(): Int = all.hashCode()
+    override fun toString(): String =
+        "Socials(website=$website, facebook=$facebook, twitter=$twitter, instagram=$instagram, youtube=$youtube, rss=$rss)"
+}
 
 /** A league a team plays in: one of `idLeague`/`strLeague` .. `idLeague7`/`strLeague7`. */
-public data class LeagueRef(val id: Long, val name: String?)
+public class LeagueRef internal constructor(public val id: Long, public val name: String?) {
+    override fun equals(other: Any?): Boolean = other is LeagueRef && other.id == id && other.name == name
+    override fun hashCode(): Int = 31 * id.hashCode() + name.hashCode()
+    override fun toString(): String = "LeagueRef(id=$id, name=$name)"
+}
 
 /** Image sizes TheSportsDB serves for any `r2.thesportsdb.com` image by appending a path suffix. */
 public enum class ImageSize(internal val suffix: String) {

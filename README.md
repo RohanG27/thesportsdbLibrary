@@ -69,6 +69,7 @@ How values are read:
 - **Times:** `Event.timestamp`, `date` and `time` are **UTC**. `localDate` and `localTime` are the venue's local time, and are often missing for future games. `TvListing.timestamp` is UTC too: the API writes it differently (`strTimeStamp`, with a space), and the library reads both forms.
 - **Status:** `event.statusCode` is the raw code (`NS`, `2H`, `Q3`, `P2`, `IN7`, `FT`, `PST`...). `event.status` reduces it to `NOT_STARTED`, `IN_PLAY`, `FINISHED`, `POSTPONED`, `CANCELLED`, `ABANDONED` or `UNKNOWN`. Older events often have no status code at all.
 - **Descriptions** come as a map keyed by language code, `descriptions["DE"]`. `description` is the English one.
+- **Records are read-only.** Every model extends `ApiRecord`: two records are equal when the API sent the same fields, and `toString()` is a short summary (`Team(id=133604, name=Arsenal)`). Constructors are internal, so later versions can add fields without breaking compiled code. To test your own code, fake the HTTP layer with an `HttpTransport` rather than building models.
 - **Anything not modelled** is in `raw`, e.g. `team.raw["strKeywords"]`. Checked against the recorded responses: every field that v1 and v2 currently return is mapped to a model property.
 - **v2 search** sends ids as JSON numbers rather than strings; the models read both.
 - **Live scores can be stale.** The live feed can still list a game hours after its last update (a 4 Oct game was still listed on 5 Oct). Check `LiveScore.updated` before showing a score as live.
@@ -105,7 +106,19 @@ SportsDbClient {
 }
 ```
 
-Create one client per key and share it: its rate limiter and cache cover every call made through it. Every endpoint has a freshness class: `STATIC` (sports, countries), `SLOW` (teams, players), `MEDIUM` (schedules, TV, tables) or `LIVE`. The cache policy maps each class to a TTL. Implement `ResponseCache` to cache in Redis, a database or on disk. Cache keys never contain your API key.
+Create one client per key and share it: its rate limiter, cache and de-duplication cover every call made through it. **Identical calls in flight are de-duplicated:** if ten coroutines ask for the same table at once, one request is made and all ten get its result (`deduplicateRequests = false` turns this off).
+
+**Observability:** `requestListener` receives a `RequestEvent` for every call: the redacted URL, status, attempts, whether it came from the cache or from another caller's request, the duration and any error.
+
+```kotlin
+SportsDbClient {
+    requestListener = RequestListener { e ->
+        log.debug("${e.url} -> ${e.status} in ${e.duration} (attempts=${e.attempts}, cache=${e.fromCache}, shared=${e.shared})")
+    }
+}
+```
+
+ Every endpoint has a freshness class: `STATIC` (sports, countries), `SLOW` (teams, players), `MEDIUM` (schedules, TV, tables) or `LIVE`. The cache policy maps each class to a TTL. Implement `ResponseCache` to cache in Redis, a database or on disk. Cache keys never contain your API key.
 
 ## Security
 

@@ -22,71 +22,80 @@ import java.time.LocalDateTime
  * A player, manager or other person. Search and list endpoints fill only some fields;
  * look the player up by id for the rest.
  */
-public data class Player(
-    /** `idPlayer` */ val id: Long?,
-    /** `strPlayer` */ val name: String?,
-    /** `strPlayerAlternate` */ val alternateName: String?,
-    /** `strLastName` */ val lastName: String?,
-    /** `idTeam` */ val teamId: Long?,
-    /** `strTeam` */ val team: String?,
-    /** `idTeam2` */ val secondTeamId: Long?,
-    /** `strTeam2`, often the national team */ val secondTeam: String?,
-    /** `idTeamNational` */ val nationalTeamId: Long?,
-    /** `idPlayerManager`: this person's record as a manager */ val managerId: Long?,
-    /** `strSport` */ val sport: String?,
-    /** `strNationality` */ val nationality: String?,
-    /** `strPosition` */ val position: String?,
-    /** `strNumber`: the shirt number, as text */ val number: String?,
-    /** `strStatus`, e.g. `Active`, `Retired` */ val status: String?,
-    /** `strGender` */ val gender: String?,
-    /** `dateBorn` */ val born: LocalDate?,
-    /** `strBirthLocation` */ val birthLocation: String?,
-    /** `dateDied` */ val died: LocalDate?,
-    /** `strDeathLocation` */ val deathLocation: String?,
-    /** `dateSigned` */ val signed: LocalDate?,
-    /** `strSigning`: the fee as text, e.g. `£25.20m` */ val signing: String?,
-    /** `strWage`, as text */ val wage: String?,
-    /** `strAgent` */ val agent: String?,
-    /** `strHeight`, as text: `1.82 m (6 ft 0 in)` or `186 cm` */ val height: String?,
-    /** `strWeight`, as text */ val weight: String?,
-    /** `strSide`: `Left`/`Right` (preferred foot or hand) */ val side: String?,
-    /** `strKit`: boot or equipment model */ val kit: String?,
-    /** `strOutfitter` */ val outfitter: String?,
-    /** `strCollege` */ val college: String?,
-    /** `strEthnicity` */ val ethnicity: String?,
-    /** `strThumb` */ val thumb: String?,
-    /** `strCutout`: transparent head-and-shoulders */ val cutout: String?,
-    /** `strRender`: transparent full body */ val render: String?,
-    /** `strCartoon` */ val cartoon: String?,
-    /** `strBanner` */ val banner: String?,
-    /** `strPoster` */ val poster: String?,
-    /** `strFanart1`..`strFanart4` */ val fanart: List<String>,
+public class Player internal constructor(
+    /** `idPlayer` */ public val id: Long?,
+    /** `strPlayer` */ public val name: String?,
+    /** `strPlayerAlternate` */ public val alternateName: String?,
+    /** `strLastName` */ public val lastName: String?,
+    /** `idTeam` */ public val teamId: Long?,
+    /** `strTeam` */ public val team: String?,
+    /** `idTeam2` */ public val secondTeamId: Long?,
+    /** `strTeam2`, often the national team */ public val secondTeam: String?,
+    /** `idTeamNational` */ public val nationalTeamId: Long?,
+    /** `idPlayerManager`: this person's record as a manager */ public val managerId: Long?,
+    /** `strSport` */ public val sport: String?,
+    /** `strNationality` */ public val nationality: String?,
+    /** `strPosition` */ public val position: String?,
+    /** `strNumber`: the shirt number, as text */ public val number: String?,
+    /** `strStatus`, e.g. `Active`, `Retired` */ public val status: String?,
+    /** `strGender` */ public val gender: String?,
+    /** `dateBorn` */ public val born: LocalDate?,
+    /** `strBirthLocation` */ public val birthLocation: String?,
+    /** `dateDied` */ public val died: LocalDate?,
+    /** `strDeathLocation` */ public val deathLocation: String?,
+    /** `dateSigned` */ public val signed: LocalDate?,
+    /** `strSigning`: the fee as text, e.g. `£25.20m` */ public val signing: String?,
+    /** `strWage`, as text */ public val wage: String?,
+    /** `strAgent` */ public val agent: String?,
+    /** `strHeight`, as text: `1.82 m (6 ft 0 in)` or `186 cm` */ public val height: String?,
+    /** `strWeight`, as text */ public val weight: String?,
+    /** `strSide`: `Left`/`Right` (preferred foot or hand) */ public val side: String?,
+    /** `strKit`: boot or equipment model */ public val kit: String?,
+    /** `strOutfitter` */ public val outfitter: String?,
+    /** `strCollege` */ public val college: String?,
+    /** `strEthnicity` */ public val ethnicity: String?,
+    /** `strThumb` */ public val thumb: String?,
+    /** `strCutout`: transparent head-and-shoulders */ public val cutout: String?,
+    /** `strRender`: transparent full body */ public val render: String?,
+    /** `strCartoon` */ public val cartoon: String?,
+    /** `strBanner` */ public val banner: String?,
+    /** `strPoster` */ public val poster: String?,
+    /** `strFanart1`..`strFanart4` */ public val fanart: List<String>,
     /**
      * `strCreativeCommons`: whether the artwork is Creative Commons. TheSportsDB's terms
      * say artwork that isn't (false or null) must not be used in published apps.
      */
-    val creativeCommons: Boolean?,
-    /** `strCreativeCommonsAttribution`: the credit line to show */ val creativeCommonsAttribution: String?,
-    /** `strDescriptionEN`, ... keyed by language code */ val descriptions: Map<String, String>,
-    val socials: Socials,
-    /** `intLoved` */ val loved: Int?,
-    /** `strLocked` */ val isLocked: Boolean?,
-    /** `relevance`: search score (v1 `searchplayers.php` only) */ val relevance: Double?,
-    val externalIds: PlayerExternalIds,
-    val raw: RawRecord,
-) {
-    val description: String? get() = descriptions["EN"]
+    public val creativeCommons: Boolean?,
+    /** `strCreativeCommonsAttribution`: the credit line to show */ public val creativeCommonsAttribution: String?,
+    /** `strDescriptionEN`, ... keyed by language code */ public val descriptions: Map<String, String>,
+    public val socials: Socials,
+    /** `intLoved` */ public val loved: Int?,
+    /** `strLocked` */ public val isLocked: Boolean?,
+    /** `relevance`: search score (v1 `searchplayers.php` only) */ public val relevance: Double?,
+    public val externalIds: PlayerExternalIds,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "Player(id=$id, name=$name, team=$team)"
+
+    public val description: String? get() = descriptions["EN"]
 }
 
 /** Ids of the same player in other databases. */
-public data class PlayerExternalIds(
-    /** `idAPIfootball` */ val apiFootball: Long?,
-    /** `idESPN` */ val espn: String?,
-    /** `idGoogle`, e.g. `/g/11cpprmr81` */ val google: String?,
-    /** `idTransferMkt` */ val transfermarkt: String?,
-    /** `idWikidata`, e.g. `Q9144353` */ val wikidata: String?,
-    /** `intSoccerXMLTeamID` */ val soccerXmlTeam: String?,
-)
+public class PlayerExternalIds internal constructor(
+    /** `idAPIfootball` */ public val apiFootball: Long?,
+    /** `idESPN` */ public val espn: String?,
+    /** `idGoogle`, e.g. `/g/11cpprmr81` */ public val google: String?,
+    /** `idTransferMkt` */ public val transfermarkt: String?,
+    /** `idWikidata`, e.g. `Q9144353` */ public val wikidata: String?,
+    /** `intSoccerXMLTeamID` */ public val soccerXmlTeam: String?,
+) {
+    private val all get() = listOf(apiFootball, espn, google, transfermarkt, wikidata, soccerXmlTeam)
+    override fun equals(other: Any?): Boolean = other is PlayerExternalIds && other.all == all
+    override fun hashCode(): Int = all.hashCode()
+    override fun toString(): String =
+        "PlayerExternalIds(apiFootball=$apiFootball, espn=$espn, google=$google, transfermarkt=$transfermarkt, " +
+            "wikidata=$wikidata, soccerXmlTeam=$soccerXmlTeam)"
+}
 
 internal fun JsonObject.toPlayer() = Player(
     id = id("idPlayer"),
@@ -146,22 +155,24 @@ internal fun JsonObject.toPlayer() = Player(
 )
 
 /** A trophy a player won (`lookuphonours.php`, `lookup/player_honours`). */
-public data class Honour(
-    /** `id`: this record */ val id: Long?,
-    /** `idHonour`: the honour itself, shared by everyone who won it */ val honourId: Long?,
-    /** `strHonour`, e.g. `Copa Libertadores` */ val name: String?,
-    /** `strSeason` */ val season: String?,
-    /** `idPlayer` */ val playerId: Long?,
-    /** `strPlayer` */ val player: String?,
-    /** `idTeam` */ val teamId: Long?,
-    /** `strTeam` */ val team: String?,
-    /** `strTeamBadge` */ val teamBadge: String?,
-    /** `idLeague` */ val leagueId: Long?,
-    /** `strSport` */ val sport: String?,
-    /** `strHonourLogo` */ val logo: String?,
-    /** `strHonourTrophy` */ val trophy: String?,
-    val raw: RawRecord,
-)
+public class Honour internal constructor(
+    /** `id`: this record */ public val id: Long?,
+    /** `idHonour`: the honour itself, shared by everyone who won it */ public val honourId: Long?,
+    /** `strHonour`, e.g. `Copa Libertadores` */ public val name: String?,
+    /** `strSeason` */ public val season: String?,
+    /** `idPlayer` */ public val playerId: Long?,
+    /** `strPlayer` */ public val player: String?,
+    /** `idTeam` */ public val teamId: Long?,
+    /** `strTeam` */ public val team: String?,
+    /** `strTeamBadge` */ public val teamBadge: String?,
+    /** `idLeague` */ public val leagueId: Long?,
+    /** `strSport` */ public val sport: String?,
+    /** `strHonourLogo` */ public val logo: String?,
+    /** `strHonourTrophy` */ public val trophy: String?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "Honour(player=$player, name=$name, season=$season)"
+}
 
 internal fun JsonObject.toHonour() = Honour(
     id = id("id"),
@@ -181,21 +192,23 @@ internal fun JsonObject.toHonour() = Honour(
 )
 
 /** A team a player used to play for (`lookupformerteams.php`, `lookup/player_teams`). */
-public data class FormerTeam(
-    /** `id` */ val id: Long?,
-    /** `idPlayer` */ val playerId: Long?,
-    /** `strPlayer` */ val player: String?,
-    /** `idFormerTeam`: the team's `idTeam` */ val teamId: Long?,
-    /** `strFormerTeam` */ val team: String?,
-    /** `strBadge` */ val badge: String?,
-    /** `strJoined`: usually a year, as text */ val joined: String?,
-    /** `strDeparted`: usually a year, as text */ val departed: String?,
-    /** `strMoveType`, e.g. `Permanent`, `Loan` */ val moveType: String?,
-    /** `intAppearances` */ val appearances: Int?,
-    /** `intGoals` */ val goals: Int?,
-    /** `strSport` */ val sport: String?,
-    val raw: RawRecord,
-)
+public class FormerTeam internal constructor(
+    /** `id` */ public val id: Long?,
+    /** `idPlayer` */ public val playerId: Long?,
+    /** `strPlayer` */ public val player: String?,
+    /** `idFormerTeam`: the team's `idTeam` */ public val teamId: Long?,
+    /** `strFormerTeam` */ public val team: String?,
+    /** `strBadge` */ public val badge: String?,
+    /** `strJoined`: usually a year, as text */ public val joined: String?,
+    /** `strDeparted`: usually a year, as text */ public val departed: String?,
+    /** `strMoveType`, e.g. `Permanent`, `Loan` */ public val moveType: String?,
+    /** `intAppearances` */ public val appearances: Int?,
+    /** `intGoals` */ public val goals: Int?,
+    /** `strSport` */ public val sport: String?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "FormerTeam(player=$player, team=$team, joined=$joined, departed=$departed)"
+}
 
 internal fun JsonObject.toFormerTeam() = FormerTeam(
     id = id("id"),
@@ -214,19 +227,21 @@ internal fun JsonObject.toFormerTeam() = FormerTeam(
 )
 
 /** A career milestone or award (`lookupmilestones.php`, `lookup/player_milestones`). */
-public data class Milestone(
-    /** `id` */ val id: Long?,
-    /** `idMilestone` */ val milestoneId: Long?,
-    /** `strMilestone` */ val name: String?,
-    /** `dateMilestone` */ val date: LocalDate?,
-    /** `idPlayer` */ val playerId: Long?,
-    /** `strPlayer` */ val player: String?,
-    /** `idTeam` */ val teamId: Long?,
-    /** `strTeam` */ val team: String?,
-    /** `strSport` */ val sport: String?,
-    /** `strMilestoneLogo` */ val logo: String?,
-    val raw: RawRecord,
-)
+public class Milestone internal constructor(
+    /** `id` */ public val id: Long?,
+    /** `idMilestone` */ public val milestoneId: Long?,
+    /** `strMilestone` */ public val name: String?,
+    /** `dateMilestone` */ public val date: LocalDate?,
+    /** `idPlayer` */ public val playerId: Long?,
+    /** `strPlayer` */ public val player: String?,
+    /** `idTeam` */ public val teamId: Long?,
+    /** `strTeam` */ public val team: String?,
+    /** `strSport` */ public val sport: String?,
+    /** `strMilestoneLogo` */ public val logo: String?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "Milestone(player=$player, name=$name, date=$date)"
+}
 
 internal fun JsonObject.toMilestone() = Milestone(
     id = id("id"),
@@ -243,19 +258,21 @@ internal fun JsonObject.toMilestone() = Milestone(
 )
 
 /** A player's contract (`lookupcontracts.php`, `lookup/player_contracts`). */
-public data class Contract(
-    /** `id` */ val id: Long?,
-    /** `idPlayer` */ val playerId: Long?,
-    /** `strPlayer` */ val player: String?,
-    /** `idTeam` */ val teamId: Long?,
-    /** `strTeam` */ val team: String?,
-    /** `strBadge` */ val badge: String?,
-    /** `strYearStart` */ val yearStart: Int?,
-    /** `strYearEnd` */ val yearEnd: Int?,
-    /** `strWage`, as text */ val wage: String?,
-    /** `strSport` */ val sport: String?,
-    val raw: RawRecord,
-)
+public class Contract internal constructor(
+    /** `id` */ public val id: Long?,
+    /** `idPlayer` */ public val playerId: Long?,
+    /** `strPlayer` */ public val player: String?,
+    /** `idTeam` */ public val teamId: Long?,
+    /** `strTeam` */ public val team: String?,
+    /** `strBadge` */ public val badge: String?,
+    /** `strYearStart` */ public val yearStart: Int?,
+    /** `strYearEnd` */ public val yearEnd: Int?,
+    /** `strWage`, as text */ public val wage: String?,
+    /** `strSport` */ public val sport: String?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "Contract(player=$player, team=$team, yearStart=$yearStart, yearEnd=$yearEnd)"
+}
 
 internal fun JsonObject.toContract() = Contract(
     id = id("id"),
@@ -275,23 +292,25 @@ internal fun JsonObject.toContract() = Contract(
  * One competitor's result in an individual-sport event: a race, a golf tournament, a
  * fight. Returned both per player (`playerresults.php`) and per event (`eventresults.php`).
  */
-public data class EventResult(
-    /** `idResult` */ val id: Long?,
-    /** `idEvent` */ val eventId: Long?,
-    /** `strEvent` */ val event: String?,
-    /** `dateEvent` */ val date: LocalDate?,
-    /** `strSeason` */ val season: String?,
-    /** `strSport` */ val sport: String?,
-    /** `strCountry` */ val country: String?,
-    /** `idPlayer` */ val playerId: Long?,
-    /** `strPlayer` */ val player: String?,
-    /** `idTeam` */ val teamId: Long?,
-    /** `intPosition`: finishing position */ val position: Int?,
-    /** `intPoints` */ val points: Int?,
-    /** `strResult`: free text */ val result: String?,
-    /** `strDetail`: e.g. a time gap `+29.520` */ val detail: String?,
-    val raw: RawRecord,
-)
+public class EventResult internal constructor(
+    /** `idResult` */ public val id: Long?,
+    /** `idEvent` */ public val eventId: Long?,
+    /** `strEvent` */ public val event: String?,
+    /** `dateEvent` */ public val date: LocalDate?,
+    /** `strSeason` */ public val season: String?,
+    /** `strSport` */ public val sport: String?,
+    /** `strCountry` */ public val country: String?,
+    /** `idPlayer` */ public val playerId: Long?,
+    /** `strPlayer` */ public val player: String?,
+    /** `idTeam` */ public val teamId: Long?,
+    /** `intPosition`: finishing position */ public val position: Int?,
+    /** `intPoints` */ public val points: Int?,
+    /** `strResult`: free text */ public val result: String?,
+    /** `strDetail`: e.g. a time gap `+29.520` */ public val detail: String?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "EventResult(eventId=$eventId, player=$player, position=$position)"
+}
 
 internal fun JsonObject.toEventResult() = EventResult(
     id = id("idResult"),
@@ -312,24 +331,26 @@ internal fun JsonObject.toEventResult() = EventResult(
 )
 
 /** One statistic for a player in one season (`lookupplayerstats.php`, `lookup/player_stats`). */
-public data class PlayerStat(
-    /** `id` */ val id: Long?,
-    /** `idPlayer` */ val playerId: Long?,
-    /** `strPlayer` */ val player: String?,
-    /** `idTeam` */ val teamId: Long?,
-    /** `strTeam` */ val team: String?,
-    /** `strTeamBadge` */ val teamBadge: String?,
-    /** `idLeague` */ val leagueId: Long?,
-    /** `strLeague` */ val league: String?,
-    /** `strLeagueBadge` */ val leagueBadge: String?,
-    /** `strSeason` */ val season: String?,
-    /** `strSport` */ val sport: String?,
-    /** `strStatistic`, e.g. `Goals`, `Appearances`, `Mins Played` */ val statistic: String?,
-    /** `strValue`, as text */ val value: String?,
-    val raw: RawRecord,
-) {
+public class PlayerStat internal constructor(
+    /** `id` */ public val id: Long?,
+    /** `idPlayer` */ public val playerId: Long?,
+    /** `strPlayer` */ public val player: String?,
+    /** `idTeam` */ public val teamId: Long?,
+    /** `strTeam` */ public val team: String?,
+    /** `strTeamBadge` */ public val teamBadge: String?,
+    /** `idLeague` */ public val leagueId: Long?,
+    /** `strLeague` */ public val league: String?,
+    /** `strLeagueBadge` */ public val leagueBadge: String?,
+    /** `strSeason` */ public val season: String?,
+    /** `strSport` */ public val sport: String?,
+    /** `strStatistic`, e.g. `Goals`, `Appearances`, `Mins Played` */ public val statistic: String?,
+    /** `strValue`, as text */ public val value: String?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "PlayerStat(player=$player, season=$season, statistic=$statistic, value=$value)"
+
     /** [value] as a number, when it is one. */
-    val numericValue: Double? get() = value?.trim()?.toDoubleOrNull()
+    public val numericValue: Double? get() = value?.trim()?.toDoubleOrNull()
 }
 
 internal fun JsonObject.toPlayerStat() = PlayerStat(
@@ -350,16 +371,18 @@ internal fun JsonObject.toPlayerStat() = PlayerStat(
 )
 
 /** A team kit (`lookupequipment.php`, `lookup/team_equipment`). */
-public data class Equipment(
-    /** `idEquipment` */ val id: Long?,
-    /** `idTeam` */ val teamId: Long?,
-    /** `strSeason` */ val season: String?,
-    /** `strType`, e.g. `1st`, `2nd`, `GK` */ val type: String?,
-    /** `strEquipment`: the image */ val image: String?,
-    /** `strUsername`: who uploaded it */ val uploadedBy: String?,
-    /** `date`: when it was added (zone not stated) */ val added: LocalDateTime?,
-    val raw: RawRecord,
-)
+public class Equipment internal constructor(
+    /** `idEquipment` */ public val id: Long?,
+    /** `idTeam` */ public val teamId: Long?,
+    /** `strSeason` */ public val season: String?,
+    /** `strType`, e.g. `1st`, `2nd`, `GK` */ public val type: String?,
+    /** `strEquipment`: the image */ public val image: String?,
+    /** `strUsername`: who uploaded it */ public val uploadedBy: String?,
+    /** `date`: when it was added (zone not stated) */ public val added: LocalDateTime?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "Equipment(teamId=$teamId, season=$season, type=$type)"
+}
 
 internal fun JsonObject.toEquipment() = Equipment(
     id = id("idEquipment"),
@@ -373,35 +396,37 @@ internal fun JsonObject.toEquipment() = Equipment(
 )
 
 /** A stadium, arena or circuit. */
-public data class Venue(
-    /** `idVenue` */ val id: Long?,
-    /** `strVenue` */ val name: String?,
-    /** `strVenueAlternate` */ val alternateName: String?,
-    /** `strVenueSponsor` */ val sponsorName: String?,
-    /** `strSport` */ val sport: String?,
-    /** `strLocation` */ val location: String?,
-    /** `strCountry` */ val country: String?,
-    /** `strTimezone`, as text, e.g. `UTC +00:00 Greenwich Mean Time (GMT)` */ val timezone: String?,
-    /** `intCapacity` */ val capacity: Int?,
-    /** `intFormedYear` */ val formedYear: Int?,
-    /** `strArchitect` */ val architect: String?,
-    /** `strCost`, as text */ val cost: String?,
-    /** `strMap`: either `lat, lon` or an image URL */ val map: String?,
-    /** `strThumb` */ val thumb: String?,
-    /** `strLogo` */ val logo: String?,
-    /** `strFanart1`..`strFanart4` */ val fanart: List<String>,
-    /** `strCreativeCommons`: see [Player.creativeCommons] */ val creativeCommons: Boolean?,
-    /** `strDescriptionEN`, ... */ val descriptions: Map<String, String>,
-    val socials: Socials,
-    /** `intLoved` */ val loved: Int?,
-    /** `strLocked` */ val isLocked: Boolean?,
-    /** `idDupe`: set when this record duplicates another venue */ val duplicateOf: Long?,
-    val raw: RawRecord,
-) {
-    val description: String? get() = descriptions["EN"]
+public class Venue internal constructor(
+    /** `idVenue` */ public val id: Long?,
+    /** `strVenue` */ public val name: String?,
+    /** `strVenueAlternate` */ public val alternateName: String?,
+    /** `strVenueSponsor` */ public val sponsorName: String?,
+    /** `strSport` */ public val sport: String?,
+    /** `strLocation` */ public val location: String?,
+    /** `strCountry` */ public val country: String?,
+    /** `strTimezone`, as text, e.g. `UTC +00:00 Greenwich Mean Time (GMT)` */ public val timezone: String?,
+    /** `intCapacity` */ public val capacity: Int?,
+    /** `intFormedYear` */ public val formedYear: Int?,
+    /** `strArchitect` */ public val architect: String?,
+    /** `strCost`, as text */ public val cost: String?,
+    /** `strMap`: either `lat, lon` or an image URL */ public val map: String?,
+    /** `strThumb` */ public val thumb: String?,
+    /** `strLogo` */ public val logo: String?,
+    /** `strFanart1`..`strFanart4` */ public val fanart: List<String>,
+    /** `strCreativeCommons`: see [Player.creativeCommons] */ public val creativeCommons: Boolean?,
+    /** `strDescriptionEN`, ... */ public val descriptions: Map<String, String>,
+    public val socials: Socials,
+    /** `intLoved` */ public val loved: Int?,
+    /** `strLocked` */ public val isLocked: Boolean?,
+    /** `idDupe`: set when this record duplicates another venue */ public val duplicateOf: Long?,
+    raw: RawRecord,
+) : ApiRecord(raw) {
+    override fun toString(): String = "Venue(id=$id, name=$name)"
+
+    public val description: String? get() = descriptions["EN"]
 
     /** [map] as latitude and longitude, when it holds coordinates. */
-    val coordinates: Pair<Double, Double>?
+    public val coordinates: Pair<Double, Double>?
         get() {
             val parts = map?.split(',')?.map { it.trim().toDoubleOrNull() } ?: return null
             val (lat, lon) = parts.takeIf { it.size == 2 } ?: return null

@@ -27,6 +27,22 @@ public final class sportsdb/RateLimitException : sportsdb/SportsDbException {
 	public final fun retryAfterDuration ()Ljava/time/Duration;
 }
 
+public final class sportsdb/RequestEvent {
+	public final fun getAttempts ()I
+	public final fun getDuration-UwyO8pc ()J
+	public final fun getDurationMillis ()J
+	public final fun getError ()Ljava/lang/Throwable;
+	public final fun getFromCache ()Z
+	public final fun getShared ()Z
+	public final fun getStatus ()Ljava/lang/Integer;
+	public final fun getUrl ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public abstract interface class sportsdb/RequestListener {
+	public abstract fun onRequest (Lsportsdb/RequestEvent;)V
+}
+
 public final class sportsdb/ResponseParseException : sportsdb/SportsDbException {
 	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -54,8 +70,10 @@ public final class sportsdb/SportsDbConfig {
 	public final fun getBaseUrl ()Ljava/lang/String;
 	public final fun getCache ()Lsportsdb/cache/ResponseCache;
 	public final fun getCachePolicy ()Lsportsdb/cache/CachePolicy;
+	public final fun getDeduplicateRequests ()Z
 	public final fun getMaxRetries ()I
 	public final fun getRateLimitWait-UwyO8pc ()J
+	public final fun getRequestListener ()Lsportsdb/RequestListener;
 	public final fun getRequestsPerMinute ()Ljava/lang/Integer;
 	public final fun getRetryBackoff-UwyO8pc ()J
 	public final fun getRetryOnRateLimit ()Z
@@ -66,9 +84,11 @@ public final class sportsdb/SportsDbConfig {
 	public final fun setBaseUrl (Ljava/lang/String;)V
 	public final fun setCache (Lsportsdb/cache/ResponseCache;)V
 	public final fun setCachePolicy (Lsportsdb/cache/CachePolicy;)V
+	public final fun setDeduplicateRequests (Z)V
 	public final fun setMaxRetries (I)V
 	public final fun setRateLimitWait (Ljava/time/Duration;)V
 	public final fun setRateLimitWait-LRDsOJo (J)V
+	public final fun setRequestListener (Lsportsdb/RequestListener;)V
 	public final fun setRequestsPerMinute (Ljava/lang/Integer;)V
 	public final fun setRetryBackoff (Ljava/time/Duration;)V
 	public final fun setRetryBackoff-LRDsOJo (J)V
@@ -498,54 +518,31 @@ public final class sportsdb/http/OkHttpTransport : sportsdb/http/HttpTransport {
 	public fun get (Lokhttp3/HttpUrl;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public abstract class sportsdb/model/ApiRecord {
+	public final fun equals (Ljava/lang/Object;)Z
+	public final fun getRaw ()Lsportsdb/model/RawRecord;
+	public final fun hashCode ()I
+}
+
 public final class sportsdb/model/CommonKt {
 	public static final fun sized (Ljava/lang/String;Lsportsdb/model/ImageSize;)Ljava/lang/String;
 }
 
-public final class sportsdb/model/Contract {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/String;
-	public final fun component11 ()Lsportsdb/model/RawRecord;
-	public final fun component2 ()Ljava/lang/Long;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/Long;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/lang/Integer;
-	public final fun component8 ()Ljava/lang/Integer;
-	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)Lsportsdb/model/Contract;
-	public static synthetic fun copy$default (Lsportsdb/model/Contract;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/Contract;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/Contract : sportsdb/model/ApiRecord {
 	public final fun getBadge ()Ljava/lang/String;
 	public final fun getId ()Ljava/lang/Long;
 	public final fun getPlayer ()Ljava/lang/String;
 	public final fun getPlayerId ()Ljava/lang/Long;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getSport ()Ljava/lang/String;
 	public final fun getTeam ()Ljava/lang/String;
 	public final fun getTeamId ()Ljava/lang/Long;
 	public final fun getWage ()Ljava/lang/String;
 	public final fun getYearEnd ()Ljava/lang/Integer;
 	public final fun getYearStart ()Ljava/lang/Integer;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/Country {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/lang/Long;
-	public final fun component8 ()Lsportsdb/model/RawRecord;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Lsportsdb/model/RawRecord;)Lsportsdb/model/Country;
-	public static synthetic fun copy$default (Lsportsdb/model/Country;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/Country;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/Country : sportsdb/model/ApiRecord {
 	public final fun getApiFootballId ()Ljava/lang/Long;
 	public final fun getCode ()Ljava/lang/String;
 	public final fun getFlag16 ()Ljava/lang/String;
@@ -553,91 +550,21 @@ public final class sportsdb/model/Country {
 	public final fun getFlag64 ()Ljava/lang/String;
 	public final fun getName ()Ljava/lang/String;
 	public final fun getNameFr ()Ljava/lang/String;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/Equipment {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/time/LocalDateTime;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component2 ()Ljava/lang/Long;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/time/LocalDateTime;
-	public final fun component8 ()Lsportsdb/model/RawRecord;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/time/LocalDateTime;Lsportsdb/model/RawRecord;)Lsportsdb/model/Equipment;
-	public static synthetic fun copy$default (Lsportsdb/model/Equipment;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/time/LocalDateTime;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/Equipment;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/Equipment : sportsdb/model/ApiRecord {
 	public final fun getAdded ()Ljava/time/LocalDateTime;
 	public final fun getId ()Ljava/lang/Long;
 	public final fun getImage ()Ljava/lang/String;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getSeason ()Ljava/lang/String;
 	public final fun getTeamId ()Ljava/lang/Long;
 	public final fun getType ()Ljava/lang/String;
 	public final fun getUploadedBy ()Ljava/lang/String;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/Event {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/time/Instant;Ljava/time/LocalDate;Ljava/time/LocalTime;Ljava/time/LocalDate;Ljava/time/LocalTime;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Long;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/Integer;
-	public final fun component11 ()Ljava/lang/String;
-	public final fun component12 ()Ljava/lang/Long;
-	public final fun component13 ()Ljava/lang/String;
-	public final fun component14 ()Ljava/lang/String;
-	public final fun component15 ()Ljava/lang/Long;
-	public final fun component16 ()Ljava/lang/String;
-	public final fun component17 ()Ljava/lang/String;
-	public final fun component18 ()Ljava/lang/Integer;
-	public final fun component19 ()Ljava/lang/Integer;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component20 ()Ljava/lang/Integer;
-	public final fun component21 ()Ljava/lang/Integer;
-	public final fun component22 ()Ljava/time/Instant;
-	public final fun component23 ()Ljava/time/LocalDate;
-	public final fun component24 ()Ljava/time/LocalTime;
-	public final fun component25 ()Ljava/time/LocalDate;
-	public final fun component26 ()Ljava/time/LocalTime;
-	public final fun component27 ()Ljava/lang/String;
-	public final fun component28 ()Ljava/lang/Boolean;
-	public final fun component29 ()Ljava/lang/Long;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component30 ()Ljava/lang/String;
-	public final fun component31 ()Ljava/lang/String;
-	public final fun component32 ()Ljava/lang/String;
-	public final fun component33 ()Ljava/lang/Integer;
-	public final fun component34 ()Ljava/lang/String;
-	public final fun component35 ()Ljava/lang/String;
-	public final fun component36 ()Ljava/lang/String;
-	public final fun component37 ()Ljava/lang/String;
-	public final fun component38 ()Ljava/lang/String;
-	public final fun component39 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component40 ()Ljava/lang/String;
-	public final fun component41 ()Ljava/lang/String;
-	public final fun component42 ()Ljava/lang/String;
-	public final fun component43 ()Ljava/lang/String;
-	public final fun component44 ()Ljava/lang/String;
-	public final fun component45 ()Ljava/lang/String;
-	public final fun component46 ()Ljava/lang/Double;
-	public final fun component47 ()Ljava/lang/Integer;
-	public final fun component48 ()Ljava/lang/Boolean;
-	public final fun component49 ()Ljava/lang/Long;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component50 ()Lsportsdb/model/RawRecord;
-	public final fun component6 ()Ljava/lang/Long;
-	public final fun component7 ()Ljava/lang/String;
-	public final fun component8 ()Ljava/lang/String;
-	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/time/Instant;Ljava/time/LocalDate;Ljava/time/LocalTime;Ljava/time/LocalDate;Ljava/time/LocalTime;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Long;Lsportsdb/model/RawRecord;)Lsportsdb/model/Event;
-	public static synthetic fun copy$default (Lsportsdb/model/Event;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/time/Instant;Ljava/time/LocalDate;Ljava/time/LocalTime;Ljava/time/LocalDate;Ljava/time/LocalTime;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Long;Lsportsdb/model/RawRecord;IILjava/lang/Object;)Lsportsdb/model/Event;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/Event : sportsdb/model/ApiRecord {
 	public final fun getAlternateName ()Ljava/lang/String;
 	public final fun getApiFootballId ()Ljava/lang/Long;
 	public final fun getAwayScore ()Ljava/lang/Integer;
@@ -670,7 +597,6 @@ public final class sportsdb/model/Event {
 	public final fun getPoster ()Ljava/lang/String;
 	public final fun getRating ()Ljava/lang/Double;
 	public final fun getRatingVotes ()Ljava/lang/Integer;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getResultText ()Ljava/lang/String;
 	public final fun getRound ()Ljava/lang/Integer;
 	public final fun getSeason ()Ljava/lang/String;
@@ -687,32 +613,12 @@ public final class sportsdb/model/Event {
 	public final fun getVenueId ()Ljava/lang/Long;
 	public final fun getVideo ()Ljava/lang/String;
 	public final fun getWeather ()Ljava/lang/String;
-	public fun hashCode ()I
 	public final fun isLocked ()Ljava/lang/Boolean;
 	public final fun isPostponed ()Ljava/lang/Boolean;
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/EventResult {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/Long;
-	public final fun component11 ()Ljava/lang/Integer;
-	public final fun component12 ()Ljava/lang/Integer;
-	public final fun component13 ()Ljava/lang/String;
-	public final fun component14 ()Ljava/lang/String;
-	public final fun component15 ()Lsportsdb/model/RawRecord;
-	public final fun component2 ()Ljava/lang/Long;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/time/LocalDate;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/lang/String;
-	public final fun component8 ()Ljava/lang/Long;
-	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)Lsportsdb/model/EventResult;
-	public static synthetic fun copy$default (Lsportsdb/model/EventResult;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/EventResult;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/EventResult : sportsdb/model/ApiRecord {
 	public final fun getCountry ()Ljava/lang/String;
 	public final fun getDate ()Ljava/time/LocalDate;
 	public final fun getDetail ()Ljava/lang/String;
@@ -723,28 +629,14 @@ public final class sportsdb/model/EventResult {
 	public final fun getPlayerId ()Ljava/lang/Long;
 	public final fun getPoints ()Ljava/lang/Integer;
 	public final fun getPosition ()Ljava/lang/Integer;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getResult ()Ljava/lang/String;
 	public final fun getSeason ()Ljava/lang/String;
 	public final fun getSport ()Ljava/lang/String;
 	public final fun getTeamId ()Ljava/lang/Long;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/EventStat {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/Double;Ljava/lang/Long;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component2 ()Ljava/lang/Long;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/Double;
-	public final fun component6 ()Ljava/lang/Double;
-	public final fun component7 ()Ljava/lang/Long;
-	public final fun component8 ()Lsportsdb/model/RawRecord;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/Double;Ljava/lang/Long;Lsportsdb/model/RawRecord;)Lsportsdb/model/EventStat;
-	public static synthetic fun copy$default (Lsportsdb/model/EventStat;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Double;Ljava/lang/Double;Ljava/lang/Long;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/EventStat;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/EventStat : sportsdb/model/ApiRecord {
 	public final fun getApiFootballId ()Ljava/lang/Long;
 	public final fun getAway ()Ljava/lang/Double;
 	public final fun getEvent ()Ljava/lang/String;
@@ -752,8 +644,6 @@ public final class sportsdb/model/EventStat {
 	public final fun getHome ()Ljava/lang/Double;
 	public final fun getId ()Ljava/lang/Long;
 	public final fun getName ()Ljava/lang/String;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -775,24 +665,7 @@ public final class sportsdb/model/EventStatus$Companion {
 	public final fun of (Ljava/lang/String;)Lsportsdb/model/EventStatus;
 }
 
-public final class sportsdb/model/FormerTeam {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/Integer;
-	public final fun component11 ()Ljava/lang/Integer;
-	public final fun component12 ()Ljava/lang/String;
-	public final fun component13 ()Lsportsdb/model/RawRecord;
-	public final fun component2 ()Ljava/lang/Long;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/Long;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/lang/String;
-	public final fun component8 ()Ljava/lang/String;
-	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Lsportsdb/model/RawRecord;)Lsportsdb/model/FormerTeam;
-	public static synthetic fun copy$default (Lsportsdb/model/FormerTeam;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/FormerTeam;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/FormerTeam : sportsdb/model/ApiRecord {
 	public final fun getAppearances ()Ljava/lang/Integer;
 	public final fun getBadge ()Ljava/lang/String;
 	public final fun getDeparted ()Ljava/lang/String;
@@ -802,33 +675,13 @@ public final class sportsdb/model/FormerTeam {
 	public final fun getMoveType ()Ljava/lang/String;
 	public final fun getPlayer ()Ljava/lang/String;
 	public final fun getPlayerId ()Ljava/lang/Long;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getSport ()Ljava/lang/String;
 	public final fun getTeam ()Ljava/lang/String;
 	public final fun getTeamId ()Ljava/lang/Long;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/Honour {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/Long;
-	public final fun component11 ()Ljava/lang/String;
-	public final fun component12 ()Ljava/lang/String;
-	public final fun component13 ()Ljava/lang/String;
-	public final fun component14 ()Lsportsdb/model/RawRecord;
-	public final fun component2 ()Ljava/lang/Long;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/Long;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/lang/Long;
-	public final fun component8 ()Ljava/lang/String;
-	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)Lsportsdb/model/Honour;
-	public static synthetic fun copy$default (Lsportsdb/model/Honour;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/Honour;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/Honour : sportsdb/model/ApiRecord {
 	public final fun getHonourId ()Ljava/lang/Long;
 	public final fun getId ()Ljava/lang/Long;
 	public final fun getLeagueId ()Ljava/lang/Long;
@@ -836,14 +689,12 @@ public final class sportsdb/model/Honour {
 	public final fun getName ()Ljava/lang/String;
 	public final fun getPlayer ()Ljava/lang/String;
 	public final fun getPlayerId ()Ljava/lang/Long;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getSeason ()Ljava/lang/String;
 	public final fun getSport ()Ljava/lang/String;
 	public final fun getTeam ()Ljava/lang/String;
 	public final fun getTeamBadge ()Ljava/lang/String;
 	public final fun getTeamId ()Ljava/lang/Long;
 	public final fun getTrophy ()Ljava/lang/String;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -856,37 +707,7 @@ public final class sportsdb/model/ImageSize : java/lang/Enum {
 	public static fun values ()[Lsportsdb/model/ImageSize;
 }
 
-public final class sportsdb/model/League {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Integer;Ljava/time/LocalDate;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/Map;Lsportsdb/model/Socials;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/Long;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/Integer;
-	public final fun component11 ()Ljava/time/LocalDate;
-	public final fun component12 ()Ljava/lang/Boolean;
-	public final fun component13 ()Ljava/lang/String;
-	public final fun component14 ()Ljava/lang/String;
-	public final fun component15 ()Ljava/lang/String;
-	public final fun component16 ()Ljava/lang/String;
-	public final fun component17 ()Ljava/lang/String;
-	public final fun component18 ()Ljava/lang/String;
-	public final fun component19 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component20 ()Ljava/util/List;
-	public final fun component21 ()Ljava/util/Map;
-	public final fun component22 ()Lsportsdb/model/Socials;
-	public final fun component23 ()Ljava/lang/Boolean;
-	public final fun component24 ()Ljava/lang/Long;
-	public final fun component25 ()Ljava/lang/Long;
-	public final fun component26 ()Lsportsdb/model/RawRecord;
-	public final fun component3 ()Ljava/util/List;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/lang/String;
-	public final fun component8 ()Ljava/lang/Integer;
-	public final fun component9 ()Ljava/lang/Boolean;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Integer;Ljava/time/LocalDate;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/Map;Lsportsdb/model/Socials;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/Long;Lsportsdb/model/RawRecord;)Lsportsdb/model/League;
-	public static synthetic fun copy$default (Lsportsdb/model/League;Ljava/lang/Long;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Integer;Ljava/time/LocalDate;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/Map;Lsportsdb/model/Socials;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/Long;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/League;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/League : sportsdb/model/ApiRecord {
 	public final fun getAlternateNames ()Ljava/util/List;
 	public final fun getApiFootballId ()Ljava/lang/Long;
 	public final fun getApiFootballV3Id ()Ljava/lang/Long;
@@ -906,12 +727,10 @@ public final class sportsdb/model/League {
 	public final fun getLogo ()Ljava/lang/String;
 	public final fun getName ()Ljava/lang/String;
 	public final fun getPoster ()Ljava/lang/String;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getSocials ()Lsportsdb/model/Socials;
 	public final fun getSport ()Ljava/lang/String;
 	public final fun getTrophy ()Ljava/lang/String;
 	public final fun getTvRights ()Ljava/lang/String;
-	public fun hashCode ()I
 	public final fun isComplete ()Ljava/lang/Boolean;
 	public final fun isCup ()Ljava/lang/Boolean;
 	public final fun isLocked ()Ljava/lang/Boolean;
@@ -919,11 +738,6 @@ public final class sportsdb/model/League {
 }
 
 public final class sportsdb/model/LeagueRef {
-	public fun <init> (JLjava/lang/String;)V
-	public final fun component1 ()J
-	public final fun component2 ()Ljava/lang/String;
-	public final fun copy (JLjava/lang/String;)Lsportsdb/model/LeagueRef;
-	public static synthetic fun copy$default (Lsportsdb/model/LeagueRef;JLjava/lang/String;ILjava/lang/Object;)Lsportsdb/model/LeagueRef;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getId ()J
 	public final fun getName ()Ljava/lang/String;
@@ -931,31 +745,7 @@ public final class sportsdb/model/LeagueRef {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/LineupEntry {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/String;
-	public final fun component11 ()Ljava/lang/String;
-	public final fun component12 ()Ljava/lang/String;
-	public final fun component13 ()Ljava/lang/Integer;
-	public final fun component14 ()Ljava/lang/String;
-	public final fun component15 ()Ljava/lang/String;
-	public final fun component16 ()Ljava/lang/String;
-	public final fun component17 ()Ljava/lang/String;
-	public final fun component18 ()Ljava/lang/String;
-	public final fun component19 ()Ljava/lang/Long;
-	public final fun component2 ()Ljava/lang/Long;
-	public final fun component20 ()Lsportsdb/model/RawRecord;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/Long;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/Long;
-	public final fun component7 ()Ljava/lang/String;
-	public final fun component8 ()Ljava/lang/Boolean;
-	public final fun component9 ()Ljava/lang/Boolean;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Lsportsdb/model/RawRecord;)Lsportsdb/model/LineupEntry;
-	public static synthetic fun copy$default (Lsportsdb/model/LineupEntry;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/LineupEntry;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/LineupEntry : sportsdb/model/ApiRecord {
 	public final fun getApiFootballId ()Ljava/lang/Long;
 	public final fun getCountry ()Ljava/lang/String;
 	public final fun getCutout ()Ljava/lang/String;
@@ -967,45 +757,18 @@ public final class sportsdb/model/LineupEntry {
 	public final fun getPlayerId ()Ljava/lang/Long;
 	public final fun getPosition ()Ljava/lang/String;
 	public final fun getPositionShort ()Ljava/lang/String;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getRender ()Ljava/lang/String;
 	public final fun getSeason ()Ljava/lang/String;
 	public final fun getSquadNumber ()Ljava/lang/Integer;
 	public final fun getTeam ()Ljava/lang/String;
 	public final fun getTeamId ()Ljava/lang/Long;
 	public final fun getThumb ()Ljava/lang/String;
-	public fun hashCode ()I
 	public final fun isHome ()Ljava/lang/Boolean;
 	public final fun isSubstitute ()Ljava/lang/Boolean;
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/LiveScore {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/time/LocalTime;Ljava/time/LocalDate;Ljava/time/Instant;Ljava/time/LocalDateTime;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/Long;
-	public final fun component11 ()Ljava/lang/String;
-	public final fun component12 ()Ljava/lang/String;
-	public final fun component13 ()Ljava/lang/Integer;
-	public final fun component14 ()Ljava/lang/Integer;
-	public final fun component15 ()Ljava/lang/String;
-	public final fun component16 ()Ljava/lang/String;
-	public final fun component17 ()Ljava/time/LocalTime;
-	public final fun component18 ()Ljava/time/LocalDate;
-	public final fun component19 ()Ljava/time/Instant;
-	public final fun component2 ()Ljava/lang/Long;
-	public final fun component20 ()Ljava/time/LocalDateTime;
-	public final fun component21 ()Lsportsdb/model/RawRecord;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/Long;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/Integer;
-	public final fun component7 ()Ljava/lang/Long;
-	public final fun component8 ()Ljava/lang/String;
-	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/time/LocalTime;Ljava/time/LocalDate;Ljava/time/Instant;Ljava/time/LocalDateTime;Lsportsdb/model/RawRecord;)Lsportsdb/model/LiveScore;
-	public static synthetic fun copy$default (Lsportsdb/model/LiveScore;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/time/LocalTime;Ljava/time/LocalDate;Ljava/time/Instant;Ljava/time/LocalDateTime;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/LiveScore;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/LiveScore : sportsdb/model/ApiRecord {
 	public final fun getAwayScore ()Ljava/lang/Integer;
 	public final fun getAwayTeam ()Ljava/lang/String;
 	public final fun getAwayTeamBadge ()Ljava/lang/String;
@@ -1022,32 +785,15 @@ public final class sportsdb/model/LiveScore {
 	public final fun getLeague ()Ljava/lang/String;
 	public final fun getLeagueId ()Ljava/lang/Long;
 	public final fun getProgress ()Ljava/lang/String;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getSport ()Ljava/lang/String;
 	public final fun getStatus ()Lsportsdb/model/EventStatus;
 	public final fun getStatusCode ()Ljava/lang/String;
 	public final fun getTimestamp ()Ljava/time/Instant;
 	public final fun getUpdated ()Ljava/time/LocalDateTime;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/Milestone {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/String;
-	public final fun component11 ()Lsportsdb/model/RawRecord;
-	public final fun component2 ()Ljava/lang/Long;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/time/LocalDate;
-	public final fun component5 ()Ljava/lang/Long;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/lang/Long;
-	public final fun component8 ()Ljava/lang/String;
-	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)Lsportsdb/model/Milestone;
-	public static synthetic fun copy$default (Lsportsdb/model/Milestone;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/Milestone;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/Milestone : sportsdb/model/ApiRecord {
 	public final fun getDate ()Ljava/time/LocalDate;
 	public final fun getId ()Ljava/lang/Long;
 	public final fun getLogo ()Ljava/lang/String;
@@ -1055,66 +801,13 @@ public final class sportsdb/model/Milestone {
 	public final fun getName ()Ljava/lang/String;
 	public final fun getPlayer ()Ljava/lang/String;
 	public final fun getPlayerId ()Ljava/lang/Long;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getSport ()Ljava/lang/String;
 	public final fun getTeam ()Ljava/lang/String;
 	public final fun getTeamId ()Ljava/lang/Long;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/Player {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/util/Map;Lsportsdb/model/Socials;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Double;Lsportsdb/model/PlayerExternalIds;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/Long;
-	public final fun component11 ()Ljava/lang/String;
-	public final fun component12 ()Ljava/lang/String;
-	public final fun component13 ()Ljava/lang/String;
-	public final fun component14 ()Ljava/lang/String;
-	public final fun component15 ()Ljava/lang/String;
-	public final fun component16 ()Ljava/lang/String;
-	public final fun component17 ()Ljava/time/LocalDate;
-	public final fun component18 ()Ljava/lang/String;
-	public final fun component19 ()Ljava/time/LocalDate;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component20 ()Ljava/lang/String;
-	public final fun component21 ()Ljava/time/LocalDate;
-	public final fun component22 ()Ljava/lang/String;
-	public final fun component23 ()Ljava/lang/String;
-	public final fun component24 ()Ljava/lang/String;
-	public final fun component25 ()Ljava/lang/String;
-	public final fun component26 ()Ljava/lang/String;
-	public final fun component27 ()Ljava/lang/String;
-	public final fun component28 ()Ljava/lang/String;
-	public final fun component29 ()Ljava/lang/String;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component30 ()Ljava/lang/String;
-	public final fun component31 ()Ljava/lang/String;
-	public final fun component32 ()Ljava/lang/String;
-	public final fun component33 ()Ljava/lang/String;
-	public final fun component34 ()Ljava/lang/String;
-	public final fun component35 ()Ljava/lang/String;
-	public final fun component36 ()Ljava/lang/String;
-	public final fun component37 ()Ljava/lang/String;
-	public final fun component38 ()Ljava/util/List;
-	public final fun component39 ()Ljava/lang/Boolean;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component40 ()Ljava/lang/String;
-	public final fun component41 ()Ljava/util/Map;
-	public final fun component42 ()Lsportsdb/model/Socials;
-	public final fun component43 ()Ljava/lang/Integer;
-	public final fun component44 ()Ljava/lang/Boolean;
-	public final fun component45 ()Ljava/lang/Double;
-	public final fun component46 ()Lsportsdb/model/PlayerExternalIds;
-	public final fun component47 ()Lsportsdb/model/RawRecord;
-	public final fun component5 ()Ljava/lang/Long;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/lang/Long;
-	public final fun component8 ()Ljava/lang/String;
-	public final fun component9 ()Ljava/lang/Long;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/util/Map;Lsportsdb/model/Socials;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Double;Lsportsdb/model/PlayerExternalIds;Lsportsdb/model/RawRecord;)Lsportsdb/model/Player;
-	public static synthetic fun copy$default (Lsportsdb/model/Player;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/lang/String;Ljava/util/Map;Lsportsdb/model/Socials;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Double;Lsportsdb/model/PlayerExternalIds;Lsportsdb/model/RawRecord;IILjava/lang/Object;)Lsportsdb/model/Player;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/Player : sportsdb/model/ApiRecord {
 	public final fun getAgent ()Ljava/lang/String;
 	public final fun getAlternateName ()Ljava/lang/String;
 	public final fun getBanner ()Ljava/lang/String;
@@ -1146,7 +839,6 @@ public final class sportsdb/model/Player {
 	public final fun getOutfitter ()Ljava/lang/String;
 	public final fun getPosition ()Ljava/lang/String;
 	public final fun getPoster ()Ljava/lang/String;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getRelevance ()Ljava/lang/Double;
 	public final fun getRender ()Ljava/lang/String;
 	public final fun getSecondTeam ()Ljava/lang/String;
@@ -1162,21 +854,11 @@ public final class sportsdb/model/Player {
 	public final fun getThumb ()Ljava/lang/String;
 	public final fun getWage ()Ljava/lang/String;
 	public final fun getWeight ()Ljava/lang/String;
-	public fun hashCode ()I
 	public final fun isLocked ()Ljava/lang/Boolean;
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class sportsdb/model/PlayerExternalIds {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lsportsdb/model/PlayerExternalIds;
-	public static synthetic fun copy$default (Lsportsdb/model/PlayerExternalIds;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lsportsdb/model/PlayerExternalIds;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getApiFootball ()Ljava/lang/Long;
 	public final fun getEspn ()Ljava/lang/String;
@@ -1188,25 +870,7 @@ public final class sportsdb/model/PlayerExternalIds {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/PlayerStat {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/String;
-	public final fun component11 ()Ljava/lang/String;
-	public final fun component12 ()Ljava/lang/String;
-	public final fun component13 ()Ljava/lang/String;
-	public final fun component14 ()Lsportsdb/model/RawRecord;
-	public final fun component2 ()Ljava/lang/Long;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/Long;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/lang/Long;
-	public final fun component8 ()Ljava/lang/String;
-	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)Lsportsdb/model/PlayerStat;
-	public static synthetic fun copy$default (Lsportsdb/model/PlayerStat;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/PlayerStat;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/PlayerStat : sportsdb/model/ApiRecord {
 	public final fun getId ()Ljava/lang/Long;
 	public final fun getLeague ()Ljava/lang/String;
 	public final fun getLeagueBadge ()Ljava/lang/String;
@@ -1214,7 +878,6 @@ public final class sportsdb/model/PlayerStat {
 	public final fun getNumericValue ()Ljava/lang/Double;
 	public final fun getPlayer ()Ljava/lang/String;
 	public final fun getPlayerId ()Ljava/lang/Long;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getSeason ()Ljava/lang/String;
 	public final fun getSport ()Ljava/lang/String;
 	public final fun getStatistic ()Ljava/lang/String;
@@ -1222,12 +885,10 @@ public final class sportsdb/model/PlayerStat {
 	public final fun getTeamBadge ()Ljava/lang/String;
 	public final fun getTeamId ()Ljava/lang/Long;
 	public final fun getValue ()Ljava/lang/String;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class sportsdb/model/RawRecord {
-	public fun <init> (Ljava/util/Map;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun get (Ljava/lang/String;)Ljava/lang/String;
 	public final fun getFields ()Ljava/util/Map;
@@ -1235,35 +896,15 @@ public final class sportsdb/model/RawRecord {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/Season {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Lsportsdb/model/RawRecord;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)Lsportsdb/model/Season;
-	public static synthetic fun copy$default (Lsportsdb/model/Season;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/Season;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/Season : sportsdb/model/ApiRecord {
 	public final fun getBadge ()Ljava/lang/String;
 	public final fun getDescription ()Ljava/lang/String;
 	public final fun getName ()Ljava/lang/String;
 	public final fun getPoster ()Ljava/lang/String;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
 public final class sportsdb/model/Socials {
-	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V
-	public final fun component1 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Lsportsdb/model/Socials;
-	public static synthetic fun copy$default (Lsportsdb/model/Socials;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lsportsdb/model/Socials;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getFacebook ()Ljava/lang/String;
 	public final fun getInstagram ()Ljava/lang/String;
@@ -1275,57 +916,18 @@ public final class sportsdb/model/Socials {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/Sport {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/lang/String;
-	public final fun component8 ()Lsportsdb/model/RawRecord;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)Lsportsdb/model/Sport;
-	public static synthetic fun copy$default (Lsportsdb/model/Sport;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/Sport;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/Sport : sportsdb/model/ApiRecord {
 	public final fun getDescription ()Ljava/lang/String;
 	public final fun getFormat ()Ljava/lang/String;
 	public final fun getIcon ()Ljava/lang/String;
 	public final fun getId ()Ljava/lang/Long;
 	public final fun getName ()Ljava/lang/String;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getThumb ()Ljava/lang/String;
 	public final fun getThumbBlackAndWhite ()Ljava/lang/String;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/Standing {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/Integer;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/time/LocalDateTime;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/String;
-	public final fun component11 ()Ljava/lang/String;
-	public final fun component12 ()Ljava/lang/Integer;
-	public final fun component13 ()Ljava/lang/Integer;
-	public final fun component14 ()Ljava/lang/Integer;
-	public final fun component15 ()Ljava/lang/Integer;
-	public final fun component16 ()Ljava/lang/Integer;
-	public final fun component17 ()Ljava/lang/Integer;
-	public final fun component18 ()Ljava/lang/Integer;
-	public final fun component19 ()Ljava/lang/Integer;
-	public final fun component2 ()Ljava/lang/Integer;
-	public final fun component20 ()Ljava/time/LocalDateTime;
-	public final fun component21 ()Lsportsdb/model/RawRecord;
-	public final fun component3 ()Ljava/lang/Long;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/Long;
-	public final fun component7 ()Ljava/lang/String;
-	public final fun component8 ()Ljava/lang/String;
-	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/Integer;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/time/LocalDateTime;Lsportsdb/model/RawRecord;)Lsportsdb/model/Standing;
-	public static synthetic fun copy$default (Lsportsdb/model/Standing;Ljava/lang/Long;Ljava/lang/Integer;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/time/LocalDateTime;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/Standing;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/Standing : sportsdb/model/ApiRecord {
 	public final fun getBadge ()Ljava/lang/String;
 	public final fun getDescription ()Ljava/lang/String;
 	public final fun getDrawn ()Ljava/lang/Integer;
@@ -1341,50 +943,15 @@ public final class sportsdb/model/Standing {
 	public final fun getPlayed ()Ljava/lang/Integer;
 	public final fun getPoints ()Ljava/lang/Integer;
 	public final fun getRank ()Ljava/lang/Integer;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getSeason ()Ljava/lang/String;
 	public final fun getTeam ()Ljava/lang/String;
 	public final fun getTeamId ()Ljava/lang/Long;
 	public final fun getUpdated ()Ljava/time/LocalDateTime;
 	public final fun getWon ()Ljava/lang/Integer;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/Team {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Long;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/Map;Lsportsdb/model/Socials;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/Integer;
-	public final fun component11 ()Ljava/lang/Long;
-	public final fun component12 ()Ljava/lang/String;
-	public final fun component13 ()Ljava/util/List;
-	public final fun component14 ()Ljava/lang/String;
-	public final fun component15 ()Ljava/lang/Long;
-	public final fun component16 ()Ljava/lang/String;
-	public final fun component17 ()Ljava/util/List;
-	public final fun component18 ()Ljava/lang/String;
-	public final fun component19 ()Ljava/lang/String;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component20 ()Ljava/lang/String;
-	public final fun component21 ()Ljava/lang/String;
-	public final fun component22 ()Ljava/util/List;
-	public final fun component23 ()Ljava/util/Map;
-	public final fun component24 ()Lsportsdb/model/Socials;
-	public final fun component25 ()Ljava/lang/Integer;
-	public final fun component26 ()Ljava/lang/Boolean;
-	public final fun component27 ()Ljava/lang/Long;
-	public final fun component28 ()Ljava/lang/String;
-	public final fun component29 ()Lsportsdb/model/RawRecord;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/util/List;
-	public final fun component5 ()Ljava/util/List;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/lang/String;
-	public final fun component8 ()Ljava/lang/String;
-	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Long;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/Map;Lsportsdb/model/Socials;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Lsportsdb/model/RawRecord;)Lsportsdb/model/Team;
-	public static synthetic fun copy$default (Lsportsdb/model/Team;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Long;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/util/List;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/util/Map;Lsportsdb/model/Socials;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Long;Ljava/lang/String;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/Team;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/Team : sportsdb/model/ApiRecord {
 	public final fun getAlternateNames ()Ljava/util/List;
 	public final fun getApiFootballId ()Ljava/lang/Long;
 	public final fun getBadge ()Ljava/lang/String;
@@ -1408,42 +975,16 @@ public final class sportsdb/model/Team {
 	public final fun getLogo ()Ljava/lang/String;
 	public final fun getLoved ()Ljava/lang/Integer;
 	public final fun getName ()Ljava/lang/String;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getShortName ()Ljava/lang/String;
 	public final fun getSocials ()Lsportsdb/model/Socials;
 	public final fun getSport ()Ljava/lang/String;
 	public final fun getStadium ()Ljava/lang/String;
 	public final fun getVenueId ()Ljava/lang/Long;
-	public fun hashCode ()I
 	public final fun isLocked ()Ljava/lang/Boolean;
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/TimelineEntry {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/String;
-	public final fun component11 ()Ljava/lang/Long;
-	public final fun component12 ()Ljava/lang/String;
-	public final fun component13 ()Ljava/lang/String;
-	public final fun component14 ()Ljava/lang/Long;
-	public final fun component15 ()Ljava/lang/String;
-	public final fun component16 ()Ljava/lang/Long;
-	public final fun component17 ()Ljava/lang/String;
-	public final fun component18 ()Ljava/lang/Boolean;
-	public final fun component19 ()Ljava/lang/Long;
-	public final fun component2 ()Ljava/lang/Long;
-	public final fun component20 ()Lsportsdb/model/RawRecord;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/time/LocalDate;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/Integer;
-	public final fun component7 ()Ljava/lang/String;
-	public final fun component8 ()Ljava/lang/String;
-	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Lsportsdb/model/RawRecord;)Lsportsdb/model/TimelineEntry;
-	public static synthetic fun copy$default (Lsportsdb/model/TimelineEntry;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/time/LocalDate;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/Boolean;Ljava/lang/Long;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/TimelineEntry;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/TimelineEntry : sportsdb/model/ApiRecord {
 	public final fun getApiFootballId ()Ljava/lang/Long;
 	public final fun getAssist ()Ljava/lang/String;
 	public final fun getAssistId ()Ljava/lang/Long;
@@ -1458,40 +999,15 @@ public final class sportsdb/model/TimelineEntry {
 	public final fun getPeriod ()Ljava/lang/String;
 	public final fun getPlayer ()Ljava/lang/String;
 	public final fun getPlayerId ()Ljava/lang/Long;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getSeason ()Ljava/lang/String;
 	public final fun getTeam ()Ljava/lang/String;
 	public final fun getTeamId ()Ljava/lang/Long;
 	public final fun getType ()Ljava/lang/String;
-	public fun hashCode ()I
 	public final fun isHome ()Ljava/lang/Boolean;
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/TvListing {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/time/Instant;Ljava/time/LocalDate;Ljava/time/LocalTime;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/String;
-	public final fun component11 ()Ljava/time/Instant;
-	public final fun component12 ()Ljava/time/LocalDate;
-	public final fun component13 ()Ljava/time/LocalTime;
-	public final fun component14 ()Ljava/lang/Integer;
-	public final fun component15 ()Ljava/lang/String;
-	public final fun component16 ()Ljava/lang/String;
-	public final fun component17 ()Ljava/lang/String;
-	public final fun component18 ()Ljava/lang/String;
-	public final fun component19 ()Lsportsdb/model/RawRecord;
-	public final fun component2 ()Ljava/lang/Long;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/Long;
-	public final fun component7 ()Ljava/lang/String;
-	public final fun component8 ()Ljava/lang/String;
-	public final fun component9 ()Ljava/lang/String;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/time/Instant;Ljava/time/LocalDate;Ljava/time/LocalTime;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;)Lsportsdb/model/TvListing;
-	public static synthetic fun copy$default (Lsportsdb/model/TvListing;Ljava/lang/Long;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/time/Instant;Ljava/time/LocalDate;Ljava/time/LocalTime;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/TvListing;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/TvListing : sportsdb/model/ApiRecord {
 	public final fun getChannel ()Ljava/lang/String;
 	public final fun getChannelId ()Ljava/lang/Long;
 	public final fun getChannelLogo ()Ljava/lang/String;
@@ -1506,43 +1022,14 @@ public final class sportsdb/model/TvListing {
 	public final fun getEventSquare ()Ljava/lang/String;
 	public final fun getEventThumb ()Ljava/lang/String;
 	public final fun getId ()Ljava/lang/Long;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getSeason ()Ljava/lang/String;
 	public final fun getSport ()Ljava/lang/String;
 	public final fun getTime ()Ljava/time/LocalTime;
 	public final fun getTimestamp ()Ljava/time/Instant;
-	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class sportsdb/model/Venue {
-	public fun <init> (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/util/Map;Lsportsdb/model/Socials;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Long;Lsportsdb/model/RawRecord;)V
-	public final fun component1 ()Ljava/lang/Long;
-	public final fun component10 ()Ljava/lang/Integer;
-	public final fun component11 ()Ljava/lang/String;
-	public final fun component12 ()Ljava/lang/String;
-	public final fun component13 ()Ljava/lang/String;
-	public final fun component14 ()Ljava/lang/String;
-	public final fun component15 ()Ljava/lang/String;
-	public final fun component16 ()Ljava/util/List;
-	public final fun component17 ()Ljava/lang/Boolean;
-	public final fun component18 ()Ljava/util/Map;
-	public final fun component19 ()Lsportsdb/model/Socials;
-	public final fun component2 ()Ljava/lang/String;
-	public final fun component20 ()Ljava/lang/Integer;
-	public final fun component21 ()Ljava/lang/Boolean;
-	public final fun component22 ()Ljava/lang/Long;
-	public final fun component23 ()Lsportsdb/model/RawRecord;
-	public final fun component3 ()Ljava/lang/String;
-	public final fun component4 ()Ljava/lang/String;
-	public final fun component5 ()Ljava/lang/String;
-	public final fun component6 ()Ljava/lang/String;
-	public final fun component7 ()Ljava/lang/String;
-	public final fun component8 ()Ljava/lang/String;
-	public final fun component9 ()Ljava/lang/Integer;
-	public final fun copy (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/util/Map;Lsportsdb/model/Socials;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Long;Lsportsdb/model/RawRecord;)Lsportsdb/model/Venue;
-	public static synthetic fun copy$default (Lsportsdb/model/Venue;Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/List;Ljava/lang/Boolean;Ljava/util/Map;Lsportsdb/model/Socials;Ljava/lang/Integer;Ljava/lang/Boolean;Ljava/lang/Long;Lsportsdb/model/RawRecord;ILjava/lang/Object;)Lsportsdb/model/Venue;
-	public fun equals (Ljava/lang/Object;)Z
+public final class sportsdb/model/Venue : sportsdb/model/ApiRecord {
 	public final fun getAlternateName ()Ljava/lang/String;
 	public final fun getArchitect ()Ljava/lang/String;
 	public final fun getCapacity ()Ljava/lang/Integer;
@@ -1561,13 +1048,11 @@ public final class sportsdb/model/Venue {
 	public final fun getLoved ()Ljava/lang/Integer;
 	public final fun getMap ()Ljava/lang/String;
 	public final fun getName ()Ljava/lang/String;
-	public final fun getRaw ()Lsportsdb/model/RawRecord;
 	public final fun getSocials ()Lsportsdb/model/Socials;
 	public final fun getSponsorName ()Ljava/lang/String;
 	public final fun getSport ()Ljava/lang/String;
 	public final fun getThumb ()Ljava/lang/String;
 	public final fun getTimezone ()Ljava/lang/String;
-	public fun hashCode ()I
 	public final fun isLocked ()Ljava/lang/Boolean;
 	public fun toString ()Ljava/lang/String;
 }

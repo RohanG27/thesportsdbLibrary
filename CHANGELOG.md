@@ -9,8 +9,10 @@ First version.
 - Client-side rate limiting by key tier, retries for 429, 5xx and network errors, optional caching by data freshness, and API keys redacted from every error and cache key.
 - `SportsDbFutures`: a `CompletableFuture` API for Java, generated from the Kotlin API.
 - Dokka API reference; tests against recorded free and premium responses, plus optional live tests.
+- Models are read-only `ApiRecord` subclasses with internal constructors, equal when built from the same API fields, so fields can be added without breaking binary compatibility.
+- Identical calls in flight share one HTTP request (`deduplicateRequests`).
+- `requestListener`: a `RequestEvent` per call, for logging and metrics.
 
 ### Known issues
 
-- **Models are data classes.** Adding a property changes their `copy()` and `componentN()` signatures, which breaks binary compatibility. TheSportsDB adds fields over time, so this needs a decision before 1.0: switch to regular classes with `equals`/`hashCode`/`toString` (or a tool such as Poko), or accept breaking releases. The ABI check (`api/sportsdb-kotlin.api`) flags any such change.
 - Placeholder Maven coordinates (`local.sportsdb`), and no license yet.

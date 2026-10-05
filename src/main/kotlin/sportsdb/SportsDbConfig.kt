@@ -38,6 +38,15 @@ public class SportsDbConfig {
     /** How long to wait after a 429 when the server does not say. The docs say one minute. */
     public var rateLimitWait: Duration = 1.minutes
 
+    /**
+     * Share one HTTP request between identical calls made at the same time (same URL and key),
+     * so ten coroutines asking for the same table cause one request, not ten.
+     */
+    public var deduplicateRequests: Boolean = true
+
+    /** Called once per call, after it finishes: for logging and metrics. See [RequestEvent]. */
+    public var requestListener: RequestListener? = null
+
     /** Optional response cache; `null` (the default) disables caching. */
     public var cache: ResponseCache? = null
 

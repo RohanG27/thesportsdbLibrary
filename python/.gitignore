@@ -1,0 +1,6 @@
+# Local tooling (uv binary, its cache and Python builds)
+.tools/
+# Clone of https://github.com/TralahM/thesportsdb: its own git repository
+upstream/
+__pycache__/
+.venv/

@@ -1,0 +1,4 @@
+extends:
+  - recommended
+rules:
+  info-license: off  # TheSportsDB's data is governed by its terms of use (info.termsOfService), not a software license

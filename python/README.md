@@ -2,7 +2,7 @@
 
 **API reference:** https://rohang27.github.io/thesportsdbLibrary/api/python/thesportsdb_client.html (pdoc)
 
-A Python client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the Python twin of the Kotlin library in this repository (`../kotlin/`): same behaviour, same lessons, tested against the same recorded responses.
+A Python client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the Python twin of the Kotlin library in this repository ([`kotlin/`](https://github.com/RohanG27/thesportsdbLibrary/tree/main/kotlin)): same behaviour, same lessons, tested against the same recorded responses.
 
 - **Every documented endpoint**, plus the useful undocumented ones, one method each, for v1 and v2.
 - **Blocking and async:** `SportsDB` and `AsyncSportsDB` (asyncio or trio) share one implementation. The async code is the source, and the blocking client is generated from it.
@@ -55,7 +55,7 @@ async with AsyncSportsDB(os.environ["THESPORTSDB_API_KEY"], cache=InMemoryRespon
     tv = await db.v2.tv.country("Canada")                                      # about a week of listings
 ```
 
-The method names follow the API's groups: `db.v1.search`, `.lookup`, `.list`, `.schedule`, `.tv`, `.video`, `.live`, and `db.v2.search`, `.lookup`, `.list`, `.all`, `.schedule`, `.tv`, `.live`. Each method's docstring names the endpoint it calls and the free key's limit. The full list, the record keys and the free/premium counts are in [`../docs/ENDPOINTS.md`](../docs/ENDPOINTS.md); the Python names are the snake_case versions of the Kotlin ones. Python has no overloading, so two Kotlin overloads get their own names here: `leagues_in_country` and `channel_id`.
+The method names follow the API's groups: `db.v1.search`, `.lookup`, `.list`, `.schedule`, `.tv`, `.video`, `.live`, and `db.v2.search`, `.lookup`, `.list`, `.all`, `.schedule`, `.tv`, `.live`. Each method's docstring names the endpoint it calls and the free key's limit. The full list, the record keys and the free/premium counts are in [`../docs/ENDPOINTS.md`](https://github.com/RohanG27/thesportsdbLibrary/blob/main/docs/ENDPOINTS.md); the Python names are the snake_case versions of the Kotlin ones. Python has no overloading, so two Kotlin overloads get their own names here: `leagues_in_country` and `channel_id`.
 
 ## Helpers
 
@@ -145,7 +145,7 @@ python tools/unasync.py              # regenerate src/thesportsdb_client/_sync/ 
 python tools/sync_fixtures.py        # copy re-recorded fixtures from the Kotlin project
 ```
 
-`src/thesportsdb_client/_async/` is the source of truth. `_sync/` is generated, except the hand-written `_compat.py` on each side, and a test fails if it's out of date. Behaviour shared with the Kotlin library is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
+`src/thesportsdb_client/_async/` is the source of truth. `_sync/` is generated, except the hand-written `_compat.py` on each side, and a test fails if it's out of date. Behaviour shared with the Kotlin library is tracked in [`../docs/LIBRARY-PARITY.md`](https://github.com/RohanG27/thesportsdbLibrary/blob/main/docs/LIBRARY-PARITY.md).
 
 ## License
 

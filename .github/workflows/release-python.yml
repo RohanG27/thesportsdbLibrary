@@ -1,0 +1,48 @@
+# Publishes the Python library to PyPI when a tag like python/v0.1.0 is pushed, using PyPI
+# trusted publishing (no token stored): PyPI trusts this workflow file in the "pypi" environment.
+name: Release Python
+
+on:
+  push:
+    tags: ["python/v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - run: pip install -e '.[dev]' build twine
+      - run: pytest -q
+      - name: Check the tag matches the package version
+        run: |
+          version="$(python -c 'import thesportsdb_client as t; print(t.__version__)')"
+          [ "$version" = "${GITHUB_REF_NAME#python/v}" ] || { echo "::error::tag $GITHUB_REF_NAME but package version $version"; exit 1; }
+      - run: python -m build && twine check --strict dist/*
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: python/dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/thesportsdb-client/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1

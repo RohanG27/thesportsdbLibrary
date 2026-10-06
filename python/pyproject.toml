@@ -4,21 +4,44 @@ build-backend = "hatchling.build"
 
 [project]
 name = "thesportsdb-client"
-version = "0.1.0.dev0"
+dynamic = ["version"]
 description = "Python client for TheSportsDB API v1 and v2: typed models, sync and async, rate limiting, caching."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 license-files = ["LICENSE"]
 dependencies = ["httpx>=0.27"]
+authors = [{ name = "RohanG27" }]
+keywords = ["thesportsdb", "sports", "api", "client", "async"]
 classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Framework :: AsyncIO",
     "Typing :: Typed",
 ]
 
+[project.urls]
+Homepage = "https://rohang27.github.io/thesportsdbLibrary/"
+Documentation = "https://rohang27.github.io/thesportsdbLibrary/api/python/thesportsdb_client.html"
+Source = "https://github.com/RohanG27/thesportsdbLibrary/tree/main/python"
+Issues = "https://github.com/RohanG27/thesportsdbLibrary/issues"
+Changelog = "https://github.com/RohanG27/thesportsdbLibrary/blob/main/python/CHANGELOG.md"
+
 [project.optional-dependencies]
 dev = ["pytest", "anyio", "mypy", "ruff"]
+
+[tool.hatch.version]
+path = "src/thesportsdb_client/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+only-include = ["src", "README.md", "LICENSE", "CHANGELOG.md"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/thesportsdb_client"]

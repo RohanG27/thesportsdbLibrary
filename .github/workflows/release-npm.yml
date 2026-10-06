@@ -1,0 +1,39 @@
+# Publishes to npm when a tag like javascript/v0.1.0 (thesportsdb-client) or graphql/v0.1.0
+# (thesportsdb-graphql-schema) is pushed, using npm trusted publishing (no token stored): each
+# package on npmjs.com trusts this workflow file. npm adds provenance automatically.
+name: Release npm
+
+on:
+  push:
+    tags: ["javascript/v*", "graphql/v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+      - name: Pick the package from the tag
+        run: echo "PKG_DIR=${GITHUB_REF_NAME%%/*}" >> "$GITHUB_ENV"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@latest   # trusted publishing needs npm 11.5.1+
+      - run: npm ci
+        working-directory: ${{ env.PKG_DIR }}
+      - run: npm test
+        working-directory: ${{ env.PKG_DIR }}
+      - name: Check the tag matches the package version
+        working-directory: ${{ env.PKG_DIR }}
+        run: |
+          version="$(node -p 'require("./package.json").version')"
+          [ "$version" = "${GITHUB_REF_NAME#*/v}" ] || { echo "::error::tag $GITHUB_REF_NAME but package version $version"; exit 1; }
+      - run: npm publish --access public
+        working-directory: ${{ env.PKG_DIR }}

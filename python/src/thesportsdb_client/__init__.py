@@ -56,7 +56,7 @@ from .models import (
     sized,
 )
 
-__version__ = "0.1.0.dev0"
+__version__ = "0.1.0"
 
 __all__ = [
     "AsyncSportsDB", "SportsDB", "Config", "FREE_API_KEY", "FREE_API_KEYS",

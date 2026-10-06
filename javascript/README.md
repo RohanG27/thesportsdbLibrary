@@ -2,7 +2,7 @@
 
 **API reference:** https://rohang27.github.io/thesportsdbLibrary/api/javascript/index.html (TypeDoc)
 
-A JavaScript and TypeScript client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the JS sibling of the Kotlin (`../kotlin/`), Python (`../python/`) and PHP (`../php/`) libraries: same behaviour, same lessons, tested against the same recorded responses.
+A JavaScript and TypeScript client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the JS sibling of the Kotlin ([`kotlin/`](https://github.com/RohanG27/thesportsdbLibrary/tree/main/kotlin)), Python ([`python/`](https://github.com/RohanG27/thesportsdbLibrary/tree/main/python)) and PHP ([`php/`](https://github.com/RohanG27/thesportsdbLibrary/tree/main/php)) libraries: same behaviour, same lessons, tested against the same recorded responses.
 
 - **Every documented endpoint**, plus the useful undocumented ones, one method each, for v1 and v2.
 - **Typed, frozen, plain-object models**, generated from the Kotlin models, so every library has the same fields:
@@ -57,7 +57,7 @@ const season = await db.v2.schedule.leagueSeason(4328, league!.currentSeason!); 
 const tv = await db.v2.tv.country("Canada");                                       // about a week of listings
 ```
 
-The method groups follow the API: `db.v1.search`, `.lookup`, `.list`, `.schedule`, `.tv`, `.video`, `.live`, and `db.v2.search`, `.lookup`, `.list`, `.all`, `.schedule`, `.tv`, `.live`. Each method's doc comment names the endpoint it calls and the free key's limit. Names match the Kotlin library; the full list, the record keys and the free/premium counts are in [`../docs/ENDPOINTS.md`](../docs/ENDPOINTS.md). JS has no overloading, so Kotlin's `leagues(country)` and `channel(id)` are `leaguesInCountry()` and `channelId()` here, and optional parameters are passed as an options object: `db.v1.schedule.day("2026-10-04", { sport: "Soccer" })`. Days can be a `Date` (its UTC date is used) or a `"YYYY-MM-DD"` string.
+The method groups follow the API: `db.v1.search`, `.lookup`, `.list`, `.schedule`, `.tv`, `.video`, `.live`, and `db.v2.search`, `.lookup`, `.list`, `.all`, `.schedule`, `.tv`, `.live`. Each method's doc comment names the endpoint it calls and the free key's limit. Names match the Kotlin library; the full list, the record keys and the free/premium counts are in [`../docs/ENDPOINTS.md`](https://github.com/RohanG27/thesportsdbLibrary/blob/main/docs/ENDPOINTS.md). JS has no overloading, so Kotlin's `leagues(country)` and `channel(id)` are `leaguesInCountry()` and `channelId()` here, and optional parameters are passed as an options object: `db.v1.schedule.day("2026-10-04", { sport: "Soccer" })`. Days can be a `Date` (its UTC date is used) or a `"YYYY-MM-DD"` string.
 
 ## Helpers
 
@@ -144,7 +144,7 @@ npm run sync-fixtures       # copy re-recorded fixtures from the Kotlin project
 
 Vitest needs Node 22.12+ (it fails to start on Node 18), while the library supports Node 18+. So `test/smoke-node18.mjs` checks the built package on Node 18 without a test framework: parsing, time zones via `Intl`, de-duplication, the timeout and, with `LIVE=1`, real calls. Verified on Node 18.20.8.
 
-`src/models.ts` is generated from `../kotlin/src/main/kotlin/io/github/rohang27/thesportsdb/model/`, and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
+`src/models.ts` is generated from `../kotlin/src/main/kotlin/io/github/rohang27/thesportsdb/model/`, and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](https://github.com/RohanG27/thesportsdbLibrary/blob/main/docs/LIBRARY-PARITY.md).
 
 ## License
 

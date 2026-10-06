@@ -1,6 +1,6 @@
 {
   "name": "thesportsdb-graphql-schema",
-  "version": "0.1.0-dev",
+  "version": "0.1.0",
   "description": "GraphQL schema (SDL) for TheSportsDB API: every record type, relationships and queries, each annotated with the v1/v2 endpoints that resolve it.",
   "type": "module",
   "main": "./dist/index.js",
@@ -14,7 +14,8 @@
   },
   "files": [
     "dist",
-    "schema.graphql"
+    "schema.graphql",
+    "CHANGELOG.md"
   ],
   "sideEffects": false,
   "keywords": [
@@ -25,6 +26,16 @@
     "sports"
   ],
   "license": "MIT",
+  "author": "RohanG27",
+  "homepage": "https://github.com/RohanG27/thesportsdbLibrary/tree/main/graphql#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RohanG27/thesportsdbLibrary.git",
+    "directory": "graphql"
+  },
+  "bugs": {
+    "url": "https://github.com/RohanG27/thesportsdbLibrary/issues"
+  },
   "peerDependencies": {
     "graphql": "^16.0.0 || ^17.0.0"
   },
@@ -37,7 +48,8 @@
     "generate": "node tools/gen-schema.mjs",
     "build": "node tools/gen-schema.mjs --check && tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "prepack": "npm run build"
   },
   "devDependencies": {
     "@graphql-tools/merge": "^9.2.6",

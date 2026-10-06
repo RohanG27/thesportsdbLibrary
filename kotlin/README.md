@@ -19,8 +19,6 @@ A Kotlin/JVM client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v
 
 ## Install
 
-Not published yet: until the first release, build it from this folder (see [Building](#building)).
-
 ```kotlin
 implementation("io.github.rohang27:thesportsdb-client:0.1.0")  // Gradle; Maven: groupId io.github.rohang27, artifactId thesportsdb-client
 ```

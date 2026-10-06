@@ -30,8 +30,6 @@ A PHP client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's
 
 ## Install
 
-Not published yet: until the first release, build it from this folder (see [Development](#development)).
-
 ```sh
 composer require rohang27/thesportsdb-client
 ```

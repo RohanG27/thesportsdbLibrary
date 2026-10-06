@@ -8,7 +8,19 @@
         "api",
         "client"
     ],
+    "homepage": "https://rohang27.github.io/thesportsdbLibrary/",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "RohanG27",
+            "homepage": "https://github.com/RohanG27"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/RohanG27/thesportsdbLibrary/issues",
+        "source": "https://github.com/RohanG27/thesportsdbLibrary/tree/main/php",
+        "docs": "https://rohang27.github.io/thesportsdbLibrary/api/php/index.html"
+    },
     "require": {
         "php": ">=8.2",
         "ext-json": "*"

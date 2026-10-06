@@ -1,0 +1,44 @@
+# Mirrors php/ to the read-only repository RohanG27/thesportsdb-client-php, which Packagist reads
+# (Packagist needs composer.json at a repository's root). Pushes to main update its main branch;
+# a tag like php/v0.1.0 becomes the tag v0.1.0 there, which Packagist publishes as version 0.1.0.
+# Secret: PHP_SPLIT_DEPLOY_KEY, the private half of a write-enabled deploy key on that repository.
+name: PHP split
+
+on:
+  push:
+    branches: [main]
+    paths: ["php/**", ".github/workflows/php-split.yml"]
+    tags: ["php/v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency: php-split
+
+jobs:
+  split:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Split php/ into its own history
+        run: git subtree split --prefix=php -b php-split
+      - name: Push to the split repository
+        env:
+          DEPLOY_KEY: ${{ secrets.PHP_SPLIT_DEPLOY_KEY }}
+        run: |
+          if [ -z "$DEPLOY_KEY" ]; then
+            echo "::notice::PHP_SPLIT_DEPLOY_KEY isn't set yet (see RELEASING.md); skipping."
+            exit 0
+          fi
+          install -m 600 /dev/null "$RUNNER_TEMP/split_key"
+          printf '%s\n' "$DEPLOY_KEY" > "$RUNNER_TEMP/split_key"
+          export GIT_SSH_COMMAND="ssh -i $RUNNER_TEMP/split_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
+          remote=git@github.com:RohanG27/thesportsdb-client-php.git
+          if [[ "$GITHUB_REF" == refs/tags/php/v* ]]; then
+            git push "$remote" "php-split:refs/tags/${GITHUB_REF_NAME#php/}"
+          else
+            git push "$remote" php-split:refs/heads/main
+          fi

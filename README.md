@@ -52,6 +52,7 @@ With no key, the libraries use TheSportsDB's free key `123` (v1 only, small resu
 
 - **Running tests:** each folder is a self-contained project with its own README, build and tests.
 - **Shared recordings:** the real API responses all four libraries test against live in `kotlin/src/test/resources/fixtures/`. Re-record them with [`tools/record-fixtures.sh`](tools/record-fixtures.sh), then copy them into each project with its `sync-fixtures` script.
+- **Releases:** see [RELEASING.md](RELEASING.md).
 - **CI** (`.github/workflows/ci.yml`) builds and tests every project on each push. A weekly job runs the live tests against the real API, using the `THESPORTSDB_API_KEY` repository secret if set.
 
 ## License

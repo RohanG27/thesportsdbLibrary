@@ -2,7 +2,9 @@
 
 **API reference:** https://rohang27.github.io/thesportsdbLibrary/api/php/index.html (phpDocumentor)
 
-A PHP client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the PHP sibling of the Kotlin library (`../kotlin/`) and the Python library (`../python/`): same behaviour, same lessons, tested against the same recorded responses.
+> Developed in [thesportsdbLibrary](https://github.com/RohanG27/thesportsdbLibrary/tree/main/php). [RohanG27/thesportsdb-client-php](https://github.com/RohanG27/thesportsdb-client-php) is a read-only mirror that Packagist installs from; send issues and pull requests to the main repository.
+
+A PHP client for [TheSportsDB](https://www.thesportsdb.com) API, v1 and v2. It's the PHP sibling of the Kotlin library ([`kotlin/`](https://github.com/RohanG27/thesportsdbLibrary/tree/main/kotlin)) and the Python library ([`python/`](https://github.com/RohanG27/thesportsdbLibrary/tree/main/python)): same behaviour, same lessons, tested against the same recorded responses.
 
 - **Every documented endpoint**, plus the useful undocumented ones, one method each, for v1 and v2.
 - **Typed, read-only models**, generated from the Kotlin models, so all three libraries have the same fields:
@@ -57,7 +59,7 @@ $season = $db->v2->schedule->leagueSeason(4328, $league->currentSeason);  // ~38
 $tv = $db->v2->tv->country('Canada');                                     // about a week of listings
 ```
 
-The method groups follow the API: `$db->v1->search`, `->lookup`, `->list`, `->schedule`, `->tv`, `->video`, `->live`, and `$db->v2->search`, `->lookup`, `->list`, `->all`, `->schedule`, `->tv`, `->live`. Each method's docblock names the endpoint it calls and the free key's limit. Names match the Kotlin library; the full list, the record keys and the free/premium counts are in [`../docs/ENDPOINTS.md`](../docs/ENDPOINTS.md). PHP has no overloading, so Kotlin's `leagues(country)` and `channel(id)` are `leaguesInCountry()` and `channelId()` here.
+The method groups follow the API: `$db->v1->search`, `->lookup`, `->list`, `->schedule`, `->tv`, `->video`, `->live`, and `$db->v2->search`, `->lookup`, `->list`, `->all`, `->schedule`, `->tv`, `->live`. Each method's docblock names the endpoint it calls and the free key's limit. Names match the Kotlin library; the full list, the record keys and the free/premium counts are in [`../docs/ENDPOINTS.md`](https://github.com/RohanG27/thesportsdbLibrary/blob/main/docs/ENDPOINTS.md). PHP has no overloading, so Kotlin's `leagues(country)` and `channel(id)` are `leaguesInCountry()` and `channelId()` here.
 
 ## Helpers
 
@@ -143,7 +145,7 @@ python3 tools/gen_models.py                 # regenerate src/Model/ after changi
 php tools/sync_fixtures.php                 # copy re-recorded fixtures from the Kotlin project
 ```
 
-`src/Model/` is generated from `../kotlin/src/main/kotlin/io/github/rohang27/thesportsdb/model/` (except the hand-written `ApiRecord`, `Socials`, `LeagueRef`, `PlayerExternalIds`, `EventStatus` and `ImageSize`), and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](../docs/LIBRARY-PARITY.md).
+`src/Model/` is generated from `../kotlin/src/main/kotlin/io/github/rohang27/thesportsdb/model/` (except the hand-written `ApiRecord`, `Socials`, `LeagueRef`, `PlayerExternalIds`, `EventStatus` and `ImageSize`), and a test fails if it's stale. Behaviour shared with the other libraries is tracked in [`../docs/LIBRARY-PARITY.md`](https://github.com/RohanG27/thesportsdbLibrary/blob/main/docs/LIBRARY-PARITY.md).
 
 ## License
 

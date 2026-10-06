@@ -1,0 +1,7 @@
+# Keep installs small: Composer downloads the release archive, which leaves these out.
+/tests export-ignore
+/tools export-ignore
+/phpunit.xml export-ignore
+/phpstan.neon export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore

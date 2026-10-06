@@ -1,12 +1,17 @@
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
+import com.vanniktech.maven.publish.SourcesJar
+
 plugins {
     kotlin("jvm") version "2.4.20"
     `java-library`
-    `maven-publish`
+    id("com.vanniktech.maven.publish") version "0.37.0"
     id("org.jetbrains.dokka") version "2.2.0"
 }
 
 group = "io.github.rohang27"
-version = "0.1.0-SNAPSHOT"
+// Release builds pass -PreleaseVersion=x.y.z (the release workflow takes it from the kotlin/vx.y.z tag).
+version = providers.gradleProperty("releaseVersion").getOrElse("0.1.0-SNAPSHOT")
 
 repositories {
     mavenCentral()
@@ -20,10 +25,6 @@ kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
     }
-}
-
-java {
-    withSourcesJar()
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -62,34 +63,34 @@ dokka {
     }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            from(components["java"])
-            artifactId = "thesportsdb-client"
-            pom {
-                name.set("thesportsdb-client")
-                description.set("Kotlin/JVM client for TheSportsDB API v1 and v2, with typed models, rate limiting, caching and a Java CompletableFuture API.")
-                licenses {
-                    license {
-                        name.set("MIT License")
-                        url.set("https://opensource.org/license/mit")
-                    }
-                }
-                url.set("https://github.com/RohanG27/thesportsdbLibrary")
-                developers {
-                    developer {
-                        id.set("RohanG27")
-                        name.set("RohanG27")
-                        url.set("https://github.com/RohanG27")
-                    }
-                }
-                scm {
-                    url.set("https://github.com/RohanG27/thesportsdbLibrary")
-                    connection.set("scm:git:https://github.com/RohanG27/thesportsdbLibrary.git")
-                    developerConnection.set("scm:git:ssh://git@github.com/RohanG27/thesportsdbLibrary.git")
-                }
+mavenPublishing {
+    configure(KotlinJvm(javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"), sourcesJar = SourcesJar.Sources()))
+    publishToMavenCentral(automaticRelease = true)
+    // Signs only when a key is configured (CI); local publishToMavenLocal stays unsigned.
+    if (providers.gradleProperty("signingInMemoryKey").isPresent) signAllPublications()
+    coordinates("io.github.rohang27", "thesportsdb-client", version.toString())
+    pom {
+        name.set("thesportsdb-client")
+        description.set("Kotlin/JVM client for TheSportsDB API v1 and v2, with typed models, rate limiting, caching and a Java CompletableFuture API.")
+        inceptionYear.set("2026")
+        url.set("https://github.com/RohanG27/thesportsdbLibrary")
+        licenses {
+            license {
+                name.set("MIT License")
+                url.set("https://opensource.org/license/mit")
             }
+        }
+        developers {
+            developer {
+                id.set("RohanG27")
+                name.set("RohanG27")
+                url.set("https://github.com/RohanG27")
+            }
+        }
+        scm {
+            url.set("https://github.com/RohanG27/thesportsdbLibrary")
+            connection.set("scm:git:https://github.com/RohanG27/thesportsdbLibrary.git")
+            developerConnection.set("scm:git:ssh://git@github.com/RohanG27/thesportsdbLibrary.git")
         }
     }
 }

@@ -31,8 +31,6 @@ A JavaScript and TypeScript client for [TheSportsDB](https://www.thesportsdb.com
 
 ## Install
 
-Not published yet: until the first release, build it from this folder (see [Development](#development)).
-
 ```sh
 npm install thesportsdb-client
 ```
